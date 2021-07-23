@@ -175,6 +175,8 @@ __declspec(dllimport) int WINAPI CollectingMemoryUsageInformationForProcess();
 
 __declspec(dllimport) int WINAPI EnumeratingAllProcesses();
 
+__declspec(dllimport) int WINAPI ShellExecInExplorerProcess(PCWSTR pszFile);
+
 __declspec(dllimport) int WINAPI EnumeratingAllModulesForProcess();
 
 __declspec(dllimport) int WINAPI EnumeratingAllDeviceDrivers();

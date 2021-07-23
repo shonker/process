@@ -181,6 +181,7 @@
     <ClInclude Include="Process.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Session.h" />
+    <ClInclude Include="ShellExecute.h" />
     <ClInclude Include="Shutdown.h" />
     <ClInclude Include="TaskScheduler.h" />
     <ClInclude Include="TEB.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="PEB.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="ShellExecute.cpp" />
     <ClCompile Include="Shutdown.cpp" />
     <ClCompile Include="TaskScheduler.cpp" />
     <ClCompile Include="TEB.cpp" />

@@ -182,9 +182,9 @@ https://support.microsoft.com/zh-cn/kb/118626
             the current user is a local admin.
           */
         if (!AllocateAndInitializeSid(&SystemSidAuthority, 2,
-                                      SECURITY_BUILTIN_DOMAIN_RID,
-                                      DOMAIN_ALIAS_RID_ADMINS,
-                                      0, 0, 0, 0, 0, 0, &psidAdmin))
+            SECURITY_BUILTIN_DOMAIN_RID,
+            DOMAIN_ALIAS_RID_ADMINS,
+            0, 0, 0, 0, 0, 0, &psidAdmin))
             __leave;
 
         psdAdmin = LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
@@ -232,8 +232,8 @@ https://support.microsoft.com/zh-cn/kb/118626
         GenericMapping.GenericAll = ACCESS_READ | ACCESS_WRITE;
 
         if (!AccessCheck(psdAdmin, hImpersonationToken, dwAccessDesired,
-                         &GenericMapping, &ps, &dwStructureSize, &dwStatus,
-                         &fReturn)) {
+            &GenericMapping, &ps, &dwStructureSize, &dwStatus,
+            &fReturn)) {
             fReturn = FALSE;
             __leave;
         }
@@ -416,13 +416,15 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI EnumerateAccountRights(int argc, char * argv[])
 /*
+功能：枚举用户或者用户组的特权信息，如：administrator或者administrators.
+
 进程继承用户的权限。
 程序员大多知道给进程提权。
 但是有的进程的某些权限是不易搞到的。
 如：Note that your process must have the SE_ASSIGNPRIMARYTOKEN_NAME and
 SE_INCREASE_QUOTA_NAME privileges for successful execution of CreateProcessAsUser.
 解决办法是用LsaAddAccountRights/LsaRemoveAccountRights给用户添加/删除权限。
-然后在用常用的办法提权。
+然后再用常用的办法提权。
 可是这要求注销/重启系统。
 
 记得有个办法是不用重启的，但是忘了方法和链接了。
@@ -492,7 +494,7 @@ made at 2014.06.14
         NULL,       // default lookup logic
         AccountName,// account to obtain SID
         &pSid       // buffer to allocate to contain resultant SID
-    )) {
+        )) {
         //这几行代码是自己的。
         PLSA_UNICODE_STRING UserRights;
         ULONG CountOfRights;
@@ -797,7 +799,7 @@ made at 2013.10.10
         GetCurrentProcess(), // target current process
         TOKEN_QUERY,         // TOKEN_QUERY access
         &hToken              // resultant hToken
-    )) {
+        )) {
         return 1;
     }
 
@@ -868,7 +870,7 @@ BOOL IsRunAsAdmin()
         goto Cleanup;
     }
 
-Cleanup:
+    Cleanup:
     // Centralized cleanup for all allocated resources.
     if (pAdministratorsGroup) {
         FreeSid(pAdministratorsGroup);
@@ -972,7 +974,7 @@ BOOL IsUserInAdminGroup()
         goto Cleanup;
     }
 
-Cleanup:
+    Cleanup:
     // Centralized cleanup for all allocated resources.
     if (hToken) {
         CloseHandle(hToken);
@@ -1040,4 +1042,3 @@ https://titanwolf.org/Network/Articles/Article?AID=c55a10c3-265e-42cd-b520-118ca
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-

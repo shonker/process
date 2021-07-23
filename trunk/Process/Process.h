@@ -1,10 +1,5 @@
 #pragma once
 
-class Process
-{
-
-};
-
 
 typedef BOOL(WINAPI * LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 

@@ -46,7 +46,6 @@
 #include <mstcpip.h>
 #include <Intshcut.h>
 #include <atlstr.h>
-#include <comutil.h>
 #include <wbemidl.h>
 #include <dbt.h>
 #include <comdef.h>
@@ -58,12 +57,17 @@
 #include <lmcons.h>
 #include <netioapi.h>
 #include <ole2.h>
+//#include <urlmon.h>
+//#include <winsafer.h>
 
-#include <ShlDisp.h>
+//#include <ShlDisp.h>
 #include <Shlobj.h>
-#include <ShlGuid.h>
-#include <shobjidl_core.h>
+//#include <ShlGuid.h>
+
+//#include <shobjidl_core.h>
+//#include <shlobj_core.h>
 #include <exdisp.h>
+#include <comutil.h>
 
 //几个内核相关的头文件。
 /*
@@ -87,6 +91,11 @@
 //#include <winternl.h>
 //#include <ntdef.h>
 //#include <SubAuth.h>
+
+#include <wincon.h> 
+#include <time.h> 
+#include <fwpmu.h>
+#include <nb30.h>
 
 //几个USB相关的头文件。
 #include <initguid.h> //注意前后顺序。
@@ -116,10 +125,12 @@
 //#pragma comment(lib, "cmcfg32.lib")
 #pragma comment(lib,"Mpr.lib")
 #pragma comment(lib,"Comctl32.lib")
+#pragma comment(lib, "fwpuclnt.lib") 
 
 #include <VersionHelpers.h>
 #pragma comment(lib, "Version.lib") 
 
+#pragma comment(lib,"Netapi32.lib")
 #pragma comment (lib,"Secur32.lib")
 
 #include <Rpc.h>
@@ -137,7 +148,7 @@
 #include <Setupapi.h>
 #pragma comment (lib,"Setupapi.lib")
 
-#include <shellapi.h>
+//#include <shellapi.h>
 #pragma comment (lib,"Shell32.lib")
 
 #include <Shlwapi.h>
