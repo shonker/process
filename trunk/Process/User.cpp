@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "User.h"
 
-
 #include <LsaLookup.h>
 #include <NTSecAPI.h>
 
+#include <ntsecapi.h>
 
 #pragma warning(disable:6011)
 #pragma warning(disable:6387)
@@ -1038,6 +1038,58 @@ https://titanwolf.org/Network/Articles/Article?AID=c55a10c3-265e-42cd-b520-118ca
     }
 
     return isEnableUAC;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void AddPrivileges(PSID AccountSID, LSA_HANDLE PolicyHandle)
+/*
+管理帐户权限
+
+LSA 提供一些函数，应用程序可调用这些函数来枚举或设置用户、组和本地组帐户的 特权 。
+
+你的应用程序必须获得本地策略对象的句柄，如 打开策略对象句柄中所述，你的应用程序必须获得本地 策略对象的句柄。 
+此外，若要枚举或编辑帐户的权限，则必须具有该帐户的 安全标识符 (SID) 。 
+应用程序可以根据 名称和 Sid 间的转换中所述，查找给定了帐户名的 SID。
+
+若要访问具有特定权限的所有帐户，请调用 LsaEnumerateAccountsWithUserRight。 
+此函数使用具有指定权限的所有帐户的 Sid 填充数组。
+
+获取帐户的 SID 后，可以修改其权限。 调用 LsaAddAccountRights ，将权限添加到帐户。 
+如果指定的帐户不存在， LsaAddAccountRights 将创建该帐户。 
+若要从帐户中删除权限，请调用 LsaRemoveAccountRights。 
+如果从帐户中删除所有权限，则 LsaRemoveAccountRights 也会删除该帐户。
+
+应用程序可以通过调用 LsaEnumerateAccountRights来检查当前分配给帐户的权限。 
+此函数填充 LSA _ UNICODE _ 字符串 结构的数组。 
+每个结构都包含指定帐户持有的特权的名称。
+
+下面的示例将 SeServiceLogonRight 权限添加到帐户。 
+在此示例中，AccountSID 变量指定了帐户的 SID。 
+有关如何查找帐户 SID 的详细信息，请参阅 名称和 Sid 间的转换。
+
+https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/managing-account-permissions
+*/
+{
+	LSA_UNICODE_STRING lucPrivilege;
+	NTSTATUS ntsResult;
+
+	// Create an LSA_UNICODE_STRING for the privilege names.
+	InitLsaString(&lucPrivilege, (LPWSTR)L"SeServiceLogonRight");
+
+	ntsResult = LsaAddAccountRights(
+		PolicyHandle,  // An open policy handle.
+		AccountSID,    // The target SID.
+		&lucPrivilege, // The privileges.
+		1              // Number of privileges.
+	);
+	if (ntsResult == STATUS_SUCCESS) {
+		wprintf(L"Privilege added.\n");
+	} else {
+		wprintf(L"Privilege was not added - %lu \n", LsaNtStatusToWinError(ntsResult));
+	}
 }
 
 
