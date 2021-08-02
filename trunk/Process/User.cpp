@@ -10,6 +10,7 @@
 #pragma warning(disable:6387)
 #pragma warning(disable:4996)
 #pragma warning(disable:28159)
+#pragma warning(disable:26451)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1044,6 +1045,68 @@ https://titanwolf.org/Network/Articles/Article?AID=c55a10c3-265e-42cd-b520-118ca
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define TARGET_SYSTEM_NAME L"mysystem"
+
+
+LSA_HANDLE GetPolicyHandle()
+/*
+打开策略对象句柄
+
+大多数 LSA 策略函数要求使用 策略 对象的句柄来查询或修改系统。 
+若要获取 策略 对象的句柄，请调用 LsaOpenPolicy 并指定要访问的系统的名称和所需的访问权限集。
+
+应用程序所需的访问权限取决于它执行的操作。 
+有关每个函数所需权限的详细信息，请参阅 LSA 策略函数中该函数的说明。
+
+如果对 LsaOpenPolicy 的调用成功，则它将为指定系统返回 策略 对象的句柄。 
+然后，应用程序在后续 LSA 策略函数调用中传递此句柄。 当应用程序不再需要句柄时，它应调用 LsaClose 来释放它。
+
+下面的示例演示如何打开 策略 对象句柄。
+
+在前面的示例中，应用程序请求策略 _ 所有 _ 访问 权限。 
+有关调用 LsaOpenPolicy时应用程序应该请求的权限的详细信息，请参阅应用程序将 策略 对象句柄传递到的函数的说明。
+
+若要打开受信任域的 策略 对象的句柄，请调用 LsaCreateTrustedDomainEx (以与域) 创建新的信任关系，或调用 LsaOpenTrustedDomainByName (访问现有的受信任域) 。 
+这两个函数都设置一个指向 LSA _ 句柄的指针，然后您可以在后续 LSA 策略函数调用中指定该句柄。
+与 LsaOpenPolicy一样，应用程序在不再需要受信任域的 策略 对象的句柄时，应调用 LsaClose 。
+
+https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/opening-a-policy-object-handle
+*/
+{
+    LSA_OBJECT_ATTRIBUTES ObjectAttributes;
+    WCHAR SystemName[] = TARGET_SYSTEM_NAME;
+    USHORT SystemNameLength;
+    LSA_UNICODE_STRING lusSystemName;
+    NTSTATUS ntsResult;
+    LSA_HANDLE lsahPolicyHandle;
+
+    // Object attributes are reserved, so initialize to zeros.
+    ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
+
+    //Initialize an LSA_UNICODE_STRING to the server name.
+    SystemNameLength = (USHORT)wcslen(SystemName);
+    lusSystemName.Buffer = SystemName;
+    lusSystemName.Length = SystemNameLength * sizeof(WCHAR);
+    lusSystemName.MaximumLength = (SystemNameLength + 1) * sizeof(WCHAR);
+
+    // Get a handle to the Policy object.
+    ntsResult = LsaOpenPolicy(
+        &lusSystemName,    //Name of the target system.
+        &ObjectAttributes, //Object attributes.
+        POLICY_ALL_ACCESS, //Desired access permissions.
+        &lsahPolicyHandle  //Receives the policy handle.
+    );
+
+    if (ntsResult != STATUS_SUCCESS) {
+        // An error occurred. Display it as a win32 error code.
+        wprintf(L"OpenPolicy returned %lu\n",
+                LsaNtStatusToWinError(ntsResult));
+        return NULL;
+    }
+    return lsahPolicyHandle;
+}
+
+
 void AddPrivileges(PSID AccountSID, LSA_HANDLE PolicyHandle)
 /*
 管理帐户权限
@@ -1090,6 +1153,77 @@ https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/managing-account-permissi
 	} else {
 		wprintf(L"Privilege was not added - %lu \n", LsaNtStatusToWinError(ntsResult));
 	}
+}
+
+
+void GetSIDInformation(LPWSTR AccountName, LSA_HANDLE PolicyHandle)
+/*
+名称和 Sid 间的转换
+
+本地安全机构 (LSA) 提供在用户、组和本地组名称之间进行转换的功能，以及 (SID) 值的相应 安全标识符。 
+若要查找帐户名称，请调用 LsaLookupNames 函数。 此函数以 RID/域索引对的形式返回 SID。 
+若要以单个元素的形式获取 SID，请调用 LsaLookupNames2 函数。 
+若要查找 Sid，请调用 LsaLookupSids。
+
+这些函数可以从本地系统信任的任何域转换名称和 SID 信息。
+
+你的应用程序必须获得本地策略对象的句柄，如 打开策略对象句柄中所述，你的应用程序必须获得本地 策略对象的句柄。
+
+下面的示例在给定帐户名称的情况下查找帐户的 SID。
+
+在前面的示例中，函数 InitLsaString 将 unicode 字符串转换为 LSA _ unicode _ 字符串 结构。 
+此函数的代码在 使用 LSA Unicode 字符串中显示。
+
+ 备注
+
+这些转换函数主要由权限编辑器用来显示 访问控制列表 (ACL) 信息。 
+权限编辑器应始终使用 name 或 security identifier SID 所在系统的 Policy对象调用这些函数。 
+这可确保在转换过程中引用正确的受信任域集。
+
+Windows Access Control 还提供了在 Sid 和帐户名之间执行转换的函数： LookupAccountName 和 LookupAccountSid。 
+如果你的应用程序需要查找帐户名称或 SID，但不使用其他 LSA 策略功能，请使用 Windows Access Control 功能，而不是 LSA 策略函数。 
+有关这些函数的详细信息，请参阅 访问控制。
+
+https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/translating-between-names-and-sids
+*/
+{
+    LSA_UNICODE_STRING lucName;
+    PLSA_TRANSLATED_SID ltsTranslatedSID;
+    PLSA_REFERENCED_DOMAIN_LIST lrdlDomainList;
+    LSA_TRUST_INFORMATION myDomain;
+    NTSTATUS ntsResult;
+    PWCHAR DomainString = NULL;
+
+    // Initialize an LSA_UNICODE_STRING with the name.
+    InitLsaString(&lucName, AccountName);
+
+    ntsResult = LsaLookupNames(
+        PolicyHandle,     // handle to a Policy object
+        1,                // number of names to look up
+        &lucName,         // pointer to an array of names
+        &lrdlDomainList,  // receives domain information
+        &ltsTranslatedSID // receives relative SIDs
+    );
+    if (STATUS_SUCCESS != ntsResult) {
+        wprintf(L"Failed LsaLookupNames - %lu \n", LsaNtStatusToWinError(ntsResult));
+        return;
+    }
+
+    // Get the domain the account resides in.
+    myDomain = lrdlDomainList->Domains[ltsTranslatedSID->DomainIndex];
+    DomainString = (PWCHAR)LocalAlloc(LPTR, myDomain.Name.Length + 1);
+    _ASSERTE(DomainString);
+    wcsncpy_s(DomainString,
+              myDomain.Name.Length + 1,
+              myDomain.Name.Buffer,
+              myDomain.Name.Length);
+
+    // Display the relative Id. 
+    wprintf(L"Relative Id is %lu in domain %ws.\n", ltsTranslatedSID->RelativeId, DomainString);
+
+    LocalFree(DomainString);
+    LsaFreeMemory(ltsTranslatedSID);
+    LsaFreeMemory(lrdlDomainList);
 }
 
 
