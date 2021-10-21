@@ -82,6 +82,10 @@ BOOL WINAPI GetLogonSID(HANDLE hToken, PSID * ppsid);
 
 EXTERN_C
 __declspec(dllexport)
+BOOL WINAPI IsCurrentSessionRemoteable();
+
+EXTERN_C
+__declspec(dllexport)
 BOOL WINAPI SearchTokenGroupsForSID(VOID);
 
 void TimeStampToFileTime(INT64 timeStamp, FILETIME & fileTime);

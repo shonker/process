@@ -360,3 +360,89 @@ Cleanup:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+BOOL WINAPI IsRemoteSession(void)
+/*
+The following example shows a function that 
+returns TRUE if the application is running in a remote session and 
+FALSE if the application is running on the console.
+
+You should not use GetSystemMetrics(SM_REMOTESESSION) to determine if your application is running in a remote session in Windows 8 and later or 
+Windows Server 2012 and later if the remote session may also be using the RemoteFX vGPU improvements to the Microsoft Remote Display Protocol (RDP). 
+In this case, GetSystemMetrics(SM_REMOTESESSION) will identify the remote session as a local session.
+
+https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-services-environment
+*/
+{
+    return GetSystemMetrics(SM_REMOTESESSION);
+}
+
+
+#define TERMINAL_SERVER_KEY _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\")
+#define GLASS_SESSION_ID    _T("GlassSessionId")
+
+
+EXTERN_C
+__declspec(dllexport)
+BOOL WINAPI IsCurrentSessionRemoteable()
+/*
+Your application can check the following registry key to determine whether the session is a remote session that uses RemoteFX vGPU. 
+If a local session exists, this registry key provides the ID of the local session.
+
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\GlassSessionId
+
+If the ID of the current session in which the application is running is the same as in the registry key, 
+the application is running in a local session. Sessions identified as remote session in this way include remote sessions that use RemoteFX vGPU. 
+The following sample code demonstrates this.
+
+https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-services-environment
+*/
+{
+    BOOL fIsRemoteable = FALSE;
+
+    if (GetSystemMetrics(SM_REMOTESESSION)) {
+        fIsRemoteable = TRUE;
+    } else {
+        HKEY hRegKey = NULL;
+        LONG lResult;
+
+        lResult = RegOpenKeyEx(
+            HKEY_LOCAL_MACHINE,
+            TERMINAL_SERVER_KEY,
+            0, // ulOptions
+            KEY_READ,
+            &hRegKey);
+        if (lResult == ERROR_SUCCESS) {
+            DWORD dwGlassSessionId;
+            DWORD cbGlassSessionId = sizeof(dwGlassSessionId);
+            DWORD dwType;
+
+            lResult = RegQueryValueEx(
+                hRegKey,
+                GLASS_SESSION_ID,
+                NULL, // lpReserved
+                &dwType,
+                (BYTE *)&dwGlassSessionId,
+                &cbGlassSessionId);
+            if (lResult == ERROR_SUCCESS) {
+                DWORD dwCurrentSessionId;
+
+                if (ProcessIdToSessionId(GetCurrentProcessId(), &dwCurrentSessionId)) {
+                    fIsRemoteable = (dwCurrentSessionId != dwGlassSessionId);
+                }
+            }
+        }
+
+        if (hRegKey) {
+            RegCloseKey(hRegKey);
+        }
+    }
+
+    return fIsRemoteable;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

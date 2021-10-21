@@ -231,6 +231,8 @@ __declspec(dllimport) BOOL WINAPI GetCurrentUserAndDomain(PTSTR szUser,
 
 __declspec(dllimport) BOOL WINAPI GetLogonSID(HANDLE hToken, PSID * ppsid);
 
+__declspec(dllimport) BOOL WINAPI IsCurrentSessionRemoteable();
+
 __declspec(dllimport) int WINAPI EnumerateLogonSessions();
 
 __declspec(dllimport) BOOL WINAPI StartInteractiveClientProcess(
