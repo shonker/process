@@ -362,9 +362,7 @@ Cleanup:
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-EXTERN_C
-__declspec(dllexport)
-BOOL WINAPI IsRemoteSession(void)
+BOOL IsRemoteSession(void)
 /*
 The following example shows a function that 
 returns TRUE if the application is running in a remote session and 
@@ -493,6 +491,49 @@ const char * GetSessionConnectState(WTS_CONNECTSTATE_CLASS State)
 
 EXTERN_C
 __declspec(dllexport)
+bool WINAPI IsRemoteSession(DWORD SessionId)
+/*
+功能：识别一个会话是不是远程的，如：RDP。
+
+SessionId的取值可以是WTS_CURRENT_SESSION，但是不建议，特别是on a remote serve。
+*/
+/*
+WTSIsRemoteSession
+Determines whether the current session is a remote session.
+The WTSQuerySessionInformation function returns a value of TRUE to indicate that the current session is a remote session,
+and FALSE to indicate that the current session is a local session.
+This value can only be used for the local machine,
+so the hServer parameter of the WTSQuerySessionInformation function must contain WTS_CURRENT_SERVER_HANDLE.
+
+Windows Server 2008 and Windows Vista:  This value is not supported.
+
+摘自：https://docs.microsoft.com/en-us/windows/win32/api/wtsapi32/ne-wtsapi32-wts_info_class
+
+其实上面的话是说的不对的（当前日期：2021/10/25），至少和测试不符合。
+*/
+{
+    bool ret = false;
+    LPSTR Buffer;
+    DWORD BytesReturned;
+
+    ret = WTSQuerySessionInformationA(WTS_CURRENT_SERVER_HANDLE,
+                                      SessionId,
+                                      WTSIsRemoteSession,
+                                      &Buffer,
+                                      &BytesReturned);
+    if (ret) {//只要支持，这里始终返回成功，不论是不是远程会话还是本地会话。
+        ret = Buffer[0];
+        WTSFreeMemory(Buffer);
+    } else {
+        DWORD LastError = GetLastError();
+    }
+
+    return ret;
+}
+
+
+EXTERN_C
+__declspec(dllexport)
 void WINAPI EnumerateSessions()
 /*
 功能：枚举（登录）会话。
@@ -524,6 +565,8 @@ SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
                SessionInfo[i].SessionId, 
                SessionInfo[i].pWinStationName,
                GetSessionConnectState(SessionInfo[i].State));
+
+        IsRemoteSession(SessionInfo[i].SessionId);
     }
 
     WTSFreeMemory(SessionInfo);
@@ -559,6 +602,8 @@ void WINAPI EnumerateSessionsEx()
         printf("pDomainName:%s.\n", SessionInfo[i].pDomainName);
         printf("pFarmName:%s.\n", SessionInfo[i].pFarmName);
         printf("\n"); 
+
+        IsRemoteSession(SessionInfo[i].SessionId);
     }
 
     WTSFreeMemory(SessionInfo);

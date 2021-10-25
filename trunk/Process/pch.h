@@ -90,6 +90,10 @@ void WINAPI EnumerateSessions();
 
 EXTERN_C
 __declspec(dllexport)
+bool WINAPI IsRemoteSession(DWORD SessionId);
+
+EXTERN_C
+__declspec(dllexport)
 void WINAPI EnumerateSessionsEx();
 
 EXTERN_C
