@@ -388,7 +388,7 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI IsCurrentSessionRemoteable()
-/*
+/*经测试：可区分正常登录和RDP登录。
 Your application can check the following registry key to determine whether the session is a remote session that uses RemoteFX vGPU. 
 If a local session exists, this registry key provides the ID of the local session.
 
@@ -442,6 +442,91 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
     }
 
     return fIsRemoteable;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+const char * GetSessionConnectState(WTS_CONNECTSTATE_CLASS State)
+{
+    const char * ret = "未知";
+
+    switch (State) {
+    case WTSActive:
+        ret = "Active";
+        break;
+    case WTSConnected:
+        ret = "Connected";
+        break;
+    case WTSConnectQuery:
+        ret = "ConnectQuery";
+        break;
+    case WTSShadow:
+        ret = "Shadow";
+        break;
+    case WTSDisconnected:
+        ret = "Disconnected";
+        break;
+    case WTSIdle:
+        ret = "Idle";
+        break;
+    case WTSListen:
+        ret = "Listen";
+        break;
+    case WTSReset:
+        ret = "Reset";
+        break;
+    case WTSDown:
+        ret = "Down";
+        break;
+    case WTSInit:
+        ret = "Init";
+        break;
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI EnumerateSessions()
+/*
+功能：枚举（登录）会话。
+
+正常登录测试效果：
+C:\Users\Administrator>C:\Users\Administrator\Desktop\test.exe
+SessionId:0, WinStationName:Services, State:Disconnected.
+SessionId:1, WinStationName:Console, State:Active.
+SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
+RDP登录测试效果：
+C:\Users\Administrator>C:\Users\Administrator\Desktop\test.exe
+SessionId:0, WinStationName:Services, State:Disconnected.
+SessionId:1, WinStationName:RDP-Tcp#1, State:Active.
+SessionId:3, WinStationName:Console, State:Connected.
+SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
+效果和区别自己分析。
+*/
+{
+    WTS_SESSION_INFOA * SessionInfo;
+    DWORD Count;
+    BOOL ret = WTSEnumerateSessionsA(WTS_CURRENT_SERVER_HANDLE, 0, 1, &SessionInfo, &Count);
+    if (false == ret) {
+        DWORD LastError = GetLastError();
+        return;
+    }
+
+    for (DWORD i = 0; i < Count; i++) {
+        printf("SessionId:%d, WinStationName:%s, State:%s.\n",
+               SessionInfo[i].SessionId, 
+               SessionInfo[i].pWinStationName,
+               GetSessionConnectState(SessionInfo[i].State));
+    }
+
+    WTSFreeMemory(SessionInfo);
 }
 
 

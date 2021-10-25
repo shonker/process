@@ -86,6 +86,10 @@ BOOL WINAPI IsCurrentSessionRemoteable();
 
 EXTERN_C
 __declspec(dllexport)
+void WINAPI EnumerateSessions();
+
+EXTERN_C
+__declspec(dllexport)
 BOOL WINAPI SearchTokenGroupsForSID(VOID);
 
 void TimeStampToFileTime(INT64 timeStamp, FILETIME & fileTime);
