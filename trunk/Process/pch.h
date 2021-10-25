@@ -90,6 +90,10 @@ void WINAPI EnumerateSessions();
 
 EXTERN_C
 __declspec(dllexport)
+void WINAPI EnumerateSessionsEx();
+
+EXTERN_C
+__declspec(dllexport)
 BOOL WINAPI SearchTokenGroupsForSID(VOID);
 
 void TimeStampToFileTime(INT64 timeStamp, FILETIME & fileTime);

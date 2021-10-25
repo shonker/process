@@ -235,6 +235,8 @@ __declspec(dllimport) BOOL WINAPI IsCurrentSessionRemoteable();
 
 __declspec(dllimport) void WINAPI EnumerateSessions();
 
+__declspec(dllimport) void WINAPI EnumerateSessionsEx();
+
 __declspec(dllimport) int WINAPI EnumerateLogonSessions();
 
 __declspec(dllimport) BOOL WINAPI StartInteractiveClientProcess(

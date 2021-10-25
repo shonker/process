@@ -530,4 +530,39 @@ SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
 }
 
 
+EXTERN_C
+__declspec(dllexport)
+void WINAPI EnumerateSessionsEx()
+/*
+功能：枚举（登录）会话增强版。
+*/
+{
+    DWORD Level = 1;//This parameter is reserved. Always set this parameter to one
+    WTS_SESSION_INFO_1A * SessionInfo;
+    DWORD Count;
+#pragma prefast(push)
+#pragma prefast(disable: 6387, "“_Param_(1)”可能是“0”")
+    BOOL ret = WTSEnumerateSessionsExA(WTS_CURRENT_SERVER_HANDLE, &Level, 0, &SessionInfo, &Count);
+#pragma prefast(pop)  
+    if (false == ret) {
+        DWORD LastError = GetLastError();
+        return;
+    }
+
+    for (DWORD i = 0; i < Count; i++) {
+        printf("ExecEnvId:%d.\n", SessionInfo[i].ExecEnvId);
+        printf("State:%s.\n", GetSessionConnectState(SessionInfo[i].State));
+        printf("SessionId:%d.\n", SessionInfo[i].SessionId);
+        printf("pSessionName:%s.\n", SessionInfo[i].pSessionName);//For example, "services", "console", or "RDP-Tcp#0".
+        printf("pHostName:%s.\n", SessionInfo[i].pHostName);
+        printf("pUserName:%s.\n", SessionInfo[i].pUserName);
+        printf("pDomainName:%s.\n", SessionInfo[i].pDomainName);
+        printf("pFarmName:%s.\n", SessionInfo[i].pFarmName);
+        printf("\n"); 
+    }
+
+    WTSFreeMemory(SessionInfo);
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
