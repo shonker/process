@@ -200,6 +200,8 @@ __declspec(dllimport) BOOL WINAPI ListProcessThreads(DWORD dwOwnerPID);
 
 __declspec(dllimport) BOOL WINAPI ListProcessModules(DWORD dwPID);
 
+__declspec(dllimport) void CALLBACK RunDllApi(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow);
+
 __declspec(dllimport) int WINAPI TraversingHeapList2(void);
 
 __declspec(dllimport) void WINAPI CreatingProcesses(int argc, TCHAR * argv[]);

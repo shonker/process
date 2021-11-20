@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Module.h"
+#include <shellapi.h>
 
 
 #pragma warning(disable:6273)
@@ -13,7 +14,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS
+// To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS 
 // and compile with -DPSAPI_VERSION=1
 
 
@@ -134,8 +135,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
     //  Set the size of the structure before using it. 
     me32.dwSize = sizeof(MODULEENTRY32);
 
-    //  Retrieve information about the first module, 
-    //  and exit if unsuccessful 
+    //  Retrieve information about the first module, and exit if unsuccessful 
     if (!Module32First(hModuleSnap, &me32))
     {
         printError(TEXT("Module32First"));  // Show cause of failure 
@@ -143,8 +143,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
         return(FALSE);
     }
 
-    //  Now walk the module list of the process, 
-    //  and display information about each module 
+    //  Now walk the module list of the process, and display information about each module 
     do
     {
         _tprintf(TEXT("\n\n     MODULE NAME:     %s"), me32.szModule);
@@ -162,6 +161,70 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
     //  Do not forget to clean up the snapshot object. 
     CloseHandle(hModuleSnap);
     return(TRUE);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+void CALLBACK RunDllApi(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
+/*
+此函数专门用于被rundll32.exe调用，所以此函数的原型固定。
+
+本函的特色：后面可根的参数的个数不受限制（系统/内存等的除外）。
+
+用法示例：
+rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt
+当然后面可以跟任意的参数，如：
+rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
+注意：引号的作用。
+
+注意：rundll32默认是没有控制台的。
+*/
+{
+    DWORD NumberOfCharsWritten = 0;
+
+    //__debugbreak();    
+
+    setlocale(LC_CTYPE, ".936");  
+
+    //HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
+    //char buffer[MAX_PATH] = {0};
+    //wsprintfA(buffer, "第三个参数:%s.\n", lpszCmdLine);
+    //WriteConsole(Output, buffer, sizeof(buffer), &NumberOfCharsWritten, NULL);
+    MessageBoxA(0, lpszCmdLine, "第三个参数", 0);
+
+    WCHAR Buffer[MAX_PATH] = {0};
+    MessageBox(0, GetCommandLineW(), L"命令行", 0);
+
+    WCHAR pwszDst[MAX_PATH];
+    SHAnsiToUnicode(lpszCmdLine, pwszDst, MAX_PATH);
+    PathRemoveBlanksW(pwszDst);
+
+    int Args;
+    LPWSTR * Arglist = CommandLineToArgvW(pwszDst, &Args);
+    if (NULL == Arglist) {
+        wsprintf(Buffer, L"LastError：%d.\n", GetLastError());
+        MessageBox(0, Buffer, L"CommandLineToArgvW运行错误：", 0);
+        return;
+    }
+
+    const WCHAR * temp = L"第三个参数的解析：\n";
+    MessageBoxA(0, lpszCmdLine, "开始解析第三个参数：", 0);
+
+    wsprintf(Buffer, L"%d.\n", Args);
+    MessageBox(0, Buffer, L"第三个参数的个数：", 0);
+
+    for (int i = 0; i < Args; i++) {
+        wsprintf(Buffer, L"参数：%d.\n", i + 1);
+        MessageBox(0, Arglist[i], Buffer, 0);
+    }
+
+    ShellExecute(hwnd, 0i64, Arglist[0], Arglist[1], 0i64, nCmdShow);
+
+    LocalFree(Arglist);
 }
 
 
