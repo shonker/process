@@ -171,22 +171,16 @@ For example, OpenProcess fails for the Idle and CSRSS processes because their ac
 https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes
 */
 {
-    HANDLE hProcessSnap;
-    HANDLE hProcess;
-    PROCESSENTRY32 pe32;
-    DWORD dwPriorityClass;
-
     // Take a snapshot of all processes in the system.
-    hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcessSnap == INVALID_HANDLE_VALUE)
-    {
+    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap == INVALID_HANDLE_VALUE) {
         printError(TEXT("CreateToolhelp32Snapshot (of processes)"));
         return(FALSE);
     }
-    
-    pe32.dwSize = sizeof(PROCESSENTRY32);// Set the size of the structure before using it.
 
     // Retrieve information about the first process, and exit if unsuccessful
+    PROCESSENTRY32 pe32;
+    pe32.dwSize = sizeof(PROCESSENTRY32);// Set the size of the structure before using it.
     if (!Process32First(hProcessSnap, &pe32))
     {
         printError(TEXT("Process32First")); // show cause of failure
@@ -202,12 +196,11 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
         _tprintf(TEXT("\n-------------------------------------------------------"));
 
         // Retrieve the priority class.
-        dwPriorityClass = 0;
-        hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
-        if (hProcess == NULL)
+        DWORD dwPriorityClass = 0;
+        HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
+        if (hProcess == NULL) {
             printError(TEXT("OpenProcess"));
-        else
-        {
+        } else {
             dwPriorityClass = GetPriorityClass(hProcess);
             if (!dwPriorityClass)
                 printError(TEXT("GetPriorityClass"));
@@ -228,6 +221,45 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
 
     CloseHandle(hProcessSnap);
     return(TRUE);
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+DWORD WINAPI GetProcessName(_In_ DWORD ProcessID, PWCHAR ProcessName)
+/*
+功能：获取一个（在线的，非退出的）进程的进程名（非进程的完整路径）。
+
+参数：
+ProcessName的元素大小 >= pe32.szExeFile的MAX_PATH。
+
+注释：这个总是能获取到的，只要它没有退出。
+      但是获取到的仅仅是进程名，非完整，不能据此获取进程的IMAGE，主要作用是显示。
+*/
+{
+    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap == INVALID_HANDLE_VALUE) {
+        return GetLastError();
+    }
+
+    // Retrieve information about the first process
+    PROCESSENTRY32 pe32;
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First(hProcessSnap, &pe32)) {
+        CloseHandle(hProcessSnap);
+        return GetLastError();
+    }
+
+    // Now walk the snapshot of processes
+    do {
+        if (ProcessID == pe32.th32ProcessID) {
+            lstrcpy(ProcessName, pe32.szExeFile);
+            break;
+        }
+    } while (Process32Next(hProcessSnap, &pe32));
+
+    CloseHandle(hProcessSnap);
+    return GetLastError();
 }
 
 

@@ -196,6 +196,8 @@ __declspec(dllimport) VOID __stdcall DoQuerySvc(_In_ LPCWSTR ServiceName);
 
 __declspec(dllimport) BOOL WINAPI GetProcessList();
 
+__declspec(dllimport) DWORD WINAPI GetProcessName(_In_ DWORD ProcessID, PWCHAR ProcessName);
+
 __declspec(dllimport) BOOL WINAPI ListProcessThreads(DWORD dwOwnerPID);
 
 __declspec(dllimport) BOOL WINAPI ListProcessModules(DWORD dwPID);
