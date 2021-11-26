@@ -62,7 +62,7 @@ InstallHinfSection使用注意事项：
 
 EXTERN_C
 __declspec(dllexport)
-BOOL WINAPI DriverInstall(_In_opt_ LPCWSTR BinaryPathName,_In_ LPCWSTR ServiceName)
+BOOL WINAPI DriverInstall(_In_opt_ LPCWSTR BinaryPathName, _In_ LPCWSTR ServiceName)
 /*
 Purpose: Installs a Driver in the SCM database
 
@@ -120,8 +120,8 @@ http://msdn.microsoft.com/en-us/library/windows/desktop/ms683500(v=vs.85).aspx
 EXTERN_C
 __declspec(dllexport)
 VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
-                _In_ LPCWSTR ServiceName, 
-                _In_opt_ LPCWSTR DisplayName
+                       _In_ LPCWSTR ServiceName,
+                       _In_opt_ LPCWSTR DisplayName
 )
 // Purpose: Installs a service in the SCM database
 //https://docs.microsoft.com/zh-cn/windows/win32/services/installing-a-service
@@ -409,7 +409,12 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
 
         __try {
             // Enumerate the dependencies.
-            if (!EnumDependentServices(schService, SERVICE_ACTIVE, lpDependencies, dwBytesNeeded, &dwBytesNeeded, &dwCount))
+            if (!EnumDependentServices(schService,
+                                       SERVICE_ACTIVE,
+                                       lpDependencies,
+                                       dwBytesNeeded,
+                                       &dwBytesNeeded,
+                                       &dwCount))
                 return FALSE;
 
             for (i = 0; i < dwCount; i++) {
@@ -427,7 +432,11 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
                     // Wait for the service to stop.
                     while (ssp.dwCurrentState != SERVICE_STOPPED) {
                         Sleep(ssp.dwWaitHint);
-                        if (!QueryServiceStatusEx(hDepService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded))
+                        if (!QueryServiceStatusEx(hDepService,
+                                                  SC_STATUS_PROCESS_INFO,
+                                                  (LPBYTE)&ssp,
+                                                  sizeof(SERVICE_STATUS_PROCESS),
+                                                  &dwBytesNeeded))
                             return FALSE;
 
                         if (ssp.dwCurrentState == SERVICE_STOPPED)
@@ -488,7 +497,11 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
     }
 
     // Make sure the service is not already stopped.
-    if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
+    if (!QueryServiceStatusEx(schService,
+                              SC_STATUS_PROCESS_INFO,
+                              (LPBYTE)&ssp,
+                              sizeof(SERVICE_STATUS_PROCESS),
+                              &dwBytesNeeded)) {
         printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
         goto stop_cleanup;
     }
@@ -513,7 +526,11 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
 
         Sleep(dwWaitTime);
 
-        if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
+        if (!QueryServiceStatusEx(schService,
+                                  SC_STATUS_PROCESS_INFO,
+                                  (LPBYTE)&ssp,
+                                  sizeof(SERVICE_STATUS_PROCESS),
+                                  &dwBytesNeeded)) {
             printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
             goto stop_cleanup;
         }
@@ -541,7 +558,11 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
     // Wait for the service to stop.
     while (ssp.dwCurrentState != SERVICE_STOPPED) {
         Sleep(ssp.dwWaitHint);
-        if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
+        if (!QueryServiceStatusEx(schService,
+                                  SC_STATUS_PROCESS_INFO,
+                                  (LPBYTE)&ssp,
+                                  sizeof(SERVICE_STATUS_PROCESS),
+                                  &dwBytesNeeded)) {
             printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
             goto stop_cleanup;
         }
@@ -714,24 +735,20 @@ VOID __stdcall DoDisableSvc(_In_ LPCWSTR szSvcName)
     SC_HANDLE schService;
 
     // Get a handle to the SCM database. 
-
     schSCManager = OpenSCManager(
         NULL,                    // local computer
         NULL,                    // ServicesActive database 
         SC_MANAGER_ALL_ACCESS);  // full access rights 
-
     if (NULL == schSCManager) {
         printf("OpenSCManager failed (%d)\n", GetLastError());
         return;
     }
 
     // Get a handle to the service.
-
     schService = OpenService(
         schSCManager,            // SCM database 
         szSvcName,               // name of service 
         SERVICE_CHANGE_CONFIG);  // need change config access 
-
     if (schService == NULL) {
         printf("OpenService failed (%d)\n", GetLastError());
         CloseServiceHandle(schSCManager);
@@ -739,7 +756,6 @@ VOID __stdcall DoDisableSvc(_In_ LPCWSTR szSvcName)
     }
 
     // Change the service start type.
-
     if (!ChangeServiceConfig(
         schService,        // handle of service 
         SERVICE_NO_CHANGE, // service type: no change 
@@ -772,24 +788,20 @@ VOID __stdcall DoEnableSvc(_In_ LPCWSTR szSvcName)
     SC_HANDLE schService;
 
     // Get a handle to the SCM database. 
-
     schSCManager = OpenSCManager(
         NULL,                    // local computer
         NULL,                    // ServicesActive database 
         SC_MANAGER_ALL_ACCESS);  // full access rights 
-
     if (NULL == schSCManager) {
         printf("OpenSCManager failed (%d)\n", GetLastError());
         return;
     }
 
     // Get a handle to the service.
-
     schService = OpenService(
         schSCManager,            // SCM database 
         szSvcName,               // name of service 
         SERVICE_CHANGE_CONFIG);  // need change config access 
-
     if (schService == NULL) {
         printf("OpenService failed (%d)\n", GetLastError());
         CloseServiceHandle(schSCManager);
@@ -797,7 +809,6 @@ VOID __stdcall DoEnableSvc(_In_ LPCWSTR szSvcName)
     }
 
     // Change the service start type.
-
     if (!ChangeServiceConfig(
         schService,            // handle of service 
         SERVICE_NO_CHANGE,     // service type: no change 
@@ -832,24 +843,20 @@ VOID __stdcall DoUpdateSvcDesc(_In_ LPCWSTR szSvcName)
     LPCTSTR szDesc = TEXT("This is a test description");
 
     // Get a handle to the SCM database. 
-
     schSCManager = OpenSCManager(
         NULL,                    // local computer
         NULL,                    // ServicesActive database 
         SC_MANAGER_ALL_ACCESS);  // full access rights 
-
     if (NULL == schSCManager) {
         printf("OpenSCManager failed (%d)\n", GetLastError());
         return;
     }
 
     // Get a handle to the service.
-
     schService = OpenService(
         schSCManager,            // SCM database 
         szSvcName,               // name of service 
         SERVICE_CHANGE_CONFIG);  // need change config access 
-
     if (schService == NULL) {
         printf("OpenService failed (%d)\n", GetLastError());
         CloseServiceHandle(schSCManager);
@@ -857,9 +864,7 @@ VOID __stdcall DoUpdateSvcDesc(_In_ LPCWSTR szSvcName)
     }
 
     // Change the service description.
-
     sd.lpDescription = (LPWSTR)szDesc;
-
     if (!ChangeServiceConfig2(
         schService,                 // handle to service
         SERVICE_CONFIG_DESCRIPTION, // change: description
@@ -895,24 +900,20 @@ VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
     SC_HANDLE schService = NULL;
 
     // Get a handle to the SCM database. 
-
     schSCManager = OpenSCManager(
         NULL,                    // local computer
         NULL,                    // ServicesActive database 
         SC_MANAGER_ALL_ACCESS);  // full access rights 
-
     if (NULL == schSCManager) {
         printf("OpenSCManager failed (%d)\n", GetLastError());
         return;
     }
 
     // Get a handle to the service
-
     schService = OpenService(
         schSCManager,              // SCManager database 
         szSvcName,                 // name of service 
         READ_CONTROL | WRITE_DAC); // access
-
     if (schService == NULL) {
         printf("OpenService failed (%d)\n", GetLastError());
         CloseServiceHandle(schSCManager);
@@ -920,7 +921,6 @@ VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
     }
 
     // Get the current security descriptor.
-
     if (!QueryServiceObjectSecurity(schService,
                                     DACL_SECURITY_INFORMATION,
                                     &psd,           // using NULL does not work on all versions
@@ -928,8 +928,7 @@ VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
                                     &dwBytesNeeded)) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
             dwSize = dwBytesNeeded;
-            psd = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(),
-                                                  HEAP_ZERO_MEMORY, dwSize);
+            psd = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
             if (psd == NULL) {
                 // Note: HeapAlloc does not support GetLastError.
                 printf("HeapAlloc failed\n");
@@ -948,19 +947,15 @@ VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
     }
 
     // Get the DACL.
-
-    if (!GetSecurityDescriptorDacl(psd, &bDaclPresent, &pacl,
-                                   &bDaclDefaulted)) {
+    if (!GetSecurityDescriptorDacl(psd, &bDaclPresent, &pacl, &bDaclDefaulted)) {
         printf("GetSecurityDescriptorDacl failed(%d)\n", GetLastError());
         goto dacl_cleanup;
     }
 
     // Build the ACE.
-
     BuildExplicitAccessWithName(&ea, (LPWSTR)TEXT("GUEST"),
                                 SERVICE_START | SERVICE_STOP | READ_CONTROL | DELETE,
                                 SET_ACCESS, NO_INHERITANCE);
-
     dwError = SetEntriesInAcl(1, &ea, pacl, &pNewAcl);
     if (dwError != ERROR_SUCCESS) {
         printf("SetEntriesInAcl failed(%d)\n", dwError);
@@ -968,24 +963,19 @@ VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
     }
 
     // Initialize a new security descriptor.
-
-    if (!InitializeSecurityDescriptor(&sd,
-                                      SECURITY_DESCRIPTOR_REVISION)) {
+    if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         printf("InitializeSecurityDescriptor failed(%d)\n", GetLastError());
         goto dacl_cleanup;
     }
 
     // Set the new DACL in the security descriptor.
-
     if (!SetSecurityDescriptorDacl(&sd, TRUE, pNewAcl, FALSE)) {
         printf("SetSecurityDescriptorDacl failed(%d)\n", GetLastError());
         goto dacl_cleanup;
     }
 
     // Set the new DACL for the service object.
-
-    if (!SetServiceObjectSecurity(schService,
-                                  DACL_SECURITY_INFORMATION, &sd)) {
+    if (!SetServiceObjectSecurity(schService, DACL_SECURITY_INFORMATION, &sd)) {
         printf("SetServiceObjectSecurity failed(%d)\n", GetLastError());
         goto dacl_cleanup;
     } else printf("Service DACL updated successfully\n");

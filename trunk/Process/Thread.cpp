@@ -15,9 +15,9 @@ BOOL WINAPI ListProcessThreads(DWORD dwOwnerPID)
 Traversing the Thread List
 05/31/2018
 
-The following example function lists running threads for a specified process. 
-First, the ListProcessThreads function takes a snapshot of the currently executing threads in the system using CreateToolhelp32Snapshot, 
-and then it walks through the list recorded in the snapshot using the Thread32First and Thread32Next functions. 
+The following example function lists running threads for a specified process.
+First, the ListProcessThreads function takes a snapshot of the currently executing threads in the system using CreateToolhelp32Snapshot,
+and then it walks through the list recorded in the snapshot using the Thread32First and Thread32Next functions.
 The parameter for ListProcessThreads is the process identifier of the process whose threads are to be listed.
 
 用法：ListProcessThreads(GetCurrentProcessId());
@@ -38,8 +38,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-thread-li
 
     // Retrieve information about the first thread,
     // and exit if unsuccessful
-    if (!Thread32First(hThreadSnap, &te32))
-    {
+    if (!Thread32First(hThreadSnap, &te32)) {
         printError(TEXT("Thread32First"));  // Show cause of failure
         CloseHandle(hThreadSnap);     // Must clean up the snapshot object!
         return(FALSE);
@@ -48,10 +47,8 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-thread-li
     // Now walk the thread list of the system,
     // and display information about each thread
     // associated with the specified process
-    do
-    {
-        if (te32.th32OwnerProcessID == dwOwnerPID)
-        {
+    do {
+        if (te32.th32OwnerProcessID == dwOwnerPID) {
             _tprintf(TEXT("\n     THREAD ID      = 0x%08X"), te32.th32ThreadID);
             _tprintf(TEXT("\n     base priority  = %d"), te32.tpBasePri);
             _tprintf(TEXT("\n     delta priority = %d"), te32.tpDeltaPri);
@@ -91,17 +88,17 @@ Creating Threads
 2018/05/31
 
 The CreateThread function creates a new thread for a process.
-The creating thread must specify the starting address of the code that the new thread is to execute. 
+The creating thread must specify the starting address of the code that the new thread is to execute.
 Typically, the starting address is the name of a function defined in the program code (for more information, see ThreadProc).
-This function takes a single parameter and returns a DWORD value. 
+This function takes a single parameter and returns a DWORD value.
 A process can have multiple threads simultaneously executing the same function.
 
 The following is a simple example that demonstrates how to create a new thread that executes the locally defined function, MyThreadFunction.
 
-The calling thread uses the WaitForMultipleObjects function to persist until all worker threads have terminated. 
-The calling thread blocks while it is waiting; 
-to continue processing, a calling thread would use WaitForSingleObject and wait for each worker thread to signal its wait object. 
-Note that if you were to close the handle to a worker thread before it terminated, this does not terminate the worker thread. 
+The calling thread uses the WaitForMultipleObjects function to persist until all worker threads have terminated.
+The calling thread blocks while it is waiting;
+to continue processing, a calling thread would use WaitForSingleObject and wait for each worker thread to signal its wait object.
+Note that if you were to close the handle to a worker thread before it terminated, this does not terminate the worker thread.
 However, the handle will be unavailable for use in subsequent function calls.
 
 https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
@@ -113,15 +110,13 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 
     // Create MAX_THREADS worker threads.
 
-    for (int i = 0; i < MAX_THREADS; i++)
-    {
+    for (int i = 0; i < MAX_THREADS; i++) {
         // Allocate memory for thread data.
 
         pDataArray[i] = (PMYDATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
                                            sizeof(MYDATA));
 
-        if (pDataArray[i] == NULL)
-        {
+        if (pDataArray[i] == NULL) {
             // If the array allocation fails, the system is out of memory
             // so there is no point in trying to print an error message.
             // Just terminate execution.
@@ -148,8 +143,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
         // If CreateThread fails, terminate execution. 
         // This will automatically clean up threads and memory. 
 
-        if (hThreadArray[i] == NULL)
-        {
+        if (hThreadArray[i] == NULL) {
             ErrorHandler(TEXT("CreateThread"));
             ExitProcess(3);
         }
@@ -161,11 +155,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 
     // Close all thread handles and free memory allocations.
 
-    for (int i = 0; i < MAX_THREADS; i++)
-    {
+    for (int i = 0; i < MAX_THREADS; i++) {
         CloseHandle(hThreadArray[i]);
-        if (pDataArray[i] != NULL)
-        {
+        if (pDataArray[i] != NULL) {
             HeapFree(GetProcessHeap(), 0, pDataArray[i]);
             pDataArray[i] = NULL;    // Ensure address is not reused.
         }
@@ -242,7 +234,7 @@ int ImpersonateUser(int argc, wchar_t * argv[])
 * Copyright (c) Microsoft Corporation.
 *
 * 代码出处：User impersonation demo (CppImpersonateUser)
-* 
+*
 * Windows Impersonation is a powerful feature Windows uses frequently in its
 * security model. In general Windows also uses impersonation in its client/
 * server programming model.Impersonation lets a server to temporarily adopt

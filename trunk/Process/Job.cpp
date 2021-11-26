@@ -83,8 +83,6 @@ made by correy
 made at 2015.07.10
 */
 {
-    //DebugBreak();
-
     HANDLE hjob = CreateJob();
     if (INVALID_HANDLE_VALUE == hjob) {
         return 0;
@@ -97,7 +95,7 @@ made at 2015.07.10
     ZeroMemory(&pi, sizeof(pi));
 
     // Start the child process. 
-    if (!CreateProcess(L"c:\\windows\\system32\\calc.exe" /*这个应该有标准的获取的办法，这里是测试。*/, 
+    if (!CreateProcess(L"c:\\windows\\system32\\calc.exe" /*这个应该有标准的获取的办法，这里是测试。*/,
                        NULL,        // Command line
                        NULL,           // Process handle not inheritable
                        NULL,           // Thread handle not inheritable

@@ -161,10 +161,10 @@ void ShellExecuteFromExplorer(PCWSTR pszFile,
 
     //error C2039: "ShellExecuteW": 不是 "IShellDispatch2" 的成员
     CComQIPtr<IShellDispatch2>(spdispShell)->ShellExecute(CComBSTR(pszFile),
-                       CComVariant(pszParameters ? pszParameters : L""),
-                       CComVariant(pszDirectory ? pszDirectory : L""),
-                       CComVariant(pszOperation ? pszOperation : L""),
-                       CComVariant(nShowCmd));
+                                                          CComVariant(pszParameters ? pszParameters : L""),
+                                                          CComVariant(pszDirectory ? pszDirectory : L""),
+                                                          CComVariant(pszOperation ? pszOperation : L""),
+                                                          CComVariant(nShowCmd));
 }
 
 

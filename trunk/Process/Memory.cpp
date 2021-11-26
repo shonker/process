@@ -255,8 +255,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/allocating-memory-from-a-n
             AllocationSize,
             MEM_RESERVE | MEM_COMMIT,
             PAGE_READWRITE,
-            NodeNumber
-        );
+            NodeNumber);
         if (Buffer == NULL) {
             _tprintf(_T("VirtualAllocExNuma failed: %d, node %u\n"), GetLastError(), NodeNumber);
             goto Exit;

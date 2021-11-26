@@ -72,7 +72,7 @@ int WINAPI CreatingViewWithinFile(void)
     // 64-bit values, and then get the low-order 32 bits for the function calls.
 
     // To calculate where to start the file mapping, round down the
-    // offset of the data into the file to the nearest multiple of the
+    // offset of the data into the file to the nearest multiple of the 
     // system allocation granularity.
     dwFileMapStart = (FILE_MAP_START / dwSysGran) * dwSysGran;
     _tprintf(TEXT("The file map view starts at %ld bytes into the file.\n"), dwFileMapStart);

@@ -204,8 +204,8 @@ int WINAPI TraversingHeapList2(void)
 Traversing the Heap List
 05/31/2018
 
-The following example obtains a list of heaps for the current process. 
-It takes a snapshot of the heaps using the CreateToolhelp32Snapshot function, 
+The following example obtains a list of heaps for the current process.
+It takes a snapshot of the heaps using the CreateToolhelp32Snapshot function,
 and then walks through the list using the Heap32ListFirst and Heap32ListNext functions.
 For each heap, it uses the Heap32First and Heap32Next functions to walk the heap blocks.
 
@@ -215,25 +215,20 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-heap-list
     HEAPLIST32 hl;
     HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, GetCurrentProcessId());
     hl.dwSize = sizeof(HEAPLIST32);
-    if (hHeapSnap == INVALID_HANDLE_VALUE)
-    {
+    if (hHeapSnap == INVALID_HANDLE_VALUE) {
         printf("CreateToolhelp32Snapshot failed (%d)\n", GetLastError());
         return 1;
     }
 
-    if (Heap32ListFirst(hHeapSnap, &hl))
-    {
-        do
-        {
+    if (Heap32ListFirst(hHeapSnap, &hl)) {
+        do {
             HEAPENTRY32 he;
             ZeroMemory(&he, sizeof(HEAPENTRY32));
             he.dwSize = sizeof(HEAPENTRY32);
 
-            if (Heap32First(&he, GetCurrentProcessId(), hl.th32HeapID))
-            {
+            if (Heap32First(&he, GetCurrentProcessId(), hl.th32HeapID)) {
                 printf("\nHeap ID: %Id\n", hl.th32HeapID);
-                do
-                {
+                do {
                     printf("Block size: %Id\n", he.dwBlockSize);
                     he.dwSize = sizeof(HEAPENTRY32);
                 } while (Heap32Next(&he));

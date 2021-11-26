@@ -32,15 +32,13 @@ DisplayWinError(
     fprintf(stderr, "%s error!\n", szAPI);
 
     if (dwBufferLength = FormatMessageA(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM,
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,
         dwError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPSTR)&MessageBuffer,
         0,
-        NULL
-    )) {
+        NULL)) {
         DWORD dwBytesWritten; // unused
 
         // Output message string on stderr
@@ -122,9 +120,7 @@ void ErrorHandler(LPCTSTR lpszFunction)
     DWORD dw = GetLastError();
 
     FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dw,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),

@@ -228,7 +228,8 @@ https://docs.microsoft.com/zh-cn/windows/win32/api/winbase/nf-winbase-createproc
     if (!LogonUser(argv[1], NULL, argv[2], LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken))
         DisplayError(L"LogonUser");
 
-    ////得到的内容其实就是：The environment block is an array of null-terminated Unicode strings. The list ends with two nulls (\0\0).
+    //得到的内容其实就是：The environment block is an array of null-terminated Unicode strings.
+    //The list ends with two nulls (\0\0).
     if (!CreateEnvironmentBlock(&lpvEnv, hToken, TRUE))
         DisplayError(L"CreateEnvironmentBlock");
 
@@ -364,12 +365,12 @@ Cleanup:
 
 BOOL IsRemoteSession(void)
 /*
-The following example shows a function that 
-returns TRUE if the application is running in a remote session and 
+The following example shows a function that
+returns TRUE if the application is running in a remote session and
 FALSE if the application is running on the console.
 
-You should not use GetSystemMetrics(SM_REMOTESESSION) to determine if your application is running in a remote session in Windows 8 and later or 
-Windows Server 2012 and later if the remote session may also be using the RemoteFX vGPU improvements to the Microsoft Remote Display Protocol (RDP). 
+You should not use GetSystemMetrics(SM_REMOTESESSION) to determine if your application is running in a remote session in Windows 8 and later or
+Windows Server 2012 and later if the remote session may also be using the RemoteFX vGPU improvements to the Microsoft Remote Display Protocol (RDP).
 In this case, GetSystemMetrics(SM_REMOTESESSION) will identify the remote session as a local session.
 
 https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-services-environment
@@ -387,13 +388,13 @@ EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI IsCurrentSessionRemoteable()
 /*经测试：可区分正常登录和RDP登录。
-Your application can check the following registry key to determine whether the session is a remote session that uses RemoteFX vGPU. 
+Your application can check the following registry key to determine whether the session is a remote session that uses RemoteFX vGPU.
 If a local session exists, this registry key provides the ID of the local session.
 
 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Terminal Server\GlassSessionId
 
-If the ID of the current session in which the application is running is the same as in the registry key, 
-the application is running in a local session. Sessions identified as remote session in this way include remote sessions that use RemoteFX vGPU. 
+If the ID of the current session in which the application is running is the same as in the registry key,
+the application is running in a local session. Sessions identified as remote session in this way include remote sessions that use RemoteFX vGPU.
 The following sample code demonstrates this.
 
 https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-services-environment
@@ -407,24 +408,22 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
         HKEY hRegKey = NULL;
         LONG lResult;
 
-        lResult = RegOpenKeyEx(
-            HKEY_LOCAL_MACHINE,
-            TERMINAL_SERVER_KEY,
-            0, // ulOptions
-            KEY_READ,
-            &hRegKey);
+        lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                               TERMINAL_SERVER_KEY,
+                               0, // ulOptions
+                               KEY_READ,
+                               &hRegKey);
         if (lResult == ERROR_SUCCESS) {
             DWORD dwGlassSessionId;
             DWORD cbGlassSessionId = sizeof(dwGlassSessionId);
             DWORD dwType;
 
-            lResult = RegQueryValueEx(
-                hRegKey,
-                GLASS_SESSION_ID,
-                NULL, // lpReserved
-                &dwType,
-                (BYTE *)&dwGlassSessionId,
-                &cbGlassSessionId);
+            lResult = RegQueryValueEx(hRegKey,
+                                      GLASS_SESSION_ID,
+                                      NULL, // lpReserved
+                                      &dwType,
+                                      (BYTE *)&dwGlassSessionId,
+                                      &cbGlassSessionId);
             if (lResult == ERROR_SUCCESS) {
                 DWORD dwCurrentSessionId;
 
@@ -562,7 +561,7 @@ SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
 
     for (DWORD i = 0; i < Count; i++) {
         printf("SessionId:%d, WinStationName:%s, State:%s.\n",
-               SessionInfo[i].SessionId, 
+               SessionInfo[i].SessionId,
                SessionInfo[i].pWinStationName,
                GetSessionConnectState(SessionInfo[i].State));
 
@@ -601,7 +600,7 @@ void WINAPI EnumerateSessionsEx()
         printf("pUserName:%s.\n", SessionInfo[i].pUserName);
         printf("pDomainName:%s.\n", SessionInfo[i].pDomainName);
         printf("pFarmName:%s.\n", SessionInfo[i].pFarmName);
-        printf("\n"); 
+        printf("\n");
 
         IsRemoteSession(SessionInfo[i].SessionId);
     }

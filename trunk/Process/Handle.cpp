@@ -78,7 +78,13 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             0x00000032 不支持该请求。
             */
             HANDLE hCopy;// Duplicate the handle in the current process
-            if (!DuplicateHandle(hProcess, (HANDLE)pHandle->Handle, GetCurrentProcess(), &hCopy, MAXIMUM_ALLOWED, FALSE, 0))
+            if (!DuplicateHandle(hProcess, 
+                                 (HANDLE)pHandle->Handle,
+                                 GetCurrentProcess(),
+                                 &hCopy, 
+                                 MAXIMUM_ALLOWED,
+                                 FALSE, 
+                                 0))
             {
                 wprintf(L"DuplicateHandle fail with 0x%x,HANDLE:0x%x,ObjectTypeNumber:%d\n",
                         GetLastError(), pHandle->Handle, pHandle->ObjectTypeNumber);
@@ -223,7 +229,13 @@ DWORD EnumerateFileHandles(ULONG pid)
 
             // Duplicate the handle in the current process
             HANDLE hCopy;
-            if (!DuplicateHandle(hProcess, (HANDLE)pHandle->Handle, GetCurrentProcess(), &hCopy, MAXIMUM_ALLOWED, FALSE, 0))
+            if (!DuplicateHandle(hProcess, 
+                                 (HANDLE)pHandle->Handle,
+                                 GetCurrentProcess(),
+                                 &hCopy, 
+                                 MAXIMUM_ALLOWED,
+                                 FALSE,
+                                 0))
                 continue;
 
             // Retrieve file name information about the file object.
