@@ -22,25 +22,20 @@
 void PrintProcessNameAndID(DWORD processID)
 {
     TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
-
-    // Get a handle to the process.
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
-
-    // Get the process name.
-    if (NULL != hProcess) {
+    
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);    
+    if (NULL != hProcess) {// Get a handle to the process.
         HMODULE hMod;
         DWORD cbNeeded;
-
-        if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {
+        if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {// Get the process name.
             GetModuleBaseName(hProcess, hMod, szProcessName, sizeof(szProcessName) / sizeof(TCHAR));
         }
     }
 
     // Print the process name and identifier.
     _tprintf(TEXT("%s  (PID: %u)\n"), szProcessName, processID);
-
-    // Release the handle to the process.
-    CloseHandle(hProcess);
+    
+    CloseHandle(hProcess);// Release the handle to the process.
 }
 
 
@@ -188,12 +183,10 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
         printError(TEXT("CreateToolhelp32Snapshot (of processes)"));
         return(FALSE);
     }
+    
+    pe32.dwSize = sizeof(PROCESSENTRY32);// Set the size of the structure before using it.
 
-    // Set the size of the structure before using it.
-    pe32.dwSize = sizeof(PROCESSENTRY32);
-
-    // Retrieve information about the first process,
-    // and exit if unsuccessful
+    // Retrieve information about the first process, and exit if unsuccessful
     if (!Process32First(hProcessSnap, &pe32))
     {
         printError(TEXT("Process32First")); // show cause of failure
@@ -201,8 +194,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
         return(FALSE);
     }
 
-    // Now walk the snapshot of processes, and
-    // display information about each process in turn
+    // Now walk the snapshot of processes, and display information about each process in turn
     do
     {
         _tprintf(TEXT("\n\n====================================================="));
@@ -232,7 +224,6 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
         // List the modules and threads associated with this process
         ListProcessModules(pe32.th32ProcessID);
         ListProcessThreads(pe32.th32ProcessID);
-
     } while (Process32Next(hProcessSnap, &pe32));
 
     CloseHandle(hProcessSnap);
@@ -564,82 +555,6 @@ void GetSystemStartTime(char * SystemStartTime)
 
     //满足本工程的需求。
     wsprintfA(SystemStartTime, "%I64u", StartTime);
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-void FindDesktopFolderView(REFIID riid, void ** ppv)
-//https://devblogs.microsoft.com/oldnewthing/20130318-00/?p=4933
-{
-    CComPtr<IShellWindows> spShellWindows;
-    (void)spShellWindows.CoCreateInstance(CLSID_ShellWindows);
-
-    CComVariant vtLoc(CSIDL_DESKTOP);
-    CComVariant vtEmpty;
-    long lhwnd;
-    CComPtr<IDispatch> spdisp;
-    spShellWindows->FindWindowSW(&vtLoc, &vtEmpty, SWC_DESKTOP, &lhwnd, SWFO_NEEDDISPATCH, &spdisp);
-
-    CComPtr<IShellBrowser> spBrowser;
-    CComQIPtr<IServiceProvider>(spdisp)->QueryService(SID_STopLevelBrowser, IID_PPV_ARGS(&spBrowser));
-
-    CComPtr<IShellView> spView;
-    spBrowser->QueryActiveShellView(&spView);
-
-    spView->QueryInterface(riid, ppv);
-}
-
-
-void GetDesktopAutomationObject(REFIID riid, void ** ppv)
-//http://blogs.msdn.com/b/oldnewthing/archive/2013/11/18/10468726.aspx
-{
-    CComPtr<IShellView> spsv;
-    FindDesktopFolderView(IID_PPV_ARGS(&spsv));
-
-    CComPtr<IDispatch> spdispView;
-    spsv->GetItemObject(SVGIO_BACKGROUND, IID_PPV_ARGS(&spdispView));
-    spdispView->QueryInterface(riid, ppv);
-}
-
-
-void ShellExecuteFromExplorer(
-    PCWSTR pszFile,
-    PCWSTR pszParameters = nullptr,
-    PCWSTR pszDirectory = nullptr,
-    PCWSTR pszOperation = nullptr,
-    int nShowCmd = SW_SHOWNORMAL
-)
-//http://blogs.msdn.com/b/oldnewthing/archive/2013/11/18/10468726.aspx
-{
-    CComPtr<IShellFolderViewDual> spFolderView;
-    GetDesktopAutomationObject(IID_PPV_ARGS(&spFolderView));
-    CComPtr<IDispatch> spdispShell;
-    spFolderView->get_Application(&spdispShell);
-
-    //error C2039: "ShellExecuteW": 不是 "IShellDispatch2" 的成员
-    //CComQIPtr<IShellDispatch2>(spdispShell)->ShellExecute(CComBSTR(pszFile),
-    //                   CComVariant(pszParameters ? pszParameters : L""),
-    //                   CComVariant(pszDirectory ? pszDirectory : L""),
-    //                   CComVariant(pszOperation ? pszOperation : L""),
-    //                   CComVariant(nShowCmd));
-}
-
-
-int __cdecl ShellExecuteFromExplorerTest(int argc, wchar_t ** argv)
-{
-    if (argc < 2) return 0;
-
-    (void)CoInitialize(0);
-    ShellExecuteFromExplorer(
-        argv[1],
-        argc >= 3 ? argv[2] : L"",
-        argc >= 4 ? argv[3] : L"",
-        argc >= 5 ? argv[4] : L"",
-        argc >= 6 ? _wtoi(argv[5]) : SW_SHOWNORMAL);
-
-    return 0;
 }
 
 
