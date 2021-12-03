@@ -236,3 +236,58 @@ void GetImageFilePath(_Out_ LPWSTR ImageFilePath, _In_ DWORD nSize)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void Nt2Dos(IN  OUT TCHAR * szFileName)
+/*
+功能：把形如：L"\\Device\\HarddiskVolume1\\test.txt"的文件路径转换为：L"C:\\test.txt"。
+本代码摘自：微软的CppFileHandle工程。
+*/
+{
+    if (szFileName == NULL) {
+        return;
+    }
+
+    if (lstrlenW(szFileName) == 0) {
+        return;
+    }
+
+    TCHAR szTemp[MAX_PATH] = {0};// Translate path with device name to drive letters.
+
+    // Get a series of null-terminated strings, one for each valid drive in the system, plus with an additional null character.
+    // Each string is a drive name. e.g. C:\\0D:\\0\0
+    if (GetLogicalDriveStrings(MAX_PATH - 1, szTemp)) {
+        TCHAR szName[MAX_PATH];
+        TCHAR szDrive[3] = _T(" :");
+        BOOL bFound = FALSE;
+        TCHAR * p = szTemp;
+
+        do {
+            *szDrive = *p;// Copy the drive letter to the template string
+
+            // Look up each device name. 
+            // For example, given szDrive is C:, the output szName may be \Device\HarddiskVolume2.
+            if (QueryDosDevice(szDrive, szName, MAX_PATH)) {
+                size_t uNameLen = _tcslen(szName);
+
+                if (uNameLen < MAX_PATH) {
+                    // Match the device name e.g. \Device\HarddiskVolume2
+                    bFound = _tcsnicmp(szFileName, szName, uNameLen) == 0;
+                    if (bFound) {
+                        // Reconstruct szFileName using szTempFile
+                        // Replace device path with DOS path
+                        TCHAR szTempFile[MAX_PATH];
+                        StringCchPrintf(szTempFile, MAX_PATH, _T("%s%s"), szDrive, szFileName + uNameLen);
+                        StringCchCopyN(szFileName, MAX_PATH + 1, szTempFile, _tcslen(szTempFile));
+                    }
+                }
+            }
+
+            while (*p++);// Go to the next NULL character, i.e. the next drive name.
+
+        } while (!bFound && *p); // End of string
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

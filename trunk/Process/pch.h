@@ -105,5 +105,7 @@ void FileTimeToTimeStamp(const FILETIME & fileTime, INT64 & timeStamp);
 
 void GetImageFilePath(_Out_ LPWSTR ImageFilePath, _In_ DWORD nSize);
 
+void Nt2Dos(IN  OUT TCHAR * szFileName);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

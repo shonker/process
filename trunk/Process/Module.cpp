@@ -229,3 +229,151 @@ rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS 
+
+
+set<wstring> g_Module;
+CRITICAL_SECTION g_ModuleLock;
+
+
+void GetAllModuleInfo(HANDLE hProcess)
+/*
+功能：获取一个进程的所有的模块信息。
+
+To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS and compile with -DPSAPI_VERSION=1
+
+此办法可显示WOW64的dll,但显示的路径不对，是64的路径。
+这是GetModuleFileNameEx导致的。
+改进思路：用GetMappedFileName，但是得到的是NT路径。
+
+此函数不可用于WOW64,否则，有太多的进程获取为空，即使提权也不行。
+
+参考：
+https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-modules-for-a-process
+https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from-a-file-handle
+*/
+{
+    DWORD cbNeeded = 0;
+    EnumProcessModulesEx(hProcess, NULL, 0, &cbNeeded, LIST_MODULES_ALL);
+    if (0 == cbNeeded) {
+        //LOGW(IMPORTANT_INFO_LEVEL, "警告：LastError:%d, pid:%d", GetLastError(), GetProcessId(hProcess));
+        return;
+    }
+
+    HMODULE * hMods = (HMODULE *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cbNeeded);
+    if (NULL == hMods) {
+        //LOGA(ERROR_LEVEL, "申请内存失败");
+        return;
+    }
+
+    if (EnumProcessModulesEx(hProcess, hMods, cbNeeded, &cbNeeded, LIST_MODULES_ALL)) {
+        for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+            TCHAR szModName[MAX_PATH] = {0};
+
+#pragma warning(push)
+#pragma warning(disable:6011)
+#pragma warning(disable:6385)
+            if (GetMappedFileName(hProcess, hMods[i], szModName, MAX_PATH)) {
+#pragma warning(pop)
+                Nt2Dos(szModName);//这里是NT名，以\Device\HarddiskVolume6\开头。
+                lstrcat(szModName, L"\n");
+                g_Module.insert(szModName);
+            } else {
+                //LOGA(ERROR_LEVEL, "pid:%d, LastError:%#x", GetProcessId(hProcess), GetLastError());
+            }
+        }
+    }
+
+    HeapFree(GetProcessHeap(), 0, hMods);
+}
+
+
+void GetProcessListInfo()
+/*
+注意：
+对于没有对应文件的一些进程，这里是OpenProcess失败的。
+对于受保护的进程，这里是OpenProcess失败的。
+*/
+{
+    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hProcessSnap == INVALID_HANDLE_VALUE) {
+        return;
+    }
+
+    PROCESSENTRY32 pe32;
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+    if (!Process32First(hProcessSnap, &pe32)) {
+        CloseHandle(hProcessSnap);
+        return;
+    }
+
+    do {
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION,
+                                      FALSE,
+                                      pe32.th32ProcessID);
+        if (hProcess) {
+            GetAllModuleInfo(hProcess);
+            CloseHandle(hProcess);
+        } else {
+            switch (GetLastError()) {
+            case ERROR_ACCESS_DENIED://5（拒绝访问，即权限不足）。
+            case ERROR_INVALID_PARAMETER://87（参数错误，即进程已经退出）。
+                break;
+            default:
+                //LOGW(IMPORTANT_INFO_LEVEL, "pid:%#d", pe32.th32ProcessID);
+                //DbgPrintW("警告：打开进程失败, pid:%#d, LastError:%d", pe32.th32ProcessID, GetLastError());
+                break;
+            }
+        }
+    } while (Process32Next(hProcessSnap, &pe32));
+
+    CloseHandle(hProcessSnap);
+}
+
+
+void PrintAllModule()
+{
+    wstring all;
+    int n = 0;
+
+    //一个一个的打印有点慢。所以收集下，一下打印。
+    if (!g_Module.empty()) {
+        for (wstring temp : g_Module) {
+            //printf("%ls.\n", temp.c_str());
+            all += temp;
+            n++;
+        }
+    }
+
+    //printf("%d.\n", all.size());
+    //printf("%d.\n", all.length());
+    //printf("%d.\n", all.max_size());//-2.
+    //printf("%d.\n", all._Mysize);
+    printf("模块总个数：%d.\n", n);
+
+    printf("模块信息如下：\n");
+    printf("\n");
+
+    printf("%ls\n", all.c_str());
+}
+
+
+void PrintAllModuleTest()
+/*
+功能：枚举系统的所有进程（排除没有对应文件的一些进程和受保护的进程）的所有模块（去掉重复）。
+
+感觉这个函数是不是很有用。
+1.一些系统的工具，也有类似的功能，如：tasklist /m.
+2.procexp.exe可以搜索。
+3.Listdlls.exe的有重复。
+*/
+{
+    GetProcessListInfo();
+
+    PrintAllModule();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
