@@ -67,9 +67,12 @@ https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-p
 
 EXTERN_C
 __declspec(dllexport)
-BOOL WINAPI SetCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable)
+BOOL WINAPI AdjustCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable)
 /*
 功能：本进程的特权开启的开关。
+
+细节：
+叫Set不如叫Get，叫Get不如叫Adjust（调整）。
 
 如：
 EnablePrivilege(SE_DEBUG_NAME, TRUE);

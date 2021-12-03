@@ -29,6 +29,8 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     setlocale(LC_CTYPE, ".936");//解决汉字显示的问题。
 
+    AdjustCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
+
     int Args;
     LPWSTR * Arglist = CommandLineToArgvW(GetCommandLineW(), &Args);
     if (NULL == Arglist) {

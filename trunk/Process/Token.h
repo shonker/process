@@ -48,7 +48,7 @@ BOOL WINAPI SetPrivilege(
 
 EXTERN_C
 __declspec(dllexport)
-BOOL WINAPI SetCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable);
+BOOL WINAPI AdjustCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

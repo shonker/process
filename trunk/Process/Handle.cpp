@@ -145,7 +145,7 @@ made by correy
 made at 2014.06.25
 */
 {
-    BOOL B = SetCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
+    BOOL B = AdjustCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
     DWORD dwFiles = EnumerateProcessHandles(GetCurrentProcessId());
     return 0;
 }

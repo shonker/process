@@ -377,3 +377,125 @@ void PrintAllModuleTest()
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+int PrintModulesEx(DWORD processID)
+/*
+To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS and compile with -DPSAPI_VERSION=1
+
+此办法可显示WOW64的dll,但显示的路径不对，是64的路径。
+这是GetModuleFileNameEx导致的。
+改进思路：用GetMappedFileName，但是得到的是NT路径。
+
+此函数不可用于WOW64,否则，有太多的进程获取为空，即使提权也不行。
+
+参考：
+https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-modules-for-a-process
+https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from-a-file-handle
+*/
+{
+    HMODULE hMods[1024];
+    HANDLE hProcess;
+    DWORD cbNeeded;
+    unsigned int i;
+
+    // Print the process identifier.
+    printf("\nProcess ID: %u\n", processID);
+
+    // Get a handle to the process.
+    hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
+    if (NULL == hProcess) {
+        printf("\nLastError: %u\n", GetLastError());
+        return 1;
+    }
+
+    // Get a list of all the modules in this process.
+    if (EnumProcessModulesEx(hProcess, hMods, sizeof(hMods), &cbNeeded, LIST_MODULES_ALL)) {
+        for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
+            TCHAR szModName[MAX_PATH];
+
+            // Get the full path to the module's file.
+            if (GetModuleFileNameEx(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR))) {
+                // Print the module name and handle value.
+                //_tprintf(TEXT("\t%s (0x%p)\n"), szModName, hMods[i]);
+            }
+
+            if (GetMappedFileName(hProcess, hMods[i], szModName, MAX_PATH)) {
+                // Translate path with device name to drive letters.
+                TCHAR szTemp[MAX_PATH];
+                szTemp[0] = '\0';
+
+                if (GetLogicalDriveStrings(MAX_PATH - 1, szTemp)) {
+                    TCHAR szName[MAX_PATH];
+                    TCHAR szDrive[3] = TEXT(" :");
+                    BOOL bFound = FALSE;
+                    TCHAR * p = szTemp;
+
+                    do {
+                        // Copy the drive letter to the template string
+                        *szDrive = *p;
+
+                        // Look up each device name
+                        if (QueryDosDevice(szDrive, szName, MAX_PATH)) {
+                            size_t uNameLen = _tcslen(szName);
+
+                            if (uNameLen < MAX_PATH) {
+                                bFound = _tcsnicmp(szModName, szName, uNameLen) == 0 && *(szModName + uNameLen) == _T('\\');
+
+                                if (bFound) {
+                                    // Reconstruct pszFilename using szTempFile
+                                    // Replace device path with DOS path
+                                    TCHAR szTempFile[MAX_PATH];
+                                    StringCchPrintf(szTempFile,
+                                                    MAX_PATH,
+                                                    TEXT("%s%s"),
+                                                    szDrive,
+                                                    szModName + uNameLen);
+                                    StringCchCopyN(szModName, MAX_PATH, szTempFile, _tcslen(szTempFile));
+                                }
+                            }
+                        }
+
+                        // Go to the next NULL character.
+                        while (*p++);
+                    } while (!bFound && *p); // end of string
+                }
+
+                _tprintf(TEXT("\t%s (0x%p)\n"), szModName, hMods[i]);//这里是NT名，以\Device\HarddiskVolume6\开头。
+            }
+        }
+    }
+
+    CloseHandle(hProcess);// Release the handle to the process.
+    return 0;
+}
+
+
+int TestPrintModulesEx(void)
+{
+    DWORD aProcesses[1024];
+    DWORD cbNeeded;
+    DWORD cProcesses;
+    unsigned int i;
+
+    EnablePrivilege(SE_DEBUG_NAME, TRUE);
+
+    // Get the list of process identifiers.
+    if (!EnumProcesses(aProcesses, sizeof(aProcesses), &cbNeeded)) {
+        _ASSERTE(FALSE);
+        return 1;
+    }
+
+    // Calculate how many process identifiers were returned.
+    cProcesses = cbNeeded / sizeof(DWORD);
+
+    // Print the names of the modules for each process.
+    for (i = 0; i < cProcesses; i++) {
+        PrintModulesEx(aProcesses[i]);
+    }
+
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

@@ -291,3 +291,38 @@ void Nt2Dos(IN  OUT TCHAR * szFileName)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+BOOL WINAPI EnablePrivilege(PCTSTR szPrivilege, BOOL fEnable)
+/*
+功能：本进程的特权开启的开关。
+
+如：
+EnablePrivilege(SE_DEBUG_NAME, TRUE);
+EnablePrivilege(SE_DEBUG_NAME, FALSE);
+*/
+{
+    // Enabling the debug privilege allows the application to see information about service applications
+    BOOL fOk = FALSE;    // Assume function fails
+    HANDLE hToken;
+
+    // Try to open this process's access token
+    if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken)) {
+        // Attempt to modify the given privilege
+        TOKEN_PRIVILEGES tp;
+
+        tp.PrivilegeCount = 1;
+        LookupPrivilegeValue(NULL, szPrivilege, &tp.Privileges[0].Luid);
+
+        tp.Privileges[0].Attributes = fEnable ? SE_PRIVILEGE_ENABLED : 0;
+        AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL);
+        fOk = (GetLastError() == ERROR_SUCCESS);
+
+        CloseHandle(hToken);// Don't forget to close the token handle
+    }
+
+    return(fOk);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

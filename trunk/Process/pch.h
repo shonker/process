@@ -107,5 +107,7 @@ void GetImageFilePath(_Out_ LPWSTR ImageFilePath, _In_ DWORD nSize);
 
 void Nt2Dos(IN  OUT TCHAR * szFileName);
 
+BOOL WINAPI EnablePrivilege(PCTSTR szPrivilege, BOOL fEnable);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

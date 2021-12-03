@@ -216,7 +216,7 @@ __declspec(dllimport) BOOL WINAPI SetPrivilege(
     BOOL bEnablePrivilege   // to enable or disable privilege
 );
 
-__declspec(dllimport) BOOL WINAPI SetCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable);
+__declspec(dllimport) BOOL WINAPI AdjustCurrentProcessPrivilege(PCTSTR szPrivilege, BOOL fEnable);
 
 __declspec(dllimport) DWORD WINAPI EnumerateProcessHandles(ULONG pid);
 
