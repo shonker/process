@@ -170,7 +170,7 @@ VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoStartSvc(_In_ LPCWSTR ServiceName)
+VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
 //   Starts the service if possible.
 //   https://msdn.microsoft.com/zh-cn/library/vs/alm/ms686315.ASPx
 {
@@ -460,7 +460,7 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoStopSvc(_In_ LPCWSTR ServiceName)
+VOID __stdcall StopSvc(_In_ LPCWSTR ServiceName)
 /*
 Stops the service.
 
@@ -587,7 +587,7 @@ stop_cleanup:
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoDeleteSvc(_In_ LPCWSTR ServiceName)
+VOID __stdcall DeleteSvc(_In_ LPCWSTR ServiceName)
 /*
 Deletes a service from the SCM database
 
@@ -631,7 +631,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540473%28v=vs.85%29.a
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoQuerySvc(_In_ LPCWSTR ServiceName)
+VOID __stdcall QuerySvc(_In_ LPCWSTR ServiceName)
 /*
 Retrieves and displays the current service configuration.
 
@@ -726,7 +726,7 @@ cleanup:
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoDisableSvc(_In_ LPCWSTR szSvcName)
+VOID __stdcall DisableSvc(_In_ LPCWSTR szSvcName)
 // Purpose: 
 //   Disables the service.
 //https://docs.microsoft.com/zh-cn/windows/win32/services/changing-a-service-configuration
@@ -779,7 +779,7 @@ VOID __stdcall DoDisableSvc(_In_ LPCWSTR szSvcName)
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoEnableSvc(_In_ LPCWSTR szSvcName)
+VOID __stdcall EnableSvc(_In_ LPCWSTR szSvcName)
 // Purpose: 
 //   Enables the service.
 //https://docs.microsoft.com/zh-cn/windows/win32/services/changing-a-service-configuration
@@ -832,7 +832,7 @@ VOID __stdcall DoEnableSvc(_In_ LPCWSTR szSvcName)
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoUpdateSvcDesc(_In_ LPCWSTR szSvcName)
+VOID __stdcall UpdateSvcDesc(_In_ LPCWSTR szSvcName)
 // Purpose: 
 //   Updates the service description to "This is a test description".
 //https://docs.microsoft.com/zh-cn/windows/win32/services/changing-a-service-configuration
@@ -880,7 +880,7 @@ VOID __stdcall DoUpdateSvcDesc(_In_ LPCWSTR szSvcName)
 
 EXTERN_C
 __declspec(dllexport)
-VOID __stdcall DoUpdateSvcDacl(_In_ LPCWSTR szSvcName)
+VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
 // Purpose: 
 //   Updates the service DACL to grant start, stop, delete, and read
 //   control access to the Guest account.

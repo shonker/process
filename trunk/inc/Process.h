@@ -155,6 +155,9 @@ using namespace std;
 EXTERN_C_START
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 __declspec(dllimport) int WINAPI GetEnvironment();
 
 __declspec(dllimport) int WINAPI GetProcessHeapsInfo();
@@ -183,16 +186,25 @@ __declspec(dllimport) int WINAPI EnumeratingAllDeviceDrivers();
 
 __declspec(dllimport) BOOL WINAPI IsWow64();
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//服务相关的函数。
+
 __declspec(dllimport) BOOL WINAPI DriverInstallInf(PWSTR InfFile);
 __declspec(dllimport) BOOL WINAPI DriverInstall(_In_opt_ LPCWSTR BinaryPathName, _In_ LPCWSTR ServiceName);
 __declspec(dllimport) VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
                                              _In_ LPCWSTR ServiceName,
                                              _In_opt_ LPCWSTR DisplayName);
-__declspec(dllimport) VOID __stdcall DoStartSvc(_In_ LPCWSTR ServiceName);
+__declspec(dllimport) VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName);
 __declspec(dllimport) BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName);
-__declspec(dllimport) VOID __stdcall DoStopSvc(_In_ LPCWSTR ServiceName);
-__declspec(dllimport) VOID __stdcall DoDeleteSvc(_In_ LPCWSTR ServiceName);
-__declspec(dllimport) VOID __stdcall DoQuerySvc(_In_ LPCWSTR ServiceName);
+__declspec(dllimport) VOID __stdcall StopSvc(_In_ LPCWSTR ServiceName);
+__declspec(dllimport) VOID __stdcall DeleteSvc(_In_ LPCWSTR ServiceName);
+__declspec(dllimport) VOID __stdcall QuerySvc(_In_ LPCWSTR ServiceName);
+__declspec(dllimport) VOID __stdcall DisableSvc(_In_ LPCWSTR szSvcName);
+__declspec(dllimport) VOID __stdcall EnableSvc(_In_ LPCWSTR szSvcName);
+__declspec(dllimport) VOID __stdcall UpdateSvcDesc(_In_ LPCWSTR szSvcName);
+__declspec(dllimport) VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 __declspec(dllimport) BOOL WINAPI GetProcessList();
 
@@ -276,15 +288,13 @@ __declspec(dllimport) void WINAPI CreateProcessWithLogon(int argc, WCHAR * argv[
 
 __declspec(dllimport) int WINAPI ShellExecuteExApp();
 
-__declspec(dllimport) NTSTATUS WINAPI ZwEnumerateDirectoryObject(_In_ PCWSTR ObjectDirectory, _In_ PCWSTR TypeNameFilter);
+__declspec(dllimport) 
+NTSTATUS WINAPI ZwEnumerateDirectoryObject(_In_ PCWSTR ObjectDirectory, _In_ PCWSTR TypeNameFilter);
 
 __declspec(dllimport) void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink);
 
 
-
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 EXTERN_C_END
