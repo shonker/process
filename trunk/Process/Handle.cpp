@@ -7,6 +7,10 @@
 #pragma warning(disable:6387)
 
 
+OpenSymbolicLinkObject NtOpenSymbolicLinkObject;
+QuerySymbolicLinkObject NtQuerySymbolicLinkObject;
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -21,11 +25,11 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
     // You must use the LoadLibrary and GetProcAddress functions to dynamically link to ntdll.dll.
     HINSTANCE hNtDll = LoadLibrary(_T("ntdll.dll"));
     assert(hNtDll != NULL);
-    PFN_NTQUERYSYSTEMINFORMATION NtQuerySystemInformation = (PFN_NTQUERYSYSTEMINFORMATION)
+    QUERYSYSTEMINFORMATION NtQuerySystemInformation = (QUERYSYSTEMINFORMATION)
         GetProcAddress(hNtDll, "NtQuerySystemInformation");
     assert(NtQuerySystemInformation != NULL);
 
-    PFN_ZwQueryObject NtQueryObject = (PFN_ZwQueryObject)GetProcAddress(hNtDll, "NtQueryObject");
+    QueryObject NtQueryObject = (QueryObject)GetProcAddress(hNtDll, "NtQueryObject");
     assert(NtQueryObject != NULL);
 
     // NtQuerySystemInformation does not return the correct required buffer size if the buffer passed is too small.
@@ -189,10 +193,10 @@ DWORD EnumerateFileHandles(ULONG pid)
     HINSTANCE hNtDll = LoadLibrary(_T("ntdll.dll"));
     assert(hNtDll != NULL);
 
-    PFN_NTQUERYSYSTEMINFORMATION NtQuerySystemInformation = (PFN_NTQUERYSYSTEMINFORMATION)GetProcAddress(hNtDll, "NtQuerySystemInformation");
+    QUERYSYSTEMINFORMATION NtQuerySystemInformation = (QUERYSYSTEMINFORMATION)GetProcAddress(hNtDll, "NtQuerySystemInformation");
     assert(NtQuerySystemInformation != NULL);
 
-    PFN_NTQUERYINFORMATIONFILE NtQueryInformationFile = (PFN_NTQUERYINFORMATIONFILE)GetProcAddress(hNtDll, "NtQueryInformationFile");
+    QUERYINFORMATIONFILE NtQueryInformationFile = (QUERYINFORMATIONFILE)GetProcAddress(hNtDll, "NtQueryInformationFile");
 
     /////////////////////////////////////////////////////////////////////////
     // Get system handle information.
@@ -452,8 +456,8 @@ TypeNameFilter是过滤，可取的值有：
         GetProcAddress(hNtDll, "NtOpenDirectoryObject");
     assert(NtOpenDirectoryObject != NULL);
 
-    NtQueryDirectoryObject_PFN NtQueryDirectoryObject =
-        (NtQueryDirectoryObject_PFN)GetProcAddress(hNtDll, "NtQueryDirectoryObject");
+    QueryDirectoryObject NtQueryDirectoryObject =
+        (QueryDirectoryObject)GetProcAddress(hNtDll, "NtQueryDirectoryObject");
     assert(NtQueryDirectoryObject != NULL);
 
     InitializeObjectAttributes(&oa, &Directory, OBJ_CASE_INSENSITIVE, 0, 0);
@@ -533,12 +537,10 @@ void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink)
 
     HINSTANCE hNtDll = LoadLibrary(_T("ntdll.dll"));
     assert(hNtDll != NULL);
-    NtOpenSymbolicLinkObject_PFN NtOpenSymbolicLinkObject = (NtOpenSymbolicLinkObject_PFN)
-        GetProcAddress(hNtDll, "NtOpenSymbolicLinkObject");
+    NtOpenSymbolicLinkObject = (OpenSymbolicLinkObject)GetProcAddress(hNtDll, "NtOpenSymbolicLinkObject");
     assert(NtOpenSymbolicLinkObject != NULL);
 
-    NtQuerySymbolicLinkObject_PFN NtQuerySymbolicLinkObject =
-        (NtQuerySymbolicLinkObject_PFN)GetProcAddress(hNtDll, "NtQuerySymbolicLinkObject");
+    NtQuerySymbolicLinkObject = (QuerySymbolicLinkObject)GetProcAddress(hNtDll, "NtQuerySymbolicLinkObject");
     assert(NtQuerySymbolicLinkObject != NULL);
 
     NameString.Buffer = (PWSTR)SymbolicLink;

@@ -105,7 +105,7 @@
 
 // The NtQuerySystemInformation function and the structures that it returns are internal to the operating system and subject to change from one  release of Windows to another.
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * PFN_NTQUERYSYSTEMINFORMATION)(
+typedef NTSTATUS(WINAPI * QUERYSYSTEMINFORMATION)(
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
     OUT PVOID SystemInformation,
     IN ULONG SystemInformationLength,
@@ -119,7 +119,7 @@ typedef NTSTATUS(WINAPI * PFN_NTQUERYSYSTEMINFORMATION)(
 //    ObjectTypeInformation = 2
 //} OBJECT_INFORMATION_CLASS;
 
-typedef NTSTATUS(WINAPI * PFN_ZwQueryObject)(
+typedef NTSTATUS(WINAPI * QueryObject)(
     __in_opt HANDLE  Handle,
     __in OBJECT_INFORMATION_CLASS  ObjectInformationClass,
     __out_bcount_opt(ObjectInformationLength) PVOID  ObjectInformation,
@@ -181,7 +181,7 @@ const SYSTEM_INFORMATION_CLASS SystemHandleInformation = (SYSTEM_INFORMATION_CLA
 
 // The NtQuerySystemInformation function and the structures that it returns are internal to the operating system and subject to change from one release of Windows to another. 
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * PFN_NTQUERYSYSTEMINFORMATION)(
+typedef NTSTATUS(WINAPI * QUERYSYSTEMINFORMATION)(
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
     OUT PVOID SystemInformation,
     IN ULONG SystemInformationLength,
@@ -212,7 +212,7 @@ const FILE_INFORMATION_CLASS FileNameInformation = (FILE_INFORMATION_CLASS)9;
 
 // The NtQueryInformationFile function and the structures that it returns are internal to the operating system and subject to change from one release of Windows to another. 
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * PFN_NTQUERYINFORMATIONFILE)(
+typedef NTSTATUS(WINAPI * QUERYINFORMATIONFILE)(
     IN HANDLE FileHandle,
     OUT PIO_STATUS_BLOCK IoStatusBlock,
     OUT PVOID FileInformation,
@@ -266,7 +266,7 @@ typedef struct _OBJECT_DIRECTORY_INFORMATION {
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntquerydirectoryobject
 typedef
-NTSTATUS (WINAPI *NtQueryDirectoryObject_PFN)(
+NTSTATUS (WINAPI *QueryDirectoryObject)(
     _In_      HANDLE  DirectoryHandle,
     _Out_opt_ PVOID   Buffer,
     _In_      ULONG   Length,
@@ -279,7 +279,7 @@ NTSTATUS (WINAPI *NtQueryDirectoryObject_PFN)(
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntopensymboliclinkobject
 typedef
-NTSTATUS (WINAPI *NtOpenSymbolicLinkObject_PFN)(
+NTSTATUS (WINAPI *OpenSymbolicLinkObject)(
     _Out_ PHANDLE            LinkHandle,
     _In_  ACCESS_MASK        DesiredAccess,
     _In_  POBJECT_ATTRIBUTES ObjectAttributes
@@ -288,7 +288,7 @@ NTSTATUS (WINAPI *NtOpenSymbolicLinkObject_PFN)(
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntquerysymboliclinkobject
 typedef
-NTSTATUS (WINAPI *NtQuerySymbolicLinkObject_PFN)(
+NTSTATUS (WINAPI *QuerySymbolicLinkObject)(
     _In_      HANDLE          LinkHandle,
     _Inout_   PUNICODE_STRING LinkTarget,
     _Out_opt_ PULONG          ReturnedLength
@@ -296,3 +296,7 @@ NTSTATUS (WINAPI *NtQuerySymbolicLinkObject_PFN)(
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+extern OpenSymbolicLinkObject NtOpenSymbolicLinkObject;
+extern QuerySymbolicLinkObject NtQuerySymbolicLinkObject;
