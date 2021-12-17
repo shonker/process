@@ -22,8 +22,8 @@
 void PrintProcessNameAndID(DWORD processID)
 {
     TCHAR szProcessName[MAX_PATH] = TEXT("<unknown>");
-    
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);    
+
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
     if (NULL != hProcess) {// Get a handle to the process.
         HMODULE hMod;
         DWORD cbNeeded;
@@ -34,7 +34,7 @@ void PrintProcessNameAndID(DWORD processID)
 
     // Print the process name and identifier.
     _tprintf(TEXT("%s  (PID: %u)\n"), szProcessName, processID);
-    
+
     CloseHandle(hProcess);// Release the handle to the process.
 }
 
@@ -56,7 +56,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-processes
     if (!EnumProcesses(aProcesses, sizeof(aProcesses), &cbNeeded)) {
         return 1;
     }
-    
+
     cProcesses = cbNeeded / sizeof(DWORD);// Calculate how many process identifiers were returned.
 
     // Print the name and process identifier for each process.
@@ -73,7 +73,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-processes
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS
+// To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS 
 // and compile with -DPSAPI_VERSION=1
 
 #define ARRAY_SIZE 1024
@@ -163,7 +163,8 @@ and then it walks through the list recorded in the snapshot using Process32First
 For each process in turn, GetProcessList calls the ListProcessModules function which is described in Traversing the Module List,
 and the ListProcessThreads function which is described in Traversing the Thread List.
 
-A simple error-reporting function, printError, displays the reason for any failures, which usually result from security restrictions.
+A simple error-reporting function, printError, displays the reason for any failures,
+which usually result from security restrictions.
 For example, OpenProcess fails for the Idle and CSRSS processes because their access restrictions prevent user-level code from opening them.
 
 https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-viewing-processes
@@ -179,16 +180,14 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/taking-a-snapshot-and-vi
     // Retrieve information about the first process, and exit if unsuccessful
     PROCESSENTRY32 pe32;
     pe32.dwSize = sizeof(PROCESSENTRY32);// Set the size of the structure before using it.
-    if (!Process32First(hProcessSnap, &pe32))
-    {
+    if (!Process32First(hProcessSnap, &pe32)) {
         printError(TEXT("Process32First")); // show cause of failure
         CloseHandle(hProcessSnap);          // clean the snapshot object
         return(FALSE);
     }
 
     // Now walk the snapshot of processes, and display information about each process in turn
-    do
-    {
+    do {
         _tprintf(TEXT("\n\n====================================================="));
         _tprintf(TEXT("\nPROCESS NAME:  %s"), pe32.szExeFile);
         _tprintf(TEXT("\n-------------------------------------------------------"));
@@ -261,92 +260,6 @@ ProcessName的元素大小 >= pe32.szExeFile的MAX_PATH。
 }
 
 
-#if 0
-BOOL ListProcessModules(DWORD dwPID)
-{
-    HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
-    MODULEENTRY32 me32;
-
-    // Take a snapshot of all modules in the specified process.
-    hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwPID);
-    if (hModuleSnap == INVALID_HANDLE_VALUE)
-    {
-        printError(TEXT("CreateToolhelp32Snapshot (of modules)"));
-        return(FALSE);
-    }
-
-    // Set the size of the structure before using it.
-    me32.dwSize = sizeof(MODULEENTRY32);
-
-    // Retrieve information about the first module,
-    // and exit if unsuccessful
-    if (!Module32First(hModuleSnap, &me32))
-    {
-        printError(TEXT("Module32First"));  // show cause of failure
-        CloseHandle(hModuleSnap);           // clean the snapshot object
-        return(FALSE);
-    }
-
-    // Now walk the module list of the process,
-    // and display information about each module
-    do
-    {
-        _tprintf(TEXT("\n\n     MODULE NAME:     %s"), me32.szModule);
-        _tprintf(TEXT("\n     Executable     = %s"), me32.szExePath);
-        _tprintf(TEXT("\n     Process ID     = 0x%08X"), me32.th32ProcessID);
-        _tprintf(TEXT("\n     Ref count (g)  = 0x%04X"), me32.GlblcntUsage);
-        _tprintf(TEXT("\n     Ref count (p)  = 0x%04X"), me32.ProccntUsage);
-        _tprintf(TEXT("\n     Base address   = 0x%08X"), (DWORD)me32.modBaseAddr);
-        _tprintf(TEXT("\n     Base size      = %d"), me32.modBaseSize);
-    } while (Module32Next(hModuleSnap, &me32));
-
-    CloseHandle(hModuleSnap);
-    return(TRUE);
-}
-
-
-BOOL ListProcessThreads(DWORD dwOwnerPID)
-{
-    HANDLE hThreadSnap = INVALID_HANDLE_VALUE;
-    THREADENTRY32 te32;
-
-    // Take a snapshot of all running threads  
-    hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
-    if (hThreadSnap == INVALID_HANDLE_VALUE)
-        return(FALSE);
-
-    // Fill in the size of the structure before using it. 
-    te32.dwSize = sizeof(THREADENTRY32);
-
-    // Retrieve information about the first thread,
-    // and exit if unsuccessful
-    if (!Thread32First(hThreadSnap, &te32))
-    {
-        printError(TEXT("Thread32First")); // show cause of failure
-        CloseHandle(hThreadSnap);          // clean the snapshot object
-        return(FALSE);
-    }
-
-    // Now walk the thread list of the system,
-    // and display information about each thread
-    // associated with the specified process
-    do
-    {
-        if (te32.th32OwnerProcessID == dwOwnerPID)
-        {
-            _tprintf(TEXT("\n\n     THREAD ID      = 0x%08X"), te32.th32ThreadID);
-            _tprintf(TEXT("\n     Base priority  = %d"), te32.tpBasePri);
-            _tprintf(TEXT("\n     Delta priority = %d"), te32.tpDeltaPri);
-            _tprintf(TEXT("\n"));
-        }
-    } while (Thread32Next(hThreadSnap, &te32));
-
-    CloseHandle(hThreadSnap);
-    return(TRUE);
-}
-#endif
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -373,8 +286,7 @@ http://msdn.microsoft.com/en-us/library/ms682512(v=vs.85).aspx
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
 
-    if (argc != 2)
-    {
+    if (argc != 2) {
         printf("Usage: %ls [cmdline]\n", argv[0]);
         return;
     }
@@ -390,14 +302,12 @@ http://msdn.microsoft.com/en-us/library/ms682512(v=vs.85).aspx
                        NULL,           // Use parent's starting directory 
                        &si,            // Pointer to STARTUPINFO structure
                        &pi)           // Pointer to PROCESS_INFORMATION structure
-        )
-    {
+        ) {
         printf("CreateProcess failed (%d).\n", GetLastError());
         return;
     }
 
-    // Wait until child process exits.
-    WaitForSingleObject(pi.hProcess, INFINITE);
+    WaitForSingleObject(pi.hProcess, INFINITE);// Wait until child process exits.
 
     // Close process and thread handles. 
     CloseHandle(pi.hProcess);
@@ -433,45 +343,31 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625966(v=ms
 {
     HANDLE hToken;
     HANDLE hProcess;
-
     DWORD dwLengthNeeded;
     DWORD dwError = ERROR_SUCCESS;
-
     PTOKEN_MANDATORY_LABEL pTIL = NULL;
     //LPWSTR pStringSid;
     DWORD dwIntegrityLevel;
 
     hProcess = GetCurrentProcess();
-    if (OpenProcessToken(hProcess, TOKEN_QUERY | TOKEN_QUERY_SOURCE, &hToken))
-    {
+    if (OpenProcessToken(hProcess, TOKEN_QUERY | TOKEN_QUERY_SOURCE, &hToken)) {
         // Get the Integrity level.
-        if (!GetTokenInformation(hToken, TokenIntegrityLevel, NULL, 0, &dwLengthNeeded))
-        {
+        if (!GetTokenInformation(hToken, TokenIntegrityLevel, NULL, 0, &dwLengthNeeded)) {
             dwError = GetLastError();
-            if (dwError == ERROR_INSUFFICIENT_BUFFER)
-            {
+            if (dwError == ERROR_INSUFFICIENT_BUFFER) {
                 pTIL = (PTOKEN_MANDATORY_LABEL)LocalAlloc(0, dwLengthNeeded);
-                if (pTIL != NULL)
-                {
+                if (pTIL != NULL) {
                     if (GetTokenInformation(hToken, TokenIntegrityLevel,
-                                            pTIL, dwLengthNeeded, &dwLengthNeeded))
-                    {
+                                            pTIL, dwLengthNeeded, &dwLengthNeeded)) {
                         dwIntegrityLevel = *GetSidSubAuthority(pTIL->Label.Sid,
                                                                (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pTIL->Label.Sid) - 1));
-
-                        if (dwIntegrityLevel < SECURITY_MANDATORY_MEDIUM_RID)
-                        {
-                            // Low Integrity
-                            wprintf(L"Low Process");
+                        if (dwIntegrityLevel < SECURITY_MANDATORY_MEDIUM_RID) {
+                            wprintf(L"Low Process");// Low Integrity
                         } else if (dwIntegrityLevel >= SECURITY_MANDATORY_MEDIUM_RID &&
-                                   dwIntegrityLevel < SECURITY_MANDATORY_HIGH_RID)
-                        {
-                            // Medium Integrity
-                            wprintf(L"Medium Process");
-                        } else if (dwIntegrityLevel >= SECURITY_MANDATORY_HIGH_RID)
-                        {
-                            // High Integrity
-                            wprintf(L"High Integrity Process");
+                                   dwIntegrityLevel < SECURITY_MANDATORY_HIGH_RID) {
+                            wprintf(L"Medium Process");// Medium Integrity
+                        } else if (dwIntegrityLevel >= SECURITY_MANDATORY_HIGH_RID) {
+                            wprintf(L"High Integrity Process");// High Integrity
                         }
                     }
 
@@ -594,7 +490,8 @@ void GetSystemStartTime(char * SystemStartTime)
 BOOL GetProcessIntegrityLevel(PDWORD pdwIntegrityLevel)
 //代码原始出处：Create low-integrity process in C++ (CppCreateLowIntegrityProcess)
 //   PURPOSE: The function gets the integrity level of the current process. 
-//   Integrity level is only available on Windows Vista and newer operating systems, thus GetProcessIntegrityLevel returns FALSE if it is called on on systems prior to Windows Vista.
+//   Integrity level is only available on Windows Vista and newer operating systems, 
+//   thus GetProcessIntegrityLevel returns FALSE if it is called on on systems prior to Windows Vista.
 //
 //   PARAMETERS: 
 //   * pdwIntegrityLevel - Outputs the integrity level of the current process. It is usually one of these values:
@@ -610,7 +507,8 @@ BOOL GetProcessIntegrityLevel(PDWORD pdwIntegrityLevel)
 //     Means medium integrity level. It is used by normal applications being launched while UAC is enabled. 
 //
 //     SECURITY_MANDATORY_HIGH_RID (SID: S-1-16-0x3000)
-//     Means high integrity level. It is used by administrative applications launched through elevation when UAC is enabled, or normal applications if UAC is disabled and the user is an administrator. 
+//     Means high integrity level. It is used by administrative applications launched through elevation when UAC is enabled, 
+//     or normal applications if UAC is disabled and the user is an administrator. 
 //
 //     SECURITY_MANDATORY_SYSTEM_RID (SID: S-1-16-0x4000)
 //     Means system integrity level. It is used by services and other system-level applications (such as Wininit, Winlogon, Smss, etc.)  
@@ -685,8 +583,7 @@ Cleanup:
     }
 
     if (ERROR_SUCCESS != dwError) {
-        // Make sure that the error code is set for failure.
-        SetLastError(dwError);
+        SetLastError(dwError);// Make sure that the error code is set for failure.
         return FALSE;
     } else {
         return TRUE;
@@ -724,7 +621,9 @@ BOOL CreateLowIntegrityProcess(PWSTR pszCommandLine)
     PROCESS_INFORMATION pi = {0};
 
     // Open the primary access token of the process.
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_QUERY | TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY, &hToken)) {
+    if (!OpenProcessToken(GetCurrentProcess(),
+                          TOKEN_DUPLICATE | TOKEN_QUERY | TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY,
+                          &hToken)) {
         dwError = GetLastError();
         goto Cleanup;
     }
@@ -780,8 +679,7 @@ Cleanup:
     }
 
     if (ERROR_SUCCESS != dwError) {
-        // Make sure that the error code is set for failure.
-        SetLastError(dwError);
+        SetLastError(dwError);// Make sure that the error code is set for failure.
         return FALSE;
     } else {
         return TRUE;
@@ -796,7 +694,8 @@ BOOL IsProcessElevated()
 //摘自：UAC self-elevation (CppUACSelfElevation)
 //   PURPOSE: The function gets the elevation information of the current process. 
 //   It dictates whether the process is elevated or not. 
-//   Token elevation is only available on Windows Vista and newer operating systems, thus IsProcessElevated throws a C++ exception if it is called on systems prior to Windows Vista. 
+//   Token elevation is only available on Windows Vista and newer operating systems, 
+//   thus IsProcessElevated throws a C++ exception if it is called on systems prior to Windows Vista. 
 //   It is not appropriate to use this function to determine whether a process is run as administartor.
 //
 //   RETURN VALUE: Returns TRUE if the process is elevated. Returns FALSE if it is not.
@@ -805,7 +704,8 @@ BOOL IsProcessElevated()
 //   For example, if IsProcessElevated is called on systems prior to Windows Vista, the error code will be ERROR_INVALID_PARAMETER.
 //
 //   NOTE: TOKEN_INFORMATION_CLASS provides TokenElevationType to check the elevation type (TokenElevationTypeDefault / TokenElevationTypeLimited / TokenElevationTypeFull) of the process. 
-//   It is different from TokenElevation in that, when UAC is turned off, elevation type always returns TokenElevationTypeDefault even though the process is elevated (Integrity Level == High). 
+//   It is different from TokenElevation in that, when UAC is turned off, 
+//   elevation type always returns TokenElevationTypeDefault even though the process is elevated (Integrity Level == High). 
 //   In other words, it is not safe to say if the process is elevated based on elevation type. 
 //   Instead, we should use TokenElevation.
 //

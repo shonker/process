@@ -109,13 +109,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
     HANDLE  hThreadArray[MAX_THREADS] = {0};
 
     // Create MAX_THREADS worker threads.
-
     for (int i = 0; i < MAX_THREADS; i++) {
         // Allocate memory for thread data.
-
-        pDataArray[i] = (PMYDATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
-                                           sizeof(MYDATA));
-
+        pDataArray[i] = (PMYDATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(MYDATA));
         if (pDataArray[i] == NULL) {
             // If the array allocation fails, the system is out of memory
             // so there is no point in trying to print an error message.
@@ -124,12 +120,10 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
         }
 
         // Generate unique data for each thread to work with.
-
         pDataArray[i]->val1 = i;
         pDataArray[i]->val2 = i + 100;
 
         // Create the thread to begin execution on its own.
-
         hThreadArray[i] = CreateThread(
             NULL,                   // default security attributes
             0,                      // use default stack size  
@@ -138,11 +132,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
             0,                      // use default creation flags 
             &dwThreadIdArray[i]);   // returns the thread identifier 
 
-
         // Check the return value for success.
         // If CreateThread fails, terminate execution. 
         // This will automatically clean up threads and memory. 
-
         if (hThreadArray[i] == NULL) {
             ErrorHandler(TEXT("CreateThread"));
             ExitProcess(3);
@@ -150,11 +142,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
     } // End of main thread creation loop.
 
     // Wait until all threads have terminated.
-
     WaitForMultipleObjects(MAX_THREADS, hThreadArray, TRUE, INFINITE);
 
     // Close all thread handles and free memory allocations.
-
     for (int i = 0; i < MAX_THREADS; i++) {
         CloseHandle(hThreadArray[i]);
         if (pDataArray[i] != NULL) {
@@ -171,13 +161,11 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 {
     HANDLE hStdout;
     PMYDATA pDataArray;
-
     TCHAR msgBuf[BUF_SIZE];
     size_t cchStringSize;
     DWORD dwChars;
 
     // Make sure there is a console to receive output results. 
-
     hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdout == INVALID_HANDLE_VALUE)
         return 1;
@@ -185,11 +173,9 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
     // Cast the parameter to the correct data type.
     // The pointer is known to be valid because 
     // it was checked for NULL before the thread was created.
-
     pDataArray = (PMYDATA)lpParam;
 
     // Print the parameter values using thread-safe functions.
-
     StringCchPrintf(msgBuf, BUF_SIZE, TEXT("Parameters = %d, %d\n"),
                     pDataArray->val1, pDataArray->val2);
     (void)StringCchLength(msgBuf, BUF_SIZE, &cchStringSize);
@@ -206,7 +192,6 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 
 
 void ReportError(LPCWSTR pszFunction, DWORD dwError = GetLastError())
-//
 //   FUNCTION: ReportError(LPWSTR, DWORD)
 //
 //   PURPOSE: Display an error message for the failure of a certain function.
@@ -219,9 +204,7 @@ void ReportError(LPCWSTR pszFunction, DWORD dwError = GetLastError())
 //   NOTE: The failing function must be immediately followed by the call of 
 //   ReportError if you do not explicitly specify the dwError parameter of 
 //   ReportError. This is to ensure that the calling thread's last-error code 
-//   value is not overwritten by any calls of API between the failing 
-//   function and ReportError.
-//
+//   value is not overwritten by any calls of API between the failing function and ReportError.
 {
     wprintf(L"%s failed w/err 0x%08lx\n", pszFunction, dwError);
 }

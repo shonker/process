@@ -63,7 +63,7 @@ int WINAPI EnumeratingAllModulesForProcess(void)
 Enumerating All Modules For a Process
 2018/05/31
 
-To determine which processes have loaded a particular DLL, you must enumerate the modules for each process. 
+To determine which processes have loaded a particular DLL, you must enumerate the modules for each process.
 The following sample code uses the EnumProcessModules function to enumerate the modules of current processes in the system.
 
 https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-modules-for-a-process
@@ -100,14 +100,14 @@ BOOL WINAPI ListProcessModules(DWORD dwPID)
 Traversing the Module List
 05/31/2018
 
-The following example obtains a list of modules for the specified process. 
-The ListProcessModules function takes a snapshot of the modules associated with a given process using the CreateToolhelp32Snapshot function, 
-and then walks through the list using the Module32First and Module32Next functions. 
-The dwPID parameter of ListProcessModules identifies the process for which modules are to be enumerated, 
-and is usually obtained by calling CreateToolhelp32Snapshot to enumerate the processes running on the system. 
+The following example obtains a list of modules for the specified process.
+The ListProcessModules function takes a snapshot of the modules associated with a given process using the CreateToolhelp32Snapshot function,
+and then walks through the list using the Module32First and Module32Next functions.
+The dwPID parameter of ListProcessModules identifies the process for which modules are to be enumerated,
+and is usually obtained by calling CreateToolhelp32Snapshot to enumerate the processes running on the system.
 See Taking a Snapshot and Viewing Processes for a simple console application that uses this function.
 
-A simple error-reporting function, printError, displays the reason for any failures, 
+A simple error-reporting function, printError, displays the reason for any failures,
 which usually result from security restrictions.
 
 用法示例：ListProcessModules(GetCurrentProcessId());
@@ -126,8 +126,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
 
     //  Take a snapshot of all modules in the specified process. 
     hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwPID);
-    if (hModuleSnap == INVALID_HANDLE_VALUE)
-    {
+    if (hModuleSnap == INVALID_HANDLE_VALUE) {
         printError(TEXT("CreateToolhelp32Snapshot (of modules)"));
         return(FALSE);
     }
@@ -136,16 +135,14 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
     me32.dwSize = sizeof(MODULEENTRY32);
 
     //  Retrieve information about the first module, and exit if unsuccessful 
-    if (!Module32First(hModuleSnap, &me32))
-    {
+    if (!Module32First(hModuleSnap, &me32)) {
         printError(TEXT("Module32First"));  // Show cause of failure 
         CloseHandle(hModuleSnap);     // Must clean up the snapshot object! 
         return(FALSE);
     }
 
     //  Now walk the module list of the process, and display information about each module 
-    do
-    {
+    do {
         _tprintf(TEXT("\n\n     MODULE NAME:     %s"), me32.szModule);
         _tprintf(TEXT("\n     executable     = %s"), me32.szExePath);
         _tprintf(TEXT("\n     process ID     = 0x%08X"), me32.th32ProcessID);
@@ -153,7 +150,6 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-li
         _tprintf(TEXT("\n     ref count (p)  =     0x%04X"), me32.ProccntUsage);
         _tprintf(TEXT("\n     base address   = 0x%08X"), (DWORD)me32.modBaseAddr);
         _tprintf(TEXT("\n     base size      = %d"), me32.modBaseSize);
-
     } while (Module32Next(hModuleSnap, &me32));
 
     _tprintf(TEXT("\n"));
@@ -173,7 +169,7 @@ void CALLBACK RunDllApi(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdS
 /*
 此函数专门用于被rundll32.exe调用，所以此函数的原型固定。
 
-本函的特色：后面可根的参数的个数不受限制（系统/内存等的除外）。
+本函的特色：后面可跟的参数的个数不受限制（系统/内存等的除外）。
 
 用法示例：
 rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt
@@ -188,7 +184,7 @@ rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
 
     //__debugbreak();    
 
-    setlocale(LC_CTYPE, ".936");  
+    setlocale(LC_CTYPE, ".936");
 
     //HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
     //char buffer[MAX_PATH] = {0};
