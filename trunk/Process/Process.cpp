@@ -126,6 +126,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-device-driv
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI IsWow64()
+/*
+功能：判断本进程是否是WOW64进程。
+*/
 {
     BOOL bIsWow64 = FALSE;
 
@@ -148,6 +151,40 @@ BOOL WINAPI IsWow64()
 
     return bIsWow64;
 #pragma warning(pop)
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+BOOL WINAPI IsWow64Process2Ex(_In_ DWORD Pid) //_In_ HANDLE ProcessHandle
+/*
+
+GetCurrentProcessId()
+*/
+{
+    BOOL bIsWow64 = FALSE;
+
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                                  FALSE,
+                                  Pid);
+    if (NULL == hProcess) {
+        printf("LastError:%d\n", GetLastError());
+        return false;
+    }
+
+    HMODULE ModuleHandle = GetModuleHandle(TEXT("kernel32"));
+    if (NULL != ModuleHandle) {
+        LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS)
+            GetProcAddress(ModuleHandle, "IsWow64Process");
+        if (NULL != fnIsWow64Process) {
+            if (!fnIsWow64Process(hProcess, &bIsWow64)) {
+                // handle error
+            }
+        }
+    }
+
+    CloseHandle(hProcess);
+    return bIsWow64;
 }
 
 

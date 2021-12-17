@@ -54,7 +54,9 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
     }
 
     if (IsWow64) {
+#ifdef _WIN64    
         Offset = FIELD_OFFSET(PEB_WOW64, ProcessParameters);
+#endif        
     } else {
         Offset = FIELD_OFFSET(PEB, ProcessParameters);
     }

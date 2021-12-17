@@ -52,8 +52,7 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
     // Get the handle of the target process.
     // The handle will be used to duplicate the handles in the process.
     HANDLE hProcess = OpenProcess(PROCESS_DUP_HANDLE | PROCESS_QUERY_INFORMATION, FALSE, pid);
-    if (hProcess == NULL)
-    {
+    if (hProcess == NULL) {
         _tprintf(_T("OpenProcess failed w/err 0x%08lx\n"), GetLastError());
         return -1;
     }
@@ -64,13 +63,11 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
     在Windows 7上，提权，以管理员（administrator）权限，甚至以服务的权限（NT AUTHORITY\SYSTEM）都不行，估计的会话隔离导致（可服务应该也在会话0，所以还是驱动的权限大）。
     */
 
-    for (ULONG i = 0; i < pSysHandleInfo->NumberOfHandles; i++)
-    {
+    for (ULONG i = 0; i < pSysHandleInfo->NumberOfHandles; i++) {
         PSYSTEM_HANDLE pHandle = &(pSysHandleInfo->Handles[i]);
 
         //根据进程进行搜索。
-        if (pHandle->ProcessId == pid)
-        {
+        if (pHandle->ProcessId == pid) {
             dwhandles++;	// Increase the number of handles
 
             /*
@@ -78,14 +75,13 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             0x00000032 不支持该请求。
             */
             HANDLE hCopy;// Duplicate the handle in the current process
-            if (!DuplicateHandle(hProcess, 
+            if (!DuplicateHandle(hProcess,
                                  (HANDLE)pHandle->Handle,
                                  GetCurrentProcess(),
-                                 &hCopy, 
+                                 &hCopy,
                                  MAXIMUM_ALLOWED,
-                                 FALSE, 
-                                 0))
-            {
+                                 FALSE,
+                                 0)) {
                 wprintf(L"DuplicateHandle fail with 0x%x,HANDLE:0x%x,ObjectTypeNumber:%d\n",
                         GetLastError(), pHandle->Handle, pHandle->ObjectTypeNumber);
                 continue;
@@ -105,8 +101,11 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             如果句柄的类型是TOKEN，线程，进程等类型的，需要再特殊的处理。
             也就是说这个函数是查询不到的。
             */
-            if (NtQueryObject(hCopy, (OBJECT_INFORMATION_CLASS)1, poni, ObjectInformationLength, &ReturnLength) != STATUS_SUCCESS)
-            {
+            if (NtQueryObject(hCopy,
+                              (OBJECT_INFORMATION_CLASS)1,
+                              poni,
+                              ObjectInformationLength, 
+                              &ReturnLength) != STATUS_SUCCESS) {
                 wprintf(L"NtQueryObject fail!\n");
                 HeapFree(GetProcessHeap(), 0, poni);
                 continue;
@@ -229,10 +228,10 @@ DWORD EnumerateFileHandles(ULONG pid)
 
             // Duplicate the handle in the current process
             HANDLE hCopy;
-            if (!DuplicateHandle(hProcess, 
+            if (!DuplicateHandle(hProcess,
                                  (HANDLE)pHandle->Handle,
                                  GetCurrentProcess(),
-                                 &hCopy, 
+                                 &hCopy,
                                  MAXIMUM_ALLOWED,
                                  FALSE,
                                  0))
@@ -246,7 +245,10 @@ DWORD EnumerateFileHandles(ULONG pid)
             if (NtQueryInformationFile(hCopy, &ioStatus, pNameInfo, dwInfoSize, FileNameInformation) == STATUS_SUCCESS) {
                 // Get the file name and print it
                 WCHAR wszFileName[MAX_PATH + 1];
-                StringCchCopyNW(wszFileName, MAX_PATH + 1, pNameInfo->FileName, /*must be WCHAR*/ pNameInfo->FileNameLength /*in bytes*/ / 2);
+                StringCchCopyNW(wszFileName,
+                                MAX_PATH + 1, 
+                                pNameInfo->FileName,
+                                /*must be WCHAR*/ pNameInfo->FileNameLength /*in bytes*/ / 2);
                 wprintf(L"0x%x:\t%s\n", pHandle->Handle, wszFileName);
             }
             free(pNameInfo);
@@ -373,7 +375,13 @@ int FileHandleTest(int argc, _TCHAR * argv[])
 
     // Get file name from file handle using a file mapping object
     HANDLE hFile;
-    hFile = CreateFile(TEXT("test.txt"), GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    hFile = CreateFile(TEXT("test.txt"),
+                       GENERIC_WRITE | GENERIC_READ,
+                       0,
+                       NULL,
+                       CREATE_ALWAYS,
+                       FILE_ATTRIBUTE_NORMAL,
+                       NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
         _tprintf(TEXT("CreateFile failed with %d\n"), GetLastError());
         return 0;
@@ -593,8 +601,7 @@ https://docs.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-duplic
                     FALSE,
                     DUPLICATE_SAME_ACCESS);
 
-    hThread = CreateThread(NULL, 0, ThreadProc,
-                           (LPVOID)hMutexDup, 0, &dwThreadId);
+    hThread = CreateThread(NULL, 0, ThreadProc, (LPVOID)hMutexDup, 0, &dwThreadId);
 
     // Perform work here, closing the handle when finished with the
     // mutex. If the reference count is zero, the object is destroyed.
@@ -638,22 +645,19 @@ https://docs.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-compar
     if (Event3 == NULL) { ExitProcess(0); }
 
     // Compare two handles to the same kernel object.
-    if (CompareObjectHandles(Event1, Event2) != FALSE)
-    {	// This message should be printed by the program.
+    if (CompareObjectHandles(Event1, Event2) != FALSE) {	// This message should be printed by the program.
         wprintf(L"Event1 and Event2 refer to the same underlying event object.\n");
     }
 
     // Compare two handles to different kernel objects.
-    if (CompareObjectHandles(Event1, Event3) == FALSE)
-    {	// This message should be printed by the program.
+    if (CompareObjectHandles(Event1, Event3) == FALSE) {	// This message should be printed by the program.
         wprintf(L"Event1 and Event3 refer to different underlying event objects.  (Error %lu)\n", GetLastError());
     }
 
     // Compare two handles to different kernel objects, each of a different type of kernel object.
     // The comparison is legal to make, though the function will always return FALSE and indicate 
     // a last error status of ERROR_NOT_SAME_OBJECT.
-    if (CompareObjectHandles(Event1, GetCurrentProcess()) == FALSE)
-    {	// This message should be printed by the program.
+    if (CompareObjectHandles(Event1, GetCurrentProcess()) == FALSE) {	// This message should be printed by the program.
         wprintf(L"Event1 and the current process refer to different underlying kernel objects.  (Error %lu)\n", GetLastError());
     }
 }

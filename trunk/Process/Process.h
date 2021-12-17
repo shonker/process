@@ -156,6 +156,11 @@ BOOL WINAPI IsWow64();
 
 EXTERN_C
 __declspec(dllexport)
+BOOL WINAPI IsWow64Process2Ex(_In_ DWORD Pid);
+
+
+EXTERN_C
+__declspec(dllexport)
 HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
 
 
