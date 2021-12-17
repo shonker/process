@@ -13,6 +13,10 @@
 #pragma warning(disable:6216)
 
 
+QueryInformationProcess ZwQueryInformationProcess;
+QueryInformationProcess NtQueryInformationProcess;
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -757,6 +761,56 @@ Cleanup:
     }
 
     return fIsElevated;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
+/*
+功能：获取一个进程的父进程。
+
+参数和返回值，其实都是DWORD。
+*/
+{    
+    HANDLE ParentsPid = INVALID_HANDLE_VALUE;
+
+    if (NULL == ZwQueryInformationProcess) {
+        return ParentsPid;
+    }    
+
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, 
+                                  FALSE, 
+                                  HandleToULong(UniqueProcessId));
+    if (NULL == hProcess) {
+        printf("LastError:%d\n", GetLastError());
+        return ParentsPid;
+    }
+
+    PROCESS_BASIC_INFORMATION ProcessBasicInfo = {0};
+    ULONG ReturnLength = 0;
+    NTSTATUS status = ZwQueryInformationProcess(hProcess,
+                                       ProcessBasicInformation,
+                                       &ProcessBasicInfo,
+                                       sizeof(PROCESS_BASIC_INFORMATION),
+                                       &ReturnLength);
+    if (!NT_SUCCESS(status)) {
+        printf("LastError:%d\n", GetLastError());
+        CloseHandle(hProcess);
+        return ParentsPid;
+    }
+
+#ifdef _X86_
+    ParentsPid = ULongToHandle(PtrToUlong(ProcessBasicInfo.InheritedFromUniqueProcessId));
+#else
+    ParentsPid = (HANDLE)ProcessBasicInfo.InheritedFromUniqueProcessId;
+#endif 
+
+    CloseHandle(hProcess);
+    return ParentsPid;
 }
 
 

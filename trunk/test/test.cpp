@@ -34,7 +34,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     int Args;
     LPWSTR * Arglist = CommandLineToArgvW(GetCommandLineW(), &Args);
     if (NULL == Arglist) {
-        //LOGA(ERROR_LEVEL, "LastError：%d", GetLastError());
+        printf("LastError:%d\n", GetLastError());
         return 0;
     }
 
@@ -42,7 +42,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     //GetAdaptersAddressesInfo(argc, argv);
 
-    ExecInExplorerTest();
+    HANDLE ParentsPid = GetParentsPid((HANDLE)16716);
 
     LocalFree(Arglist);
 }

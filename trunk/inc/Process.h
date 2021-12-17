@@ -288,6 +288,8 @@ __declspec(dllimport) void WINAPI CreateProcessWithLogon(int argc, WCHAR * argv[
 
 __declspec(dllimport) int WINAPI ShellExecuteExApp();
 
+__declspec(dllimport) HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
+
 __declspec(dllimport) 
 NTSTATUS WINAPI ZwEnumerateDirectoryObject(_In_ PCWSTR ObjectDirectory, _In_ PCWSTR TypeNameFilter);
 
