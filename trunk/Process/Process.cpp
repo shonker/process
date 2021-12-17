@@ -775,15 +775,15 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
 
 参数和返回值，其实都是DWORD。
 */
-{    
+{
     HANDLE ParentsPid = INVALID_HANDLE_VALUE;
 
     if (NULL == ZwQueryInformationProcess) {
         return ParentsPid;
-    }    
+    }
 
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, 
-                                  FALSE, 
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                                  FALSE,
                                   HandleToULong(UniqueProcessId));
     if (NULL == hProcess) {
         printf("LastError:%d\n", GetLastError());
@@ -793,10 +793,10 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
     PROCESS_BASIC_INFORMATION ProcessBasicInfo = {0};
     ULONG ReturnLength = 0;
     NTSTATUS status = ZwQueryInformationProcess(hProcess,
-                                       ProcessBasicInformation,
-                                       &ProcessBasicInfo,
-                                       sizeof(PROCESS_BASIC_INFORMATION),
-                                       &ReturnLength);
+                                                ProcessBasicInformation,
+                                                &ProcessBasicInfo,
+                                                sizeof(PROCESS_BASIC_INFORMATION),
+                                                &ReturnLength);
     if (!NT_SUCCESS(status)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);
@@ -811,6 +811,49 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
 
     CloseHandle(hProcess);
     return ParentsPid;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+bool WINAPI IsWow64ProcessEx(_In_ HANDLE UniqueProcessId)
+/*
+功能：检测进程是不是Wow64Process。
+
+仿照IsSecureProcess而建。
+
+注意适用的范围。
+*/
+{
+    bool IsWow64 = false;
+
+    HANDLE ProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+                                       FALSE,
+                                       HandleToULong(UniqueProcessId));
+    if (NULL == ProcessHandle) {
+        printf("LastError:%d\n", GetLastError());
+        return GetLastError();
+    }
+
+    PROCESS_EXTENDED_BASIC_INFORMATION extendedInfo = {0};
+    extendedInfo.Size = sizeof(extendedInfo);
+    NTSTATUS status = ZwQueryInformationProcess(ProcessHandle,
+                                                ProcessBasicInformation,
+                                                &extendedInfo,
+                                                sizeof(extendedInfo),
+                                                NULL);
+    if (NT_SUCCESS(status)) {
+        IsWow64 = (extendedInfo.IsWow64Process != 0);
+    } else {
+        printf("LastError:%d\n", GetLastError());
+    }
+
+    CloseHandle(ProcessHandle);
+
+    return IsWow64;
 }
 
 

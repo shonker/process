@@ -25,6 +25,28 @@ typedef struct _PROCESS_BASIC_INFORMATION {
 
 
 //\Windows Kits\10\Include\10.0.19041.0\km\ntddk.h
+typedef struct _PROCESS_EXTENDED_BASIC_INFORMATION {
+    SIZE_T Size;    // Ignored as input, written with structure size on output
+    PROCESS_BASIC_INFORMATION BasicInfo;
+    union {
+        ULONG Flags;
+        struct {
+            ULONG IsProtectedProcess : 1;
+            ULONG IsWow64Process : 1;
+            ULONG IsProcessDeleting : 1;
+            ULONG IsCrossSessionCreate : 1;
+            ULONG IsFrozen : 1;
+            ULONG IsBackground : 1;
+            ULONG IsStronglyNamed : 1;
+            ULONG IsSecureProcess : 1;
+            ULONG IsSubsystemProcess : 1;
+            ULONG SpareBits : 23;
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME;
+} PROCESS_EXTENDED_BASIC_INFORMATION, * PPROCESS_EXTENDED_BASIC_INFORMATION;
+
+
+//\Windows Kits\10\Include\10.0.19041.0\km\ntddk.h
 typedef enum _PROCESSINFOCLASS {
     ProcessBasicInformation = 0,
     ProcessQuotaLimits = 1,
@@ -135,6 +157,11 @@ BOOL WINAPI IsWow64();
 EXTERN_C
 __declspec(dllexport)
 HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
+
+
+EXTERN_C
+__declspec(dllexport)
+bool WINAPI IsWow64ProcessEx(_In_ HANDLE ProcessHandle);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

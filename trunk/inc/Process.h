@@ -290,6 +290,8 @@ __declspec(dllimport) int WINAPI ShellExecuteExApp();
 
 __declspec(dllimport) HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
 
+__declspec(dllimport) bool WINAPI IsWow64ProcessEx(_In_ HANDLE ProcessHandle);
+
 __declspec(dllimport) DWORD WINAPI GetCommandLineEx(_In_ HANDLE UniqueProcessId);
 
 __declspec(dllimport) 

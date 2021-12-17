@@ -25,7 +25,7 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
 */
 {
     HANDLE ParentsPid = INVALID_HANDLE_VALUE;
-    bool IsWow64 = false;
+    bool IsWow64 = IsWow64ProcessEx(UniqueProcessId);
     int Offset = 0;
 
     if (NULL == ZwQueryInformationProcess) {
