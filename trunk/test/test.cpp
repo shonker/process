@@ -42,7 +42,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     //GetAdaptersAddressesInfo(argc, argv);
 
-    HANDLE ParentsPid = GetParentsPid((HANDLE)16716);
+    GetCommandLineEx((HANDLE)9780);
 
     LocalFree(Arglist);
 }

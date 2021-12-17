@@ -290,6 +290,8 @@ __declspec(dllimport) int WINAPI ShellExecuteExApp();
 
 __declspec(dllimport) HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
 
+__declspec(dllimport) DWORD WINAPI GetCommandLineEx(_In_ HANDLE UniqueProcessId);
+
 __declspec(dllimport) 
 NTSTATUS WINAPI ZwEnumerateDirectoryObject(_In_ PCWSTR ObjectDirectory, _In_ PCWSTR TypeNameFilter);
 
