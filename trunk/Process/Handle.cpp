@@ -452,7 +452,7 @@ TypeNameFilter是过滤，可取的值有：
 
     HINSTANCE hNtDll = LoadLibrary(_T("ntdll.dll"));
     assert(hNtDll != NULL);
-    NtOpenDirectoryObject_PFN NtOpenDirectoryObject = (NtOpenDirectoryObject_PFN)
+    OpenDirectoryObject NtOpenDirectoryObject = (OpenDirectoryObject)
         GetProcAddress(hNtDll, "NtOpenDirectoryObject");
     assert(NtOpenDirectoryObject != NULL);
 

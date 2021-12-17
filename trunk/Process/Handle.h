@@ -250,7 +250,7 @@ typedef struct _FILE_DIRECTORY_INFORMATION {
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntopendirectoryobject
 typedef
-NTSTATUS (WINAPI * NtOpenDirectoryObject_PFN)(
+NTSTATUS (WINAPI * OpenDirectoryObject)(
     _Out_ PHANDLE            DirectoryHandle,
     _In_  ACCESS_MASK        DesiredAccess,
     _In_  POBJECT_ATTRIBUTES ObjectAttributes
