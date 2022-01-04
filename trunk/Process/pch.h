@@ -68,6 +68,8 @@ void printError(CONST TCHAR * msg);
 void ErrorHandler(LPCTSTR lpszFunction);
 void DisplayNtStatus(LPCSTR szAPI, NTSTATUS Status);
 void DisplayWinError(LPCSTR szAPI, DWORD dwError);
+void DisplayWinError(LPSTR szAPI, DWORD WinError);
+void DisplayNtStatus(LPSTR szAPI, NTSTATUS Status);
 
 void DebugPrintA(PCSTR format, ...);
 void DebugPrintW(PCWSTR format, ...);

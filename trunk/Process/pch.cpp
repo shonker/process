@@ -144,6 +144,39 @@ void ErrorHandler(LPCTSTR lpszFunction)
 }
 
 
+void DisplayNtStatus(LPSTR szAPI, NTSTATUS Status)
+{
+    // Convert the NTSTATUS to Winerror. Then call DisplayWinError().
+    DisplayWinError(szAPI, LsaNtStatusToWinError(Status));
+}
+
+
+void DisplayWinError(LPSTR szAPI, DWORD WinError)
+{
+    LPSTR MessageBuffer;
+    DWORD dwBufferLength;
+
+    // TODO: Get this fprintf out of here!
+    fprintf(stderr, "%s error!\n", szAPI);
+
+    if (dwBufferLength = FormatMessageA(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        WinError,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPSTR)&MessageBuffer,
+        0,
+        NULL)) {
+        DWORD dwBytesWritten; // unused
+
+        // Output message string on stderr.
+        WriteFile(GetStdHandle(STD_ERROR_HANDLE), MessageBuffer, dwBufferLength, &dwBytesWritten, NULL);
+
+        LocalFree(MessageBuffer);// Free the buffer allocated by the system.
+    }
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 

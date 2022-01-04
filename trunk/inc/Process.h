@@ -286,6 +286,10 @@ __declspec(dllimport) BOOL WINAPI IsUserAnSystem(VOID);
 
 __declspec(dllimport) BOOL WINAPI IsCurrentUserLocalAdministrator(VOID);
 
+__declspec(dllimport) int WINAPI ManageUserPrivileges(int argc, char * argv[]);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 __declspec(dllimport) void WINAPI CreateProcessWithLogon(int argc, WCHAR * argv[]);
 
 __declspec(dllimport) int WINAPI ShellExecuteExApp();
