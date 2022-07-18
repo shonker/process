@@ -28,16 +28,7 @@ void EnumTaskScheduler(void)
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         return;
@@ -45,11 +36,7 @@ void EnumTaskScheduler(void)
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
         CoUninitialize();
@@ -220,16 +207,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -245,11 +223,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -483,15 +457,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
 
     //  Save the task in the root folder.
     IRegisteredTask * pRegisteredTask = NULL;
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(),
-        _variant_t(),
-        TASK_LOGON_INTERACTIVE_TOKEN,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(),
+                                             _variant_t(),
+                                             TASK_LOGON_INTERACTIVE_TOKEN,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -574,16 +547,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -599,11 +563,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -847,15 +807,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
 
     //  Save the task in the root folder.
     IRegisteredTask * pRegisteredTask = NULL;
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(_bstr_t(pszName)),
-        _variant_t(_bstr_t(pszPwd)),
-        TASK_LOGON_PASSWORD,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(_bstr_t(pszName)),
+                                             _variant_t(_bstr_t(pszPwd)),
+                                             TASK_LOGON_PASSWORD,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -932,16 +891,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -957,11 +907,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -969,8 +915,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Connect to the task service.
-    hr = pService->Connect(_variant_t(), _variant_t(),
-                           _variant_t(), _variant_t());
+    hr = pService->Connect(_variant_t(), _variant_t(), _variant_t(), _variant_t());
     if (FAILED(hr)) {
         printf("ITaskService::Connect failed: %x", hr);
         pService->Release();
@@ -978,8 +923,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
         return 1;
     }
 
-    //  Get the pointer to the root task folder.  This folder will hold the
-    //  new task that is registered.
+    //  Get the pointer to the root task folder.  This folder will hold the new task that is registered.
     ITaskFolder * pRootFolder = NULL;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
@@ -1178,15 +1122,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
 
     //  Save the task in the root folder.
     IRegisteredTask * pRegisteredTask = NULL;
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(),
-        _variant_t(),
-        TASK_LOGON_INTERACTIVE_TOKEN,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(),
+                                             _variant_t(),
+                                             TASK_LOGON_INTERACTIVE_TOKEN,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -1269,24 +1212,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
         return;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Weekly Trigger Task";
+    LPCWSTR wszTaskName = L"Weekly Trigger Task";//  Create a name for the task.
 
     //  Get the windows directory and set the path to notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -1294,11 +1227,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -1518,15 +1447,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
 
     //  Save the task in the root folder.
     IRegisteredTask * pRegisteredTask = NULL;
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(_bstr_t(pszName)),
-        _variant_t(_bstr_t(pszPwd)),
-        TASK_LOGON_PASSWORD,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(_bstr_t(pszName)),
+                                             _variant_t(_bstr_t(pszPwd)),
+                                             TASK_LOGON_PASSWORD,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -1611,16 +1539,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -1636,11 +1555,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -1837,15 +1752,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     //  Save the task in the root folder.
     IRegisteredTask * pRegisteredTask = NULL;
 
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(L"S-1-5-32-544"),
-        _variant_t(),
-        TASK_LOGON_GROUP,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(L"S-1-5-32-544"),
+                                             _variant_t(),
+                                             TASK_LOGON_GROUP,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -1930,16 +1844,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -1955,11 +1860,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -2084,8 +1985,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
 
     //  Set the task to start at a certain time. The time 
     //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
-    //  For example, the start boundary below
-    //  is January 1st 2005 at 12:05
+    //  For example, the start boundary below is January 1st 2005 at 12:05
     hr = pBootTrigger->put_StartBoundary(_bstr_t(L"2005-01-01T12:05:00"));
     if (FAILED(hr))
         printf("\nCannot put the start boundary: %x", hr);
@@ -2157,15 +2057,14 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     IRegisteredTask * pRegisteredTask = NULL;
     VARIANT varPassword;
     varPassword.vt = VT_EMPTY;
-    hr = pRootFolder->RegisterTaskDefinition(
-        _bstr_t(wszTaskName),
-        pTask,
-        TASK_CREATE_OR_UPDATE,
-        _variant_t(L"Local Service"),
-        varPassword,
-        TASK_LOGON_SERVICE_ACCOUNT,
-        _variant_t(L""),
-        &pRegisteredTask);
+    hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
+                                             pTask,
+                                             TASK_CREATE_OR_UPDATE,
+                                             _variant_t(L"Local Service"),
+                                             varPassword,
+                                             TASK_LOGON_SERVICE_ACCOUNT,
+                                             _variant_t(L""),
+                                             &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -2242,16 +2141,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -2260,11 +2150,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
 
     //  Create an instance of the Task Service. 
     ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITaskService,
-                          (void **)&pService);
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
         CoUninitialize();
@@ -2366,15 +2252,10 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     HRESULT hr = S_OK;
     ITaskScheduler * pITS;
 
-    // Call CoInitialize to initialize the COM library and then 
-    // call CoCreateInstance to get the Task Scheduler object. 
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object. 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2445,11 +2326,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
     // then call CoCreateInstance to get the Task Scheduler object. 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return hr;
@@ -2471,8 +2348,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
     // this example tries to retrieve five tasks for each call.
     LPWSTR * lpwszNames;
     DWORD dwFetchedTasks = 0;
-    while (SUCCEEDED(pIEnum->Next(TASKS_TO_RETRIEVE, &lpwszNames, &dwFetchedTasks))
-           && (dwFetchedTasks != 0)) {
+    while (SUCCEEDED(pIEnum->Next(TASKS_TO_RETRIEVE, &lpwszNames, &dwFetchedTasks)) && (dwFetchedTasks != 0)) {
         // Process each task. Note that this example prints the name of each task to the screen.
         while (dwFetchedTasks) {
             wprintf(L"%s\n", lpwszNames[--dwFetchedTasks]);
@@ -2508,11 +2384,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     // call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2566,16 +2438,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then      
-    // call CoCreateInstance to get the Task Scheduler object.      
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.      
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2630,16 +2497,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2702,16 +2564,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2768,16 +2625,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2833,16 +2685,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2895,16 +2742,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2960,16 +2802,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3002,11 +2839,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     wprintf(L"The most recent run time for this task was: \n");
-    wprintf(L"  %u/%u/%u \t %u:%02u\n", pstLastRun.wMonth,
-            pstLastRun.wDay,
-            pstLastRun.wYear,
-            pstLastRun.wHour,
-            pstLastRun.wMinute);
+    wprintf(L"  %u/%u/%u \t %u:%02u\n", pstLastRun.wMonth, pstLastRun.wDay, pstLastRun.wYear, pstLastRun.wHour, pstLastRun.wMinute);
 
     CoUninitialize();
 
@@ -3027,16 +2860,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3069,11 +2897,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     wprintf(L"The next runtime for this task is: \n");
-    wprintf(L"  %u/%u/%u \t %u:%02u\n", pstNextRun.wMonth,
-            pstNextRun.wDay,
-            pstNextRun.wYear,
-            pstNextRun.wHour,
-            pstNextRun.wMinute);
+    wprintf(L"  %u/%u/%u \t %u:%02u\n", pstNextRun.wMonth, pstNextRun.wDay, pstNextRun.wYear, pstNextRun.wHour, pstNextRun.wMinute);
 
     CoUninitialize();
 
@@ -3094,16 +2918,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3145,7 +2964,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     wprintf(L"The next %u runtimes for this task are: \n", wCountOfRuns);
 
     for (WORD i = 0; i < wCountOfRuns; i++) {
-        wprintf(L"\t%u - %u/%u/%u \t %u:%u\n", i + 1, pstListOfTimes->wMonth,
+        wprintf(L"\t%u - %u/%u/%u \t %u:%u\n",
+                i + 1,
+                pstListOfTimes->wMonth,
                 pstListOfTimes->wDay,
                 pstListOfTimes->wYear,
                 pstListOfTimes->wHour,
@@ -3174,16 +2995,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3265,17 +3081,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             wprintf(L"Failed calling CoCreateInstance. ");
             CoUninitialize();
@@ -3338,8 +3149,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
         return 1;
     }
 
-    // Call ITask::SetAccountInformation to specify the account name
-    // and the account password for Test Task.
+    // Call ITask::SetAccountInformation to specify the account name and the account password for Test Task.
     hr = pITask->SetAccountInformation((LPCWSTR)pszName, (LPCWSTR)pszPwd);
     SecureZeroMemory(pszName, sizeof(pszName));
     SecureZeroMemory(pszPwd, sizeof(pszPwd));
@@ -3385,17 +3195,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3417,8 +3222,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
         return 1;
     }
 
-    // Call ITask::SetComment to specify the account name
-    // and the account password for Test Task.
+    // Call ITask::SetComment to specify the account name and the account password for Test Task.
     LPCWSTR pwszComment = L"This task is used to test the Task Scheduler APIs.";
     hr = pITask->SetComment(pwszComment);
     if (FAILED(hr)) {
@@ -3466,17 +3270,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3530,17 +3329,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3592,17 +3386,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3657,16 +3446,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3720,17 +3504,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3751,9 +3530,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    // Call ITask::GetWorkingDirectory to display the working 
-    // directory associated with "Test Task".
-
+    // Call ITask::GetWorkingDirectory to display the working directory associated with "Test Task".
     LPWSTR lpwszWorkDir;
     hr = pITask->GetWorkingDirectory(&lpwszWorkDir);
     pITask->Release();
@@ -3764,8 +3541,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    // Process returned string. 
-    wprintf(L"Test Task is associated with : %s\n", lpwszWorkDir);
+    wprintf(L"Test Task is associated with : %s\n", lpwszWorkDir);// Process returned string. 
 
     CoTaskMemFree(lpwszWorkDir);// Call CoTaskMemFree to free resources.
     CoUninitialize();
@@ -3789,17 +3565,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3866,17 +3637,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3944,17 +3710,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4022,17 +3783,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4100,17 +3856,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4132,8 +3883,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
         return 1;
     }
 
-    // Call ITask::SetWorkingDirectory to specify the current 
-    // working directory for Test Task.
+    // Call ITask::SetWorkingDirectory to specify the current working directory for Test Task.
     LPCWSTR pwszWorkingDirectory = L"C:\\Temp";
     hr = pITask->SetWorkingDirectory(pwszWorkingDirectory);
     if (FAILED(hr)) {
@@ -4182,16 +3932,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4212,8 +3957,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    // Call ITask::QueryInterface to retrieve the IProvideTaskPage 
-    // interface, and call IProvideTaskPage::GetPage to retrieve the task page.
+    // Call ITask::QueryInterface to retrieve the IProvideTaskPage interface, and call IProvideTaskPage::GetPage to retrieve the task page.
     TASKPAGE tpType = TASKPAGE_TASK;
     BOOL fPersistChanges = TRUE;
     HPROPSHEETPAGE phPage;
@@ -4270,15 +4014,10 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     HRESULT hr = S_OK;
     ITaskScheduler * pITS;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4313,8 +4052,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     }
 
     // Define TASK_TRIGGER structure. Note that wBeginDay,
-    // wBeginMonth, and wBeginYear must be set to a valid 
-    // day, month, and year respectively.
+    // wBeginMonth, and wBeginYear must be set to a valid day, month, and year respectively.
     TASK_TRIGGER pTrigger;
     ZeroMemory(&pTrigger, sizeof(TASK_TRIGGER));
 
@@ -4381,15 +4119,10 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     HRESULT hr = S_OK;
     ITaskScheduler * pITS;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4504,16 +4237,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
 {
     HRESULT hr = S_OK;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS;
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4562,7 +4290,6 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
     }
 
     pITask->Release();// Release the ITask interface.
-
     CoUninitialize();
     return 0;
 }
@@ -4584,15 +4311,10 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
     ITaskScheduler * pITS;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler,
-                              NULL,
-                              CLSCTX_INPROC_SERVER,
-                              IID_ITaskScheduler,
-                              (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4624,15 +4346,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    // Display the trigger stings, calling ITask::GetTriggerString for 
-    // each trigger associated with the task.
-
+    // Display the trigger stings, calling ITask::GetTriggerString for each trigger associated with the task.
     wprintf(L"There are %i triggers with Test Task.\n", plTriggerCount);
     wprintf(L"They are:\n");
 
     WORD CurrentTrigger = 0;
     LPWSTR ppwszTrigger = NULL;
-
     for (CurrentTrigger = 0; CurrentTrigger < plTriggerCount; CurrentTrigger++) {
         pITask->GetTriggerString(CurrentTrigger, &ppwszTrigger);
         if (FAILED(hr)) {
