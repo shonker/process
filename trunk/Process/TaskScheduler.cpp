@@ -20,8 +20,7 @@ void EnumTaskScheduler(void)
 \Windows-classic-samples\Samples\Win7Samples\sysmgmt\tasksched\registeredtaskenum\TaskEnumeration_Example.cpp
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return;
@@ -199,8 +198,7 @@ The following C++ example shows how to schedule a task to execute Notepad one mi
 https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -214,8 +212,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
         return 1;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Time Trigger Test Task";
+    LPCWSTR wszTaskName = L"Time Trigger Test Task";//  Create a name for the task.
 
     //  Get the windows directory and set the path to notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -539,8 +536,7 @@ The following C++ example shows how to schedule a task to execute Notepad on a d
 https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -554,8 +550,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
         return 1;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Daily Trigger Test Task";
+    LPCWSTR wszTaskName = L"Daily Trigger Test Task";//  Create a name for the task.
 
     //  Get the windows directory and set the path to notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -579,8 +574,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
         return 1;
     }
 
-    //  Get the pointer to the root task folder.  This folder will hold the
-    //  new task that is registered.
+    //  Get the pointer to the root task folder.  This folder will hold the new task that is registered.
     ITaskFolder * pRootFolder = NULL;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
@@ -664,10 +658,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     if (FAILED(hr))
         printf("\nCannot put trigger ID: %x", hr);
 
-    //  Set the task to start daily at a certain time. The time 
-    //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
-    //  For example, the start boundary below
-    //  is January 1st 2005 at 12:05
+    //  Set the task to start daily at a certain time. 
+    //  The time format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
+    //  For example, the start boundary below is January 1st 2005 at 12:05
     hr = pDailyTrigger->put_StartBoundary(_bstr_t(L"2005-01-01T12:05:00"));
     if (FAILED(hr))
         printf("\nCannot put start boundary: %x", hr);
@@ -677,8 +670,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     if (FAILED(hr))
         printf("\nCannot put the end boundary: %x", hr);
 
-    //  Define the interval for the daily trigger. An interval of 2 produces an
-    //  every other day schedule
+    //  Define the interval for the daily trigger. An interval of 2 produces an every other day schedule
     hr = pDailyTrigger->put_DaysInterval((short)2);
     if (FAILED(hr)) {
         printf("\nCannot put days interval: %x", hr);
@@ -883,8 +875,7 @@ The following C++ example shows how to schedule a task to execute Notepad 30 sec
 https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -898,8 +889,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
         return 1;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Registration Trigger Test Task";
+    LPCWSTR wszTaskName = L"Registration Trigger Test Task";//  Create a name for the task.
 
     //  Get the windows directory and set the path to notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -933,8 +923,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
         return 1;
     }
 
-    //  If the same task exists, remove it.
-    hr = pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
+    hr = pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
     ITaskDefinition * pTask = NULL;
@@ -1204,8 +1193,7 @@ The following C++ example shows how to schedule a task to execute Notepad on a w
 https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return;
@@ -1531,8 +1519,7 @@ The following C++ example shows how to schedule a task to execute Notepad when a
 https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -1546,8 +1533,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
         return 1;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Logon Trigger Test Task";
+    LPCWSTR wszTaskName = L"Logon Trigger Test Task";//  Create a name for the task.
 
     //  Get the windows directory and set the path to notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -1836,8 +1822,7 @@ The following C++ code example shows how to schedule a task to execute Notepad.e
 https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -1851,8 +1836,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
         return 1;
     }
 
-    //  Create a name for the task.
-    LPCWSTR wszTaskName = L"Boot Trigger Test Task";
+    LPCWSTR wszTaskName = L"Boot Trigger Test Task";//  Create a name for the task.
 
     //  Get the Windows directory and set the path to Notepad.exe.
     wstring wstrExecutablePath = _wgetenv(L"WINDIR");
@@ -2133,8 +2117,7 @@ The following C++ example shows how to display the name and state of all the tas
 https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-and-state--c---
 */
 {
-    //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
