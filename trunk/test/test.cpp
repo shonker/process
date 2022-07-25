@@ -42,6 +42,8 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     //GetAdaptersAddressesInfo(argc, argv);
 
+    StartingExecutableDaily();
+
     BOOL ret = IsWow64Process2Ex(5612);
     printf("LastError:%d\n", ret);
 

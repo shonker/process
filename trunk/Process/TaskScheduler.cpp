@@ -489,7 +489,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
 ********************************************************************/
 
 
-int __cdecl StartingExecutableDaily()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingExecutableDaily()
 /*
 Daily Trigger Example (C++)
 05/31/2018
