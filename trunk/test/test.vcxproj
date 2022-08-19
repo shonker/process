@@ -150,10 +150,12 @@
   <ItemGroup>
     <ClCompile Include="ShellExecute.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\Process.h" />
     <ClInclude Include="ShellExecute.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

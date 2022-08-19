@@ -249,6 +249,10 @@ __declspec(dllimport) BOOL WINAPI GetCurrentUserAndDomain(PTSTR szUser,
 
 __declspec(dllimport) BOOL WINAPI GetLogonSID(HANDLE hToken, PSID * ppsid);
 
+__declspec(dllimport) bool WINAPI GetCurrentToken(OUT PHANDLE hToken);
+
+__declspec(dllimport) VOID WINAPI FreeLogonSID(PSID * ppsid);
+
 __declspec(dllimport) BOOL WINAPI IsCurrentSessionRemoteable();
 
 __declspec(dllimport) void WINAPI EnumerateSessions();
@@ -267,6 +271,8 @@ __declspec(dllimport) BOOL WINAPI StartInteractiveClientProcess(
 );
 
 __declspec(dllimport) HRESULT WINAPI GetSid(LPCWSTR wszAccName, PSID * ppSid);
+
+__declspec(dllimport) int WINAPI GetCurrentSid();
 
 __declspec(dllimport) BOOL WINAPI SearchTokenGroupsForSID(VOID);
 

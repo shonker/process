@@ -259,7 +259,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/api/winbase/nf-winbase-createproc
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-VOID FreeLogonSID(PSID * ppsid)
+EXTERN_C
+__declspec(dllexport)
+VOID WINAPI FreeLogonSID(PSID * ppsid)
 //Free the buffer for the logon SID.
 {
     HeapFree(GetProcessHeap(), 0, (LPVOID)*ppsid);

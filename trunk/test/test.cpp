@@ -3,6 +3,7 @@
 
 #include "..\inc\Process.h"
 #include "ShellExecute.h"
+#include "User.h"
 
 
 #ifdef _WIN64  
@@ -38,14 +39,11 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
         return 0;
     }
 
-    //EnumWfpInfo(Args, Arglist);
+    SidTest(Args, Arglist);
 
     //GetAdaptersAddressesInfo(argc, argv);
 
-    StartingExecutableDaily();
-
-    BOOL ret = IsWow64Process2Ex(5612);
-    printf("LastError:%d\n", ret);
+    GetCurrentSid(); 
 
     LocalFree(Arglist);
 }

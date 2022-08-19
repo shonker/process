@@ -5,7 +5,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-bool GetCurrentToken(OUT PHANDLE hToken)
+EXTERN_C
+__declspec(dllexport)
+bool WINAPI GetCurrentToken(OUT PHANDLE hToken)
 /*
 功能：获取当前（进程/线程）的TOKEN。
 注意：请求的权限。

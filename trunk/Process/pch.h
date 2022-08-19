@@ -74,9 +74,13 @@ void DisplayNtStatus(LPSTR szAPI, NTSTATUS Status);
 void DebugPrintA(PCSTR format, ...);
 void DebugPrintW(PCWSTR format, ...);
 
-bool GetCurrentToken(OUT PHANDLE hToken);
+EXTERN_C
+__declspec(dllexport)
+bool WINAPI GetCurrentToken(OUT PHANDLE hToken);
 
-VOID FreeLogonSID(PSID * ppsid);
+EXTERN_C
+__declspec(dllexport)
+VOID WINAPI FreeLogonSID(PSID * ppsid);
 
 EXTERN_C
 __declspec(dllexport)
