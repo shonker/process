@@ -15,7 +15,9 @@
 // folder on the local computer and displays their name and status.
 
 
-void EnumTaskScheduler(void)
+EXTERN_C
+__declspec(dllexport)
+void WINAPI EnumTaskScheduler(void)
 /*
 \Windows-classic-samples\Samples\Win7Samples\sysmgmt\tasksched\registeredtaskenum\TaskEnumeration_Example.cpp
 */
@@ -152,7 +154,9 @@ void EnumTaskScheduler(void)
 ********************************************************************/
 
 
-int __cdecl StartingExecutableAtSpecificTime()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingExecutableAtSpecificTime()
 /*
 Time Trigger Example (C++)
 05/31/2018
@@ -841,7 +845,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
 ********************************************************************/
 
 
-int __cdecl StartingExecutableWhenTaskRegistered()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingExecutableWhenTaskRegistered()
 /*
 Starting an Executable When a Task is Registered
 
@@ -1148,7 +1154,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
 ********************************************************************/
 
 
-void StartingExecutableWeekly(void)
+EXTERN_C
+__declspec(dllexport)
+void WINAPI StartingExecutableWeekly(void)
 /*
 Starting an Executable Weekly
 
@@ -1476,7 +1484,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
 **********************************************************************/
 
 
-int __cdecl StartingExecutableWhenUserLogsOn()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingExecutableWhenUserLogsOn()
 /*
 Starting an Executable When a User Logs On
 
@@ -1776,7 +1786,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
 ********************************************************************/
 
 
-int __cdecl StartingExecutableOnSystemBoot()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingExecutableOnSystemBoot()
 /*
 Starting an Executable on System Boot
 
@@ -2079,7 +2091,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
 ********************************************************************/
 
 
-int __cdecl EnumeratingTasks()
+EXTERN_C
+__declspec(dllexport)
+int WINAPI EnumeratingTasks()
 /*
 Enumerating Tasks and Displaying Task Information
 
@@ -2224,7 +2238,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int CreatingTaskUsingNewWorkItem(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI CreatingTaskUsingNewWorkItem(int argc, char ** argv)
 /*
 C/C++ Code Example: Creating a Task Using NewWorkItem
 05/31/2018
@@ -2294,7 +2310,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int EnumeratingTasksOne(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI EnumeratingTasksOne(int argc, char ** argv)
 /*
 C/C++ Code Example: Enumerating Tasks
 05/31/2018
@@ -2351,7 +2369,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int StartingTask(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI StartingTask(int argc, char ** argv)
 /*
 C/C++ Code Example: Starting a Task
 05/31/2018
@@ -2365,8 +2385,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     HRESULT hr = S_OK;
     ITaskScheduler * pITS;
 
-    // Call CoInitialize to initialize the COM library and then
-    // call CoCreateInstance to get the Task Scheduler object.
+    // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -2379,7 +2398,6 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-
     ITask * pITask;
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
@@ -2392,10 +2410,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     }
 
     // Call ITask::Run to start the execution of "Test Task".
-
     hr = pITask->Run();
     pITask->Release();
-
     if (FAILED(hr)) {
         wprintf(L"Failed calling ITask::Run, error = 0x%x\n", hr);
         CoUninitialize();
@@ -2410,7 +2426,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int EditingWorkItem(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI EditingWorkItem(int argc, char ** argv)
 /*
 C/C++ Code Example: Editing a Work Item
 05/31/2018
@@ -2469,7 +2487,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int RetrievingTaskAccountInformation(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskAccountInformation(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Account Information
 05/31/2018
@@ -2536,7 +2556,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskComment(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskComment(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving a Task Comment
 05/31/2018
@@ -2597,7 +2619,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskCreator(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskCreator(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task Creator
 05/31/2018
@@ -2656,7 +2680,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskExitCode(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskExitCode(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Exit Code
 05/31/2018
@@ -2714,7 +2740,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskIdleWaitTime(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskIdleWaitTime(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Idle-wait Time
 05/31/2018
@@ -2774,7 +2802,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskMostRecentRunTime(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskMostRecentRunTime(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task MostRecentRun Time
 05/31/2018
@@ -2832,7 +2862,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskNextRunTime(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskNextRunTime(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task NextRun Time
 05/31/2018
@@ -2890,7 +2922,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskRunTimes(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskRunTimes(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Run Times
 05/31/2018
@@ -2967,7 +3001,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskStatus(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskStatus(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Status
 05/31/2018
@@ -3053,7 +3089,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int SettingTaskAccountInformation(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingTaskAccountInformation(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Task Account Information
 05/31/2018
@@ -3167,7 +3205,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 }
 
 
-int SettingTaskComment(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingTaskComment(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Task Comment
 05/31/2018
@@ -3242,7 +3282,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int RetrievingTaskApplicationName(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskApplicationName(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task Application Name
 05/31/2018
@@ -3301,7 +3343,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskMaxRunTime(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskMaxRunTime(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task MaxRunTime
 05/31/2018
@@ -3358,7 +3402,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskParameters(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskParameters(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Parameters
 05/31/2018
@@ -3418,7 +3464,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskPriority(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskPriority(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Task Priority
 05/31/2018
@@ -3476,7 +3524,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 }
 
 
-int RetrievingTaskWorkingDirectory(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskWorkingDirectory(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving the Task Working Directory
 05/31/2018
@@ -3537,7 +3587,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int SettingApplicationName(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingApplicationName(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Application Name
 05/31/2018
@@ -3609,7 +3661,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 }
 
 
-int SettingMaxRunTime(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingMaxRunTime(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting MaxRunTime
 05/31/2018
@@ -3682,7 +3736,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 }
 
 
-int SettingTaskParameters(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingTaskParameters(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Task Parameters
 05/31/2018
@@ -3755,7 +3811,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 }
 
 
-int SettingTaskPriority(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingTaskPriority(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Task Priority
 05/31/2018
@@ -3828,7 +3886,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 }
 
 
-int SettingWorkingDirectory(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI SettingWorkingDirectory(int argc, char ** argv)
 /*
 C/C++ Code Example: Setting Working Directory
 05/31/2018
@@ -3904,7 +3964,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int RetrievingTaskPage(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTaskPage(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving a Task Page
 05/31/2018
@@ -3986,7 +4048,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int CreatingTaskTrigger(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI CreatingTaskTrigger(int argc, char ** argv)
 /*
 C/C++ Code Example: Creating a Task Trigger
 05/31/2018
@@ -4090,7 +4154,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int CreatingIdleTrigger(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI CreatingIdleTrigger(int argc, char ** argv)
 /*
 C/C++ Code Example: Creating an Idle Trigger
 05/31/2018
@@ -4210,7 +4276,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int TerminatingTask(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI TerminatingTask(int argc, char ** argv)
 /*
 C/C++ Code Example: Terminating a Task
 05/31/2018
@@ -4283,7 +4351,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int RetrievingTriggerStrings(int argc, char ** argv)
+EXTERN_C
+__declspec(dllexport)
+int WINAPI RetrievingTriggerStrings(int argc, char ** argv)
 /*
 C/C++ Code Example: Retrieving Trigger Strings
 05/31/2018

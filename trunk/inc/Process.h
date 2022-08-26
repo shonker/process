@@ -242,10 +242,7 @@ __declspec(dllimport) int WINAPI RemoveShutdownPrivilegeStartProcess();
 
 __declspec(dllimport) void WINAPI ShowProcessIntegrityLevel();
 
-__declspec(dllimport) BOOL WINAPI GetCurrentUserAndDomain(PTSTR szUser, 
-                                                          PDWORD pcchUser, 
-                                                          PTSTR szDomain, 
-                                                          PDWORD pcchDomain);
+__declspec(dllimport) BOOL WINAPI GetCurrentUserAndDomain(PTSTR szUser, PDWORD pcchUser, PTSTR szDomain, PDWORD pcchDomain);
 
 __declspec(dllimport) BOOL WINAPI GetLogonSID(HANDLE hToken, PSID * ppsid);
 
@@ -317,7 +314,119 @@ __declspec(dllimport) void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink
 
 
 __declspec(dllimport)
+int WINAPI EnumTaskScheduler();
+
+__declspec(dllimport)
+int WINAPI StartingExecutableAtSpecificTime();
+
+__declspec(dllimport)
 int WINAPI StartingExecutableDaily();
+
+__declspec(dllimport)
+int WINAPI StartingExecutableWhenTaskRegistered();
+
+__declspec(dllimport)
+int WINAPI StartingExecutableWeekly();
+
+__declspec(dllimport)
+int WINAPI StartingExecutableWhenUserLogsOn();
+
+__declspec(dllimport)
+int WINAPI StartingExecutableOnSystemBoot();
+
+__declspec(dllimport)
+int WINAPI EnumeratingTasks();
+
+__declspec(dllimport)
+int WINAPI CreatingTaskUsingNewWorkItem(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI EnumeratingTasksOne(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI StartingTask(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI EditingWorkItem(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskAccountInformation(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskComment(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskCreator(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskExitCode(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskIdleWaitTime(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskMostRecentRunTime(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskNextRunTime(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskRunTimes(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskStatus(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingTaskAccountInformation(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingTaskComment(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskApplicationName(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskMaxRunTime(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskParameters(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskPriority(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskWorkingDirectory(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingApplicationName(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingMaxRunTime(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingTaskParameters(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingTaskPriority(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI SettingWorkingDirectory(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTaskPage(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI CreatingTaskTrigger(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI CreatingIdleTrigger(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI TerminatingTask(int argc, char ** argv);
+
+__declspec(dllimport)
+int WINAPI RetrievingTriggerStrings(int argc, char ** argv);
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
