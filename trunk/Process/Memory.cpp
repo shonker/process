@@ -19,7 +19,7 @@
 
 
 BOOL LoggedSetLockPagesPrivilege(HANDLE hProcess, BOOL bEnable)
-/*****************************************************************
+/*
    LoggedSetLockPagesPrivilege: a function to obtain or release the privilege of locking physical pages.
 
    Inputs:
@@ -27,9 +27,10 @@ BOOL LoggedSetLockPagesPrivilege(HANDLE hProcess, BOOL bEnable)
        BOOL bEnable: Enable (TRUE) or disable?
 
    Return value: TRUE indicates success, FALSE failure.
-*****************************************************************/
+*/
 {
-    struct {
+    struct
+    {
         DWORD Count;
         LUID_AND_ATTRIBUTES Privilege[1];
     } Info;
@@ -135,10 +136,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/awe-example
     }
 
     // Reserve the virtual memory.
-    lpMemReserved = VirtualAlloc(NULL,
-                                 MEMORY_REQUESTED,
-                                 MEM_RESERVE | MEM_PHYSICAL,
-                                 PAGE_READWRITE);
+    lpMemReserved = VirtualAlloc(NULL, MEMORY_REQUESTED, MEM_RESERVE | MEM_PHYSICAL, PAGE_READWRITE);
     if (lpMemReserved == NULL) {
         _tprintf(_T("Cannot reserve memory.\n"));
         return;
@@ -249,13 +247,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/allocating-memory-from-a-n
 
         _tprintf(_T("CPU %u: node %u\n"), (ULONG)i, NodeNumber);
 
-        PCHAR Buffer = (PCHAR)VirtualAllocExNuma(
-            GetCurrentProcess(),
-            NULL,
-            AllocationSize,
-            MEM_RESERVE | MEM_COMMIT,
-            PAGE_READWRITE,
-            NodeNumber);
+        PCHAR Buffer = (PCHAR)VirtualAllocExNuma(GetCurrentProcess(), NULL, AllocationSize, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE, NodeNumber);
         if (Buffer == NULL) {
             _tprintf(_T("VirtualAllocExNuma failed: %d, node %u\n"), GetLastError(), NodeNumber);
             goto Exit;
@@ -323,8 +315,7 @@ void DumpNumaNodeInfo(PVOID Buffer, SIZE_T Size)
 
     _putts(_T("Checking NUMA node:"));
 
-    PPSAPI_WORKING_SET_EX_INFORMATION WsInfo = (PPSAPI_WORKING_SET_EX_INFORMATION)
-        malloc(NumPages * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
+    PPSAPI_WORKING_SET_EX_INFORMATION WsInfo = (PPSAPI_WORKING_SET_EX_INFORMATION)malloc(NumPages * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
     if (WsInfo == NULL) {
         _putts(_T("Could not allocate array of PSAPI_WORKING_SET_EX_INFORMATION structures"));
         return;
@@ -334,10 +325,7 @@ void DumpNumaNodeInfo(PVOID Buffer, SIZE_T Size)
         WsInfo[i].VirtualAddress = StartPtr + i * PageSize;
     }
 
-    BOOL bResult = QueryWorkingSetEx(
-        GetCurrentProcess(),
-        WsInfo,
-        (DWORD)NumPages * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
+    BOOL bResult = QueryWorkingSetEx(GetCurrentProcess(), WsInfo, (DWORD)NumPages * sizeof(PSAPI_WORKING_SET_EX_INFORMATION));
     if (!bResult) {
         _tprintf(_T("QueryWorkingSetEx failed: %d\n"), GetLastError());
         free(WsInfo);
@@ -403,7 +391,8 @@ The system will not stop the next attempt to access the memory page with a STATU
 
 If a guard page exception occurs during a system service, the service fails and typically returns some failure status indicator.
 Since the system also removes the relevant memory page's guard page status,
-the next invocation of the same system service won't fail due to a STATUS_GUARD_PAGE_VIOLATION exception (unless, of course, someone reestablishes the guard page).
+the next invocation of the same system service won't fail due to a STATUS_GUARD_PAGE_VIOLATION exception
+(unless, of course, someone reestablishes the guard page).
 
 The following short program illustrates the behavior of guard page protection.
 
@@ -588,8 +577,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/reserving-and-committing-m
         }
         // If there's a page fault, commit another page and try again.
         __except (PageFaultExceptionFilter(GetExceptionCode())) {
-            // This code is executed only if the filter function
-            // is unsuccessful in committing the next page.
+            // This code is executed only if the filter function is unsuccessful in committing the next page.
 
             _tprintf(TEXT("Exiting process.\n"));
 
@@ -703,8 +691,7 @@ void GetDumpFileName(TCHAR * dumpFileName)
     GetLocalTime(&st);
 
     wchar_t file_name[MAX_PATH] = {0};
-    wsprintf(file_name, L"%d-%d-%d-%d-%d-%d-%d.dmp",
-             st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+    wsprintf(file_name, L"%d-%d-%d-%d-%d-%d-%d.dmp", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
     B = PathAppend(dumpFileName, file_name);
     _ASSERTE(B);
@@ -737,13 +724,7 @@ SetUnhandledExceptionFilterµÄ²ÎÊý¡£
     mei.ExceptionPointers = ExceptionInfo;
     mei.ThreadId = GetCurrentThreadId();
     mei.ClientPointers = 0;
-    BOOL b = MiniDumpWriteDump(GetCurrentProcess(),
-                               GetCurrentProcessId(),
-                               hFile,
-                               MiniDumpWithFullMemory,
-                               &mei,
-                               NULL,
-                               NULL);
+    BOOL b = MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpWithFullMemory, &mei, NULL, NULL);
     if (!b) {
         //EVENTLOGW(EVENTLOG_ERROR_TYPE, "LastError:%#x", GetLastError());
     }

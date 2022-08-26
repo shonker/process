@@ -79,13 +79,7 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             0x00000032 不支持该请求。
             */
             HANDLE hCopy;// Duplicate the handle in the current process
-            if (!DuplicateHandle(hProcess,
-                                 (HANDLE)pHandle->Handle,
-                                 GetCurrentProcess(),
-                                 &hCopy,
-                                 MAXIMUM_ALLOWED,
-                                 FALSE,
-                                 0)) {
+            if (!DuplicateHandle(hProcess, (HANDLE)pHandle->Handle, GetCurrentProcess(), &hCopy, MAXIMUM_ALLOWED, FALSE, 0)) {
                 wprintf(L"DuplicateHandle fail with 0x%x,HANDLE:0x%x,ObjectTypeNumber:%d\n",
                         GetLastError(), pHandle->Handle, pHandle->ObjectTypeNumber);
                 continue;
@@ -95,8 +89,7 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             在这里可以利用复制的句柄进行一些操作，如查询值。
             */
             ULONG  ObjectInformationLength = sizeof(OBJECT_NAME_INFORMATION) + 512;
-            POBJECT_NAME_INFORMATION poni = (POBJECT_NAME_INFORMATION)
-                HeapAlloc(GetProcessHeap(), 0, ObjectInformationLength);
+            POBJECT_NAME_INFORMATION poni = (POBJECT_NAME_INFORMATION)HeapAlloc(GetProcessHeap(), 0, ObjectInformationLength);
             assert(poni != NULL);
 
             ULONG  ReturnLength;
@@ -105,11 +98,7 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             如果句柄的类型是TOKEN，线程，进程等类型的，需要再特殊的处理。
             也就是说这个函数是查询不到的。
             */
-            if (NtQueryObject(hCopy,
-                              (OBJECT_INFORMATION_CLASS)1,
-                              poni,
-                              ObjectInformationLength, 
-                              &ReturnLength) != STATUS_SUCCESS) {
+            if (NtQueryObject(hCopy, (OBJECT_INFORMATION_CLASS)1, poni, ObjectInformationLength, &ReturnLength) != STATUS_SUCCESS) {
                 wprintf(L"NtQueryObject fail!\n");
                 HeapFree(GetProcessHeap(), 0, poni);
                 continue;
@@ -232,13 +221,7 @@ DWORD EnumerateFileHandles(ULONG pid)
 
             // Duplicate the handle in the current process
             HANDLE hCopy;
-            if (!DuplicateHandle(hProcess,
-                                 (HANDLE)pHandle->Handle,
-                                 GetCurrentProcess(),
-                                 &hCopy,
-                                 MAXIMUM_ALLOWED,
-                                 FALSE,
-                                 0))
+            if (!DuplicateHandle(hProcess, (HANDLE)pHandle->Handle, GetCurrentProcess(), &hCopy, MAXIMUM_ALLOWED, FALSE, 0))
                 continue;
 
             // Retrieve file name information about the file object.
@@ -250,7 +233,7 @@ DWORD EnumerateFileHandles(ULONG pid)
                 // Get the file name and print it
                 WCHAR wszFileName[MAX_PATH + 1];
                 StringCchCopyNW(wszFileName,
-                                MAX_PATH + 1, 
+                                MAX_PATH + 1,
                                 pNameInfo->FileName,
                                 /*must be WCHAR*/ pNameInfo->FileNameLength /*in bytes*/ / 2);
                 wprintf(L"0x%x:\t%s\n", pHandle->Handle, wszFileName);
@@ -379,13 +362,7 @@ int FileHandleTest(int argc, _TCHAR * argv[])
 
     // Get file name from file handle using a file mapping object
     HANDLE hFile;
-    hFile = CreateFile(TEXT("test.txt"),
-                       GENERIC_WRITE | GENERIC_READ,
-                       0,
-                       NULL,
-                       CREATE_ALWAYS,
-                       FILE_ATTRIBUTE_NORMAL,
-                       NULL);
+    hFile = CreateFile(TEXT("test.txt"), GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
         _tprintf(TEXT("CreateFile failed with %d\n"), GetLastError());
         return 0;
@@ -452,12 +429,10 @@ TypeNameFilter是过滤，可取的值有：
 
     HINSTANCE hNtDll = LoadLibrary(_T("ntdll.dll"));
     assert(hNtDll != NULL);
-    OpenDirectoryObject NtOpenDirectoryObject = (OpenDirectoryObject)
-        GetProcAddress(hNtDll, "NtOpenDirectoryObject");
+    OpenDirectoryObject NtOpenDirectoryObject = (OpenDirectoryObject)GetProcAddress(hNtDll, "NtOpenDirectoryObject");
     assert(NtOpenDirectoryObject != NULL);
 
-    QueryDirectoryObject NtQueryDirectoryObject =
-        (QueryDirectoryObject)GetProcAddress(hNtDll, "NtQueryDirectoryObject");
+    QueryDirectoryObject NtQueryDirectoryObject = (QueryDirectoryObject)GetProcAddress(hNtDll, "NtQueryDirectoryObject");
     assert(NtQueryDirectoryObject != NULL);
 
     InitializeObjectAttributes(&oa, &Directory, OBJ_CASE_INSENSITIVE, 0, 0);
@@ -483,13 +458,7 @@ TypeNameFilter是过滤，可取的值有：
         UNICODE_STRING FullName = {0};
 
         RestartScan = FALSE;//为TRUE会导致死循环;
-        status = NtQueryDirectoryObject(FileHandle,
-                                        FileInformation,
-                                        Length,
-                                        TRUE,
-                                        RestartScan,
-                                        &Context,
-                                        &ReturnedLength);
+        status = NtQueryDirectoryObject(FileHandle, FileInformation, Length, TRUE, RestartScan, &Context, &ReturnedLength);
         if (status != STATUS_NO_MORE_FILES && status != STATUS_SUCCESS) {
             break;//这里好像没有走过。
         }
@@ -595,13 +564,7 @@ https://docs.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-duplic
     HANDLE hMutexDup, hThread;
     DWORD dwThreadId;
 
-    DuplicateHandle(GetCurrentProcess(),
-                    hMutex,
-                    GetCurrentProcess(),
-                    &hMutexDup,
-                    0,
-                    FALSE,
-                    DUPLICATE_SAME_ACCESS);
+    DuplicateHandle(GetCurrentProcess(), hMutex, GetCurrentProcess(), &hMutexDup, 0, FALSE, DUPLICATE_SAME_ACCESS);
 
     hThread = CreateThread(NULL, 0, ThreadProc, (LPVOID)hMutexDup, 0, &dwThreadId);
 

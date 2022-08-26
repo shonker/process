@@ -86,15 +86,14 @@
 
 #pragma comment(lib, "fwpuclnt.lib") 
 #pragma comment(lib, "Rpcrt4.lib")
-
 #pragma comment(lib, "mpr.lib")
-
 #pragma comment( lib, "ole32.lib" )
 #pragma comment( lib, "oleaut32.lib" )
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "Version.lib") 
 //#pragma comment (lib,"Url.lib")
 #pragma comment(lib, "wbemuuid.lib")
+#pragma comment(lib,"Netapi32.lib")
 
 #include <bcrypt.h>
 #pragma comment (lib, "Bcrypt.lib")
@@ -125,8 +124,6 @@
 
 //#include <winsock.h>
 #pragma comment(lib, "Ws2_32.lib")
-
-#pragma comment(lib,"Netapi32.lib")
 
 #include <iphlpapi.h>
 #pragma comment(lib, "IPHLPAPI.lib")
@@ -188,14 +185,14 @@ __declspec(dllimport) BOOL WINAPI IsWow64();
 
 __declspec(dllimport) BOOL WINAPI IsWow64Process2Ex(_In_ DWORD Pid);
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //服务相关的函数。
 
+
 __declspec(dllimport) BOOL WINAPI DriverInstallInf(PWSTR InfFile);
 __declspec(dllimport) BOOL WINAPI DriverInstall(_In_opt_ LPCWSTR BinaryPathName, _In_ LPCWSTR ServiceName);
-__declspec(dllimport) VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
-                                             _In_ LPCWSTR ServiceName,
-                                             _In_opt_ LPCWSTR DisplayName);
+__declspec(dllimport) VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName, _In_ LPCWSTR ServiceName, _In_opt_ LPCWSTR DisplayName);
 __declspec(dllimport) VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName);
 __declspec(dllimport) BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName);
 __declspec(dllimport) VOID __stdcall StopSvc(_In_ LPCWSTR ServiceName);
@@ -206,7 +203,9 @@ __declspec(dllimport) VOID __stdcall EnableSvc(_In_ LPCWSTR szSvcName);
 __declspec(dllimport) VOID __stdcall UpdateSvcDesc(_In_ LPCWSTR szSvcName);
 __declspec(dllimport) VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName);
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 __declspec(dllimport) BOOL WINAPI GetProcessList();
 
@@ -291,7 +290,9 @@ __declspec(dllimport) BOOL WINAPI IsCurrentUserLocalAdministrator(VOID);
 
 __declspec(dllimport) int WINAPI ManageUserPrivileges(int argc, char * argv[]);
 
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 __declspec(dllimport) void WINAPI CreateProcessWithLogon(int argc, WCHAR * argv[]);
 

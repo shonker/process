@@ -257,10 +257,7 @@ https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapsetinf
     // (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
     // If the application requires heap terminate-on-corruption to be enabled, 
     // check the return value and exit on failure as shown in this example.
-    BOOL bResult = HeapSetInformation(NULL,
-                                      HeapEnableTerminationOnCorruption,
-                                      NULL,
-                                      0);
+    BOOL bResult = HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
     if (bResult != FALSE) {
         //DbgPrintA("–≈œ¢£∫Heap terminate-on-corruption has been enabled");
     } else {

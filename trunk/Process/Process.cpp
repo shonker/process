@@ -140,8 +140,7 @@ BOOL WINAPI IsWow64()
 #pragma warning(disable:4702)
     HMODULE ModuleHandle = GetModuleHandle(TEXT("kernel32"));
     if (NULL != ModuleHandle) {
-        LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(ModuleHandle,
-                                                                                   "IsWow64Process");
+        LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(ModuleHandle, "IsWow64Process");
         if (NULL != fnIsWow64Process) {
             if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64)) {
                 // handle error
@@ -164,9 +163,7 @@ GetCurrentProcessId()
 {
     BOOL bIsWow64 = FALSE;
 
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                  FALSE,
-                                  Pid);
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, Pid);
     if (NULL == hProcess) {
         printf("LastError:%d\n", GetLastError());
         return false;
@@ -398,14 +395,11 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625966(v=ms
             if (dwError == ERROR_INSUFFICIENT_BUFFER) {
                 pTIL = (PTOKEN_MANDATORY_LABEL)LocalAlloc(0, dwLengthNeeded);
                 if (pTIL != NULL) {
-                    if (GetTokenInformation(hToken, TokenIntegrityLevel,
-                                            pTIL, dwLengthNeeded, &dwLengthNeeded)) {
-                        dwIntegrityLevel = *GetSidSubAuthority(pTIL->Label.Sid,
-                                                               (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pTIL->Label.Sid) - 1));
+                    if (GetTokenInformation(hToken, TokenIntegrityLevel, pTIL, dwLengthNeeded, &dwLengthNeeded)) {
+                        dwIntegrityLevel = *GetSidSubAuthority(pTIL->Label.Sid, (DWORD)(UCHAR)(*GetSidSubAuthorityCount(pTIL->Label.Sid) - 1));
                         if (dwIntegrityLevel < SECURITY_MANDATORY_MEDIUM_RID) {
                             wprintf(L"Low Process");// Low Integrity
-                        } else if (dwIntegrityLevel >= SECURITY_MANDATORY_MEDIUM_RID &&
-                                   dwIntegrityLevel < SECURITY_MANDATORY_HIGH_RID) {
+                        } else if (dwIntegrityLevel >= SECURITY_MANDATORY_MEDIUM_RID && dwIntegrityLevel < SECURITY_MANDATORY_HIGH_RID) {
                             wprintf(L"Medium Process");// Medium Integrity
                         } else if (dwIntegrityLevel >= SECURITY_MANDATORY_HIGH_RID) {
                             wprintf(L"High Integrity Process");// High Integrity
@@ -662,9 +656,7 @@ BOOL CreateLowIntegrityProcess(PWSTR pszCommandLine)
     PROCESS_INFORMATION pi = {0};
 
     // Open the primary access token of the process.
-    if (!OpenProcessToken(GetCurrentProcess(),
-                          TOKEN_DUPLICATE | TOKEN_QUERY | TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY,
-                          &hToken)) {
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_QUERY | TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY, &hToken)) {
         dwError = GetLastError();
         goto Cleanup;
     }
@@ -819,9 +811,7 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
         return ParentsPid;
     }
 
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                  FALSE,
-                                  HandleToULong(UniqueProcessId));
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, HandleToULong(UniqueProcessId));
     if (NULL == hProcess) {
         printf("LastError:%d\n", GetLastError());
         return ParentsPid;
@@ -829,11 +819,7 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
 
     PROCESS_BASIC_INFORMATION ProcessBasicInfo = {0};
     ULONG ReturnLength = 0;
-    NTSTATUS status = ZwQueryInformationProcess(hProcess,
-                                                ProcessBasicInformation,
-                                                &ProcessBasicInfo,
-                                                sizeof(PROCESS_BASIC_INFORMATION),
-                                                &ReturnLength);
+    NTSTATUS status = ZwQueryInformationProcess(hProcess, ProcessBasicInformation, &ProcessBasicInfo, sizeof(PROCESS_BASIC_INFORMATION), &ReturnLength);
     if (!NT_SUCCESS(status)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);
@@ -877,11 +863,7 @@ bool WINAPI IsWow64ProcessEx(_In_ HANDLE UniqueProcessId)
 
     PROCESS_EXTENDED_BASIC_INFORMATION extendedInfo = {0};
     extendedInfo.Size = sizeof(extendedInfo);
-    NTSTATUS status = ZwQueryInformationProcess(ProcessHandle,
-                                                ProcessBasicInformation,
-                                                &extendedInfo,
-                                                sizeof(extendedInfo),
-                                                NULL);
+    NTSTATUS status = ZwQueryInformationProcess(ProcessHandle, ProcessBasicInformation, &extendedInfo, sizeof(extendedInfo), NULL);
     if (NT_SUCCESS(status)) {
         IsWow64 = (extendedInfo.IsWow64Process != 0);
     } else {

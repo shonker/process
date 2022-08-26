@@ -289,8 +289,7 @@ int ImpersonateUser(int argc, wchar_t * argv[])
     if (pc != NULL) *pc = L'\0';  // Remove the trailing L'\n'
 
     // Attempt to log on the user.
-    if (!LogonUser(szUserName, szDomain, szPassword,
-                   LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken)) {
+    if (!LogonUser(szUserName, szDomain, szPassword, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken)) {
         ReportError(L"LogonUser");
         goto Cleanup;
     }

@@ -12,7 +12,6 @@
 
 
 #define BUFFSIZE 1024 // size of the memory to examine at any one time
-
 #define FILE_MAP_START 138240 // starting point within the file of the data to examine (135K)
 
 /* 
@@ -49,15 +48,9 @@ int WINAPI CreatingViewWithinFile(void)
     int iData;            // on success contains the first int of data
     int iViewDelta;       // the offset into the view where the data shows up
 
-    // Create the test file. Open it "Create Always" to overwrite any
-    // existing file. The data is re-created below
-    hFile = CreateFile(lpcTheFile,
-                       GENERIC_READ | GENERIC_WRITE,
-                       0,
-                       NULL,
-                       CREATE_ALWAYS,
-                       FILE_ATTRIBUTE_NORMAL,
-                       NULL);
+    // Create the test file.
+    // Open it "Create Always" to overwrite any existing file. The data is re-created below
+    hFile = CreateFile(lpcTheFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
         _tprintf(TEXT("hFile is NULL\n"));
         _tprintf(TEXT("Target file is %s\n"), lpcTheFile);
@@ -72,8 +65,7 @@ int WINAPI CreatingViewWithinFile(void)
     // 64-bit values, and then get the low-order 32 bits for the function calls.
 
     // To calculate where to start the file mapping, round down the
-    // offset of the data into the file to the nearest multiple of the 
-    // system allocation granularity.
+    // offset of the data into the file to the nearest multiple of the system allocation granularity.
     dwFileMapStart = (FILE_MAP_START / dwSysGran) * dwSysGran;
     _tprintf(TEXT("The file map view starts at %ld bytes into the file.\n"), dwFileMapStart);
 
@@ -85,8 +77,7 @@ int WINAPI CreatingViewWithinFile(void)
     dwFileMapSize = FILE_MAP_START + BUFFSIZE;
     _tprintf(TEXT("The file mapping object is %ld bytes large.\n"), dwFileMapSize);
 
-    // The data of interest isn't at the beginning of the
-    // view, so determine how far into the view to set the pointer.
+    // The data of interest isn't at the beginning of the view, so determine how far into the view to set the pointer.
     iViewDelta = FILE_MAP_START - dwFileMapStart;
     _tprintf(TEXT("The data is %d bytes into the view.\n"), iViewDelta);
 

@@ -45,13 +45,7 @@ https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-p
         tp.Privileges[0].Attributes = 0;
 
     // Enable the privilege or disable all privileges.
-    if (!AdjustTokenPrivileges(
-        hToken,
-        FALSE,
-        &tp,
-        sizeof(TOKEN_PRIVILEGES),
-        (PTOKEN_PRIVILEGES)NULL,
-        (PDWORD)NULL)) {
+    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)NULL, (PDWORD)NULL)) {
         printf("AdjustTokenPrivileges error: %u\n", GetLastError());
         return FALSE;
     }
@@ -159,9 +153,7 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
     WCHAR wszProcessName[MAX_PATH] = L"C:\\Windows\\System32\\Notepad.exe";// Notepad is used as an example    
     WCHAR wszIntegritySid[20] = L"S-1-16-1024";// Low integrity SID
 
-    fRet = OpenProcessToken(GetCurrentProcess(),
-                            TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY,
-                            &hToken);
+    fRet = OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY, &hToken);
     if (!fRet) {
         goto CleanExit;
     }
@@ -180,26 +172,13 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
     TIL.Label.Sid = pIntegritySid;
 
     // Set the process integrity level
-    fRet = SetTokenInformation(hNewToken,
-                               TokenIntegrityLevel,
-                               &TIL,
-                               sizeof(TOKEN_MANDATORY_LABEL) + GetLengthSid(pIntegritySid));
+    fRet = SetTokenInformation(hNewToken, TokenIntegrityLevel, &TIL, sizeof(TOKEN_MANDATORY_LABEL) + GetLengthSid(pIntegritySid));
     if (!fRet) {
         goto CleanExit;
     }
 
     // Create the new process at Low integrity
-    fRet = CreateProcessAsUser(hNewToken,
-                               NULL,
-                               wszProcessName,
-                               NULL,
-                               NULL,
-                               FALSE,
-                               0,
-                               NULL,
-                               NULL,
-                               &StartupInfo,
-                               &ProcInfo);
+    fRet = CreateProcessAsUser(hNewToken, NULL, wszProcessName, NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcInfo);
     /*
     win10,这行出错。0xc0000022.
     */
@@ -518,13 +497,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
     BOOL bResult = FALSE;
 
     // Log the client on to the local computer.
-    if (!LogonUser(
-        lpszUsername,
-        lpszDomain,
-        lpszPassword,
-        LOGON32_LOGON_INTERACTIVE,
-        LOGON32_PROVIDER_DEFAULT,
-        &hToken)) {
+    if (!LogonUser(lpszUsername, lpszDomain, lpszPassword, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken)) {
         goto Cleanup;
     }
 
@@ -689,17 +662,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-a
     }
 
     // Create a SID for the BUILTIN\Administrators group.
-    if (!AllocateAndInitializeSid(&SIDAuth,
-                                  2,
-                                  SECURITY_BUILTIN_DOMAIN_RID,
-                                  DOMAIN_ALIAS_RID_ADMINS,
-                                  0,
-                                  0,
-                                  0,
-                                  0,
-                                  0,
-                                  0,
-                                  &pSID)) {
+    if (!AllocateAndInitializeSid(&SIDAuth, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pSID)) {
         printf("AllocateAndInitializeSid Error %u\n", GetLastError());
         return FALSE;
     }
@@ -898,9 +861,7 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
     TOKEN_LINKED_TOKEN tlt = {0};
 
     // Notepad is used as an example
-    fRet = OpenProcessToken(GetCurrentProcess(),
-                            TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY,
-                            &hToken);
+    fRet = OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY, &hToken);
     if (!fRet) {
         return 0;;
     }
@@ -967,17 +928,7 @@ void CreateLowProcess(HANDLE hLowPrivToken, WCHAR * wszProcessName)
     DWORD dwLength = 0;
     BOOL fRet = 0;
 
-    fRet = CreateProcessAsUser(hLowPrivToken,
-                               NULL,
-                               wszProcessName,
-                               NULL,
-                               NULL,
-                               FALSE,
-                               0,
-                               NULL,
-                               NULL,
-                               &StartupInfo,
-                               &ProcInfo);
+    fRet = CreateProcessAsUser(hLowPrivToken, NULL, wszProcessName, NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcInfo);
     if (0 == fRet) {
         return;
     }

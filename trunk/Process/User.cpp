@@ -48,13 +48,7 @@ https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-is
     BOOL b;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
-    b = AllocateAndInitializeSid(
-        &NtAuthority,
-        2,
-        SECURITY_BUILTIN_DOMAIN_RID,
-        DOMAIN_ALIAS_RID_ADMINS,
-        0, 0, 0, 0, 0, 0,
-        &AdministratorsGroup);
+    b = AllocateAndInitializeSid(&NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup);
     if (b) {
         if (!CheckTokenMembership(NULL, AdministratorsGroup, &b)) {
             b = FALSE;
@@ -80,8 +74,7 @@ https://www.cnblogs.com/idebug/p/11124664.html
     SID_IDENTIFIER_AUTHORITY ntAuthority = SECURITY_NT_AUTHORITY;
     PSID psidLocalSystem;
 
-    BOOL fSuccess = ::AllocateAndInitializeSid(&ntAuthority, 1, SECURITY_LOCAL_SYSTEM_RID,
-                                               0, 0, 0, 0, 0, 0, 0, &psidLocalSystem);
+    BOOL fSuccess = ::AllocateAndInitializeSid(&ntAuthority, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &psidLocalSystem);
     if (fSuccess) {
         fSuccess = ::CheckTokenMembership(0, psidLocalSystem, &bIsLocalSystem);
         ::FreeSid(psidLocalSystem);
@@ -182,10 +175,7 @@ https://support.microsoft.com/zh-cn/kb/118626
             After that, perform the access check.  This will determine whether
             the current user is a local admin.
           */
-        if (!AllocateAndInitializeSid(&SystemSidAuthority, 2,
-                                      SECURITY_BUILTIN_DOMAIN_RID,
-                                      DOMAIN_ALIAS_RID_ADMINS,
-                                      0, 0, 0, 0, 0, 0, &psidAdmin))
+        if (!AllocateAndInitializeSid(&SystemSidAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &psidAdmin))
             __leave;
 
         psdAdmin = LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
@@ -232,9 +222,7 @@ https://support.microsoft.com/zh-cn/kb/118626
         GenericMapping.GenericExecute = 0;
         GenericMapping.GenericAll = ACCESS_READ | ACCESS_WRITE;
 
-        if (!AccessCheck(psdAdmin, hImpersonationToken, dwAccessDesired,
-                         &GenericMapping, &ps, &dwStructureSize, &dwStatus,
-                         &fReturn)) {
+        if (!AccessCheck(psdAdmin, hImpersonationToken, dwAccessDesired, &GenericMapping, &ps, &dwStructureSize, &dwStatus, &fReturn)) {
             fReturn = FALSE;
             __leave;
         }
@@ -351,10 +339,7 @@ If the function fails, the return value is FALSE. Call GetLastError() to obtain 
                 if (TempSid == NULL) __leave;
                 *Sid = TempSid;
 
-                TempReferencedDomain = (LPTSTR)HeapReAlloc(GetProcessHeap(),
-                                                           0,
-                                                           ReferencedDomain,
-                                                           cchReferencedDomain * sizeof(TCHAR));
+                TempReferencedDomain = (LPTSTR)HeapReAlloc(GetProcessHeap(), 0, ReferencedDomain, cchReferencedDomain * sizeof(TCHAR));
 
                 if (TempReferencedDomain == NULL) __leave;
                 ReferencedDomain = TempReferencedDomain;
@@ -954,12 +939,7 @@ https://titanwolf.org/Network/Articles/Article?AID=c55a10c3-265e-42cd-b520-118ca
                                        KEY_READ,
                                        &hKEY);
             if (ERROR_SUCCESS == status) {
-                status = RegQueryValueEx(hKEY,
-                                         TEXT("EnableLUA"),
-                                         NULL,
-                                         &dwType,
-                                         (BYTE *)&dwEnableLUA,
-                                         &dwSize);
+                status = RegQueryValueEx(hKEY, TEXT("EnableLUA"), NULL, &dwType, (BYTE *)&dwEnableLUA, &dwSize);
                 if (ERROR_SUCCESS == status) {
                     isEnableUAC = (dwEnableLUA == 1) ? TRUE : FALSE;
                 }
@@ -1029,8 +1009,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/opening-a-policy-object-h
 
     if (ntsResult != STATUS_SUCCESS) {
         // An error occurred. Display it as a win32 error code.
-        wprintf(L"OpenPolicy returned %lu\n",
-                LsaNtStatusToWinError(ntsResult));
+        wprintf(L"OpenPolicy returned %lu\n", LsaNtStatusToWinError(ntsResult));
         return NULL;
     }
     return lsahPolicyHandle;

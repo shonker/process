@@ -42,11 +42,7 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
 
     PROCESS_BASIC_INFORMATION ProcessBasicInfo = {0};
     ULONG ReturnLength = 0;
-    NTSTATUS status = ZwQueryInformationProcess(hProcess,
-                                                ProcessBasicInformation,
-                                                &ProcessBasicInfo,
-                                                sizeof(PROCESS_BASIC_INFORMATION),
-                                                &ReturnLength);
+    NTSTATUS status = ZwQueryInformationProcess(hProcess, ProcessBasicInformation, &ProcessBasicInfo, sizeof(PROCESS_BASIC_INFORMATION), &ReturnLength);
     if (!NT_SUCCESS(status)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);
@@ -62,37 +58,23 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
     }
 
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters = NULL;
-    if (!ReadProcessMemory(hProcess,
-                           (PCHAR)ProcessBasicInfo.PebBaseAddress + Offset,
-                           &ProcessParameters,
-                           sizeof(PVOID),
-                           NULL)) {
+    if (!ReadProcessMemory(hProcess, (PCHAR)ProcessBasicInfo.PebBaseAddress + Offset, &ProcessParameters, sizeof(PVOID), NULL)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);
         return GetLastError();
     }
 
     RTL_USER_PROCESS_PARAMETERS ProcessParameter = {0};
-    if (!ReadProcessMemory(hProcess,
-                           ProcessParameters,
-                           &ProcessParameter,
-                           sizeof(RTL_USER_PROCESS_PARAMETERS),
-                           NULL)) {
+    if (!ReadProcessMemory(hProcess, ProcessParameters, &ProcessParameter, sizeof(RTL_USER_PROCESS_PARAMETERS), NULL)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);
         return GetLastError();
     }
 
-    PWCHAR CommandLine = (PWCHAR)HeapAlloc(GetProcessHeap(),
-                                           HEAP_ZERO_MEMORY,
-                                           ProcessParameter.CommandLine.Length + sizeof(WCHAR));
+    PWCHAR CommandLine = (PWCHAR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, ProcessParameter.CommandLine.Length + sizeof(WCHAR));
     _ASSERTE(CommandLine);
 
-    if (!ReadProcessMemory(hProcess,
-                           ProcessParameter.CommandLine.Buffer,
-                           CommandLine,
-                           ProcessParameter.CommandLine.Length,
-                           NULL)) {
+    if (!ReadProcessMemory(hProcess, ProcessParameter.CommandLine.Buffer, CommandLine, ProcessParameter.CommandLine.Length, NULL)) {
         printf("LastError:%d\n", GetLastError());
     }
 

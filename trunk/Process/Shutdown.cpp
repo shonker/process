@@ -100,8 +100,7 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
         &PrivilegesToDelete,
         RestrictedSidCount,
         SidsToRestrict,
-        &NewTokenHandle
-    );
+        &NewTokenHandle);
     if (B == 0) {
         int x = GetLastError();
         return x;
@@ -131,8 +130,7 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
         lpEnvironment,
         lpCurrentDirectory,
         &StartupInfo,
-        &ProcessInformation
-    );
+        &ProcessInformation);
     if (B == 0) {
         int x = GetLastError();//5 ¾Ü¾ø·ÃÎÊ¡£ 
         return x;

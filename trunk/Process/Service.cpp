@@ -409,12 +409,7 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
 
         __try {
             // Enumerate the dependencies.
-            if (!EnumDependentServices(schService,
-                                       SERVICE_ACTIVE,
-                                       lpDependencies,
-                                       dwBytesNeeded,
-                                       &dwBytesNeeded,
-                                       &dwCount))
+            if (!EnumDependentServices(schService, SERVICE_ACTIVE, lpDependencies, dwBytesNeeded, &dwBytesNeeded, &dwCount))
                 return FALSE;
 
             for (i = 0; i < dwCount; i++) {
@@ -432,11 +427,7 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
                     // Wait for the service to stop.
                     while (ssp.dwCurrentState != SERVICE_STOPPED) {
                         Sleep(ssp.dwWaitHint);
-                        if (!QueryServiceStatusEx(hDepService,
-                                                  SC_STATUS_PROCESS_INFO,
-                                                  (LPBYTE)&ssp,
-                                                  sizeof(SERVICE_STATUS_PROCESS),
-                                                  &dwBytesNeeded))
+                        if (!QueryServiceStatusEx(hDepService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded))
                             return FALSE;
 
                         if (ssp.dwCurrentState == SERVICE_STOPPED)
@@ -497,11 +488,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
     }
 
     // Make sure the service is not already stopped.
-    if (!QueryServiceStatusEx(schService,
-                              SC_STATUS_PROCESS_INFO,
-                              (LPBYTE)&ssp,
-                              sizeof(SERVICE_STATUS_PROCESS),
-                              &dwBytesNeeded)) {
+    if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
         printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
         goto stop_cleanup;
     }
@@ -526,11 +513,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
 
         Sleep(dwWaitTime);
 
-        if (!QueryServiceStatusEx(schService,
-                                  SC_STATUS_PROCESS_INFO,
-                                  (LPBYTE)&ssp,
-                                  sizeof(SERVICE_STATUS_PROCESS),
-                                  &dwBytesNeeded)) {
+        if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
             printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
             goto stop_cleanup;
         }
@@ -558,11 +541,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
     // Wait for the service to stop.
     while (ssp.dwCurrentState != SERVICE_STOPPED) {
         Sleep(ssp.dwWaitHint);
-        if (!QueryServiceStatusEx(schService,
-                                  SC_STATUS_PROCESS_INFO,
-                                  (LPBYTE)&ssp,
-                                  sizeof(SERVICE_STATUS_PROCESS),
-                                  &dwBytesNeeded)) {
+        if (!QueryServiceStatusEx(schService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded)) {
             printf("QueryServiceStatusEx failed (%d)\n", GetLastError());
             goto stop_cleanup;
         }
@@ -935,8 +914,7 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
                 goto dacl_cleanup;
             }
 
-            if (!QueryServiceObjectSecurity(schService,
-                                            DACL_SECURITY_INFORMATION, psd, dwSize, &dwBytesNeeded)) {
+            if (!QueryServiceObjectSecurity(schService, DACL_SECURITY_INFORMATION, psd, dwSize, &dwBytesNeeded)) {
                 printf("QueryServiceObjectSecurity failed (%d)\n", GetLastError());
                 goto dacl_cleanup;
             }
@@ -953,9 +931,7 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
     }
 
     // Build the ACE.
-    BuildExplicitAccessWithName(&ea, (LPWSTR)TEXT("GUEST"),
-                                SERVICE_START | SERVICE_STOP | READ_CONTROL | DELETE,
-                                SET_ACCESS, NO_INHERITANCE);
+    BuildExplicitAccessWithName(&ea, (LPWSTR)TEXT("GUEST"), SERVICE_START | SERVICE_STOP | READ_CONTROL | DELETE, SET_ACCESS, NO_INHERITANCE);
     dwError = SetEntriesInAcl(1, &ea, pacl, &pNewAcl);
     if (dwError != ERROR_SUCCESS) {
         printf("SetEntriesInAcl failed(%d)\n", dwError);

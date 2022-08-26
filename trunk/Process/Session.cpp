@@ -517,11 +517,7 @@ Windows Server 2008 and Windows Vista:  This value is not supported.
     LPSTR Buffer;
     DWORD BytesReturned;
 
-    ret = WTSQuerySessionInformationA(WTS_CURRENT_SERVER_HANDLE,
-                                      SessionId,
-                                      WTSIsRemoteSession,
-                                      &Buffer,
-                                      &BytesReturned);
+    ret = WTSQuerySessionInformationA(WTS_CURRENT_SERVER_HANDLE, SessionId, WTSIsRemoteSession, &Buffer, &BytesReturned);
     if (ret) {//只要支持，这里始终返回成功，不论是不是远程会话还是本地会话。
         ret = Buffer[0];
         WTSFreeMemory(Buffer);

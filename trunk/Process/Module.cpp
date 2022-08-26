@@ -306,9 +306,7 @@ void GetProcessListInfo()
     }
 
     do {
-        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION,
-                                      FALSE,
-                                      pe32.th32ProcessID);
+        HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
         if (hProcess) {
             GetAllModuleInfo(hProcess);
             CloseHandle(hProcess);
@@ -442,11 +440,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from
                                     // Reconstruct pszFilename using szTempFile
                                     // Replace device path with DOS path
                                     TCHAR szTempFile[MAX_PATH];
-                                    StringCchPrintf(szTempFile,
-                                                    MAX_PATH,
-                                                    TEXT("%s%s"),
-                                                    szDrive,
-                                                    szModName + uNameLen);
+                                    StringCchPrintf(szTempFile, MAX_PATH, TEXT("%s%s"), szDrive, szModName + uNameLen);
                                     StringCchCopyN(szModName, MAX_PATH, szTempFile, _tcslen(szTempFile));
                                 }
                             }
