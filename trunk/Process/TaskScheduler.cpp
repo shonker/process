@@ -250,14 +250,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
         CoUninitialize();
         return 1;
     }
-
-    //  If the same task exists, remove it.
-    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
+    
+    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task definition object to create the task.
     ITaskDefinition * pTask = NULL;
     hr = pService->NewTask(0, &pTask);
-
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
@@ -287,8 +285,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
         return 1;
     }
 
-    //  Create the principal for the task - these credentials
-    //  are overwritten with the credentials passed to RegisterTaskDefinition
+    //  Create the principal for the task - these credentials are overwritten with the credentials passed to RegisterTaskDefinition
     IPrincipal * pPrincipal = NULL;
     hr = pTask->get_Principal(&pPrincipal);
     if (FAILED(hr)) {
@@ -395,8 +392,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     if (FAILED(hr))
         printf("\nCannot put end boundary on trigger: %x", hr);
 
-    //  Set the task to start at a certain time. The time 
-    //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
+    //  Set the task to start at a certain time. 
+    //  The time format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
     //  For example, the start boundary below is January 1st 2005 at 12:05
     hr = pTimeTrigger->put_StartBoundary(_bstr_t(L"2005-01-01T12:05:00"));
     pTimeTrigger->Release();
@@ -589,14 +586,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
         CoUninitialize();
         return 1;
     }
-
-    // If the same task exists, remove it.
-    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
+    
+    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);// If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
     ITaskDefinition * pTask = NULL;
     hr = pService->NewTask(0, &pTask);
-
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
@@ -1251,14 +1246,12 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
         CoUninitialize();
         return;
     }
-
-    //  If the same task exists, remove it.
-    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
+    
+    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
     ITaskDefinition * pTask = NULL;
     hr = pService->NewTask(0, &pTask);
-
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
         printf("Failed to create a task definition: %x", hr);
@@ -1325,8 +1318,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     if (FAILED(hr))
         printf("\nCannot put trigger ID: %x", hr);
 
-    //  Set the task to start weekly at a certain time. The time 
-    //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
+    //  Set the task to start weekly at a certain time. 
+    //  The time format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
     //  For example, the start boundary below is January 1st 2005 at 12:05
     hr = pWeeklyTrigger->put_StartBoundary(_bstr_t(L"2005-01-01T12:05:00"));
     if (FAILED(hr))
@@ -1406,8 +1399,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
         return;
     }
 
-    //  Securely get the user name and password. The task will
-    //  be created to run with the credentials from the supplied user name and password.
+    //  Securely get the user name and password.
+    //  The task will be created to run with the credentials from the supplied user name and password.
     CREDUI_INFO cui;
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = L"";
     TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = L"";
