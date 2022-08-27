@@ -2079,6 +2079,436 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
 
 
 /********************************************************************
+ This sample schedules a task to send an email when an event occurs.
+********************************************************************/
+
+
+//#define _WIN32_DCOM
+//
+//#include <windows.h>
+//#include <iostream>
+//#include <stdio.h>
+//#include <comdef.h>
+//#include <wincred.h>
+////  Include the task header file.
+//#include <taskschd.h>
+//# pragma comment(lib, \"taskschd.lib\")
+//# pragma comment(lib, \"comsupp.lib\")
+//# pragma comment(lib, \"credui.lib\")
+
+//using namespace std;
+
+
+EXTERN_C
+__declspec(dllexport)
+int WINAPI EventTriggerExample()
+/*
+Event Trigger Example (C++)
+Article
+10/17/2012
+7 minutes to read
+This C++ example shows how to create a task that is scheduled to send an email when an event occurs. 
+The task contains an event trigger that specifies an event query that subscribes to an event from the Windows Event Log service. 
+When the event occurs, the task is triggered. The task also contains an action that specifies the task to send an email message. 
+The task is registered using a password and user name as the security context to run the task.
+
+The following procedure describes how to schedule a task to send an email when an event occurs.
+
+Aa446886.wedge(en-us,VS.85).gifTo schedule an E-mail to be sent when an event occurs
+
+Initialize COM and set general COM security.
+
+Create the ITaskService object.
+
+This object allows you to create tasks in a specified folder.
+
+Get a task folder to create a task in.
+
+Use the ITaskService::GetFolder method to get the folder, and the ITaskService::NewTask method to create the ITaskDefinition object.
+
+Define information about the task using the ITaskDefinition object, such as the registration information for the task.
+
+Use the RegistrationInfo property of ITaskDefinition and other properties of the ITaskDefinition interface to define the task information.
+
+Create an event trigger using the Triggers property of ITaskDefinition to access the ITriggerCollection for the task.
+
+Use the ITriggerCollection::Create method (specifying the type of trigger you want to create) to create an event trigger. 
+This allows you to set the event query to subscribe to events. For information about how to create an event query, see Event Selection.
+
+Create an action for the task to execute by using the Actions property of ITaskDefinition to access the IActionCollection interface for the task.
+
+Use the IActionCollection::Create method to specify the type of action that you want to create. 
+This example uses an IEmailAction object, which represents an action that sends a specified email message.
+
+Register the task using the ITaskFolder::RegisterTaskDefinition method.
+
+The following C++ example shows how to schedule a task to send an email when an event occurs.
+
+https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
+*/
+{
+    //  ------------------------------------------------------
+    //  Initialize COM.
+    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    if (FAILED(hr)) {
+        printf("\nCoInitializeEx failed: %x", hr);
+        return 1;
+    }
+
+    //  Set general COM security levels.
+    hr = CoInitializeSecurity(
+        NULL,
+        -1,
+        NULL,
+        NULL,
+        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+        RPC_C_IMP_LEVEL_IMPERSONATE,
+        NULL,
+        0,
+        NULL);
+
+    if (FAILED(hr)) {
+        printf("\nCoInitializeSecurity failed: %x", hr);
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Create a name for the task.
+    LPCWSTR wszTaskName = L"Event Trigger Test Task";
+
+
+    //  ------------------------------------------------------
+    //  Create an instance of the Task Service. 
+    ITaskService * pService = NULL;
+    hr = CoCreateInstance(CLSID_TaskScheduler,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_ITaskService,
+                          (void **)&pService);
+    if (FAILED(hr)) {
+        printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
+        CoUninitialize();
+        return 1;
+    }
+
+    //  Connect to the task service.
+    hr = pService->Connect(_variant_t(), _variant_t(),
+                           _variant_t(), _variant_t());
+    if (FAILED(hr)) {
+        printf("ITaskService::Connect failed: %x", hr);
+        pService->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Get the pointer to the root task folder.  This folder will hold the
+    //  new task that is registered.
+    ITaskFolder * pRootFolder = NULL;
+    hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
+    if (FAILED(hr)) {
+        printf("Cannot get Root Folder pointer: %x", hr);
+        pService->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    // If the same task exists, remove it.
+    pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
+
+    //  Create the task builder object to create the task.
+    ITaskDefinition * pTask = NULL;
+    hr = pService->NewTask(0, &pTask);
+
+    pService->Release();  // COM clean up.  Pointer is no longer used.
+    if (FAILED(hr)) {
+        printf("Failed to create an instance of the task: %x", hr);
+        pRootFolder->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Get the registration info for setting the identification.
+    IRegistrationInfo * pRegInfo = NULL;
+    hr = pTask->get_RegistrationInfo(&pRegInfo);
+    if (FAILED(hr)) {
+        printf("\nCannot get identification pointer: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    hr = pRegInfo->put_Author(_bstr_t(L"Author Name"));
+    pRegInfo->Release();  // COM clean up.  Pointer is no longer used.
+    if (FAILED(hr)) {
+        printf("\nCannot put identification info: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Create the settings for the task
+    ITaskSettings * pSettings = NULL;
+    hr = pTask->get_Settings(&pSettings);
+    if (FAILED(hr)) {
+        printf("\nCannot get settings pointer: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  Set setting values for the task.  
+    hr = pSettings->put_StartWhenAvailable(VARIANT_TRUE);
+    pSettings->Release();  // COM clean up.  Pointer is no longer used.
+    if (FAILED(hr)) {
+        printf("\nCannot put setting info: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Get the trigger collection to insert the event trigger.
+    ITriggerCollection * pTriggerCollection = NULL;
+    hr = pTask->get_Triggers(&pTriggerCollection);
+    if (FAILED(hr)) {
+        printf("\nCannot get trigger collection: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  Create the event trigger for the task.
+    ITrigger * pTrigger = NULL;
+
+    hr = pTriggerCollection->Create(TASK_TRIGGER_EVENT, &pTrigger);
+    pTriggerCollection->Release();
+    if (FAILED(hr)) {
+        printf("\nCannot create the trigger: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    IEventTrigger * pEventTrigger = NULL;
+    hr = pTrigger->QueryInterface(
+        IID_IEventTrigger, (void **)&pEventTrigger);
+    pTrigger->Release();
+    if (FAILED(hr)) {
+        printf("\nQueryInterface call on IEventTrigger failed: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    hr = pEventTrigger->put_Id(_bstr_t(L"Trigger1"));
+    if (FAILED(hr))
+        printf("\nCannot put the trigger ID: %x", hr);
+
+    //  Set the task to start at a certain time. The time 
+    //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
+    //  For example, the start boundary below
+    //  is January 1st 2005 at 12:05
+    hr = pEventTrigger->put_StartBoundary(_bstr_t(L"2005-01-01T12:05:00"));
+    if (FAILED(hr))
+        printf("\nCannot put the trigger start boundary: %x", hr);
+
+    hr = pEventTrigger->put_EndBoundary(_bstr_t(L"2015-05-02T08:00:00"));
+    if (FAILED(hr))
+        printf("\nCannot put the trigger end boundary: %x", hr);
+
+    //  Define the delay for the event trigger (30 seconds).
+    hr = pEventTrigger->put_Delay(_bstr_t(L"PT30S"));
+    if (FAILED(hr))
+        printf("\nCannot put the trigger delay: %x", hr);
+
+    //  Define the event query for the event trigger.
+    //  The following query string defines a subscription to all
+    //  level 2 events in the System channel.
+    hr = pEventTrigger->put_Subscription(_bstr_t(L"<QueryList> <Query Id='1'> <Select Path='System'>*[System/Level=2]</Select></Query></QueryList>"));
+    pEventTrigger->Release();
+    if (FAILED(hr)) {
+        printf("\nCannot put the event query: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Add an action to the task. This task will send an email message.     
+    IActionCollection * pActionCollection = NULL;
+
+    //  Get the task action collection pointer.
+    hr = pTask->get_Actions(&pActionCollection);
+    if (FAILED(hr)) {
+        printf("\nCannot get action collection pointer: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  Create the action, specifying that it will send an email message.
+    IAction * pAction = NULL;
+    hr = pActionCollection->Create(TASK_ACTION_SEND_EMAIL, &pAction);
+    pActionCollection->Release();
+    if (FAILED(hr)) {
+        printf("\nCannot create an email action: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    IEmailAction * pEmailAction = NULL;
+    //  QI for the email task pointer.
+    hr = pAction->QueryInterface(IID_IEmailAction, (void **)&pEmailAction);
+    pAction->Release();
+    if (FAILED(hr)) {
+        printf("\nQueryInterface call failed for IEmailAction: %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  Set the properties of the email action.
+    hr = pEmailAction->put_From(_bstr_t(L"SendersEmailAddress@domain.com"));
+    if (FAILED(hr)) {
+        printf("\nCannot put From information: %x", hr);
+        pRootFolder->Release();
+        pEmailAction->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    hr = pEmailAction->put_To(_bstr_t(L"RecipientsEmailAddress@domain.com"));
+    if (FAILED(hr)) {
+        printf("\nCannot put To information: %x", hr);
+        pRootFolder->Release();
+        pEmailAction->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    hr = pEmailAction->put_Server(_bstr_t(L"MyEmailServerName.domain.com"));
+    if (FAILED(hr)) {
+        printf("\nCannot put SMTP server information: %x", hr);
+        pRootFolder->Release();
+        pEmailAction->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    hr = pEmailAction->put_Subject(_bstr_t(L"An event has occurred"));
+    if (FAILED(hr))
+        printf("\nCannot put the subject information: %x", hr);
+
+    hr = pEmailAction->put_Body(_bstr_t(L"A level 2 event occurred in the system channel."));
+    if (FAILED(hr))
+        printf("\nCannot put the email body information: %x", hr);
+
+    pEmailAction->Release();
+
+    //  ------------------------------------------------------
+    //  Securely get the user name and password. The task will
+    //  be created to run with the credentials from the supplied 
+    //  user name and password.
+    CREDUI_INFO cui;
+    TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = L"";
+    TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = L"";
+    BOOL fSave;
+    DWORD dwErr;
+
+    cui.cbSize = sizeof(CREDUI_INFO);
+    cui.hwndParent = NULL;
+    //  Ensure that MessageText and CaptionText identify
+    //  what credentials to use and which application requires them.
+    cui.pszMessageText = TEXT("Account information for task registration:");
+    cui.pszCaptionText = TEXT("Enter Account Information for Task Registration");
+    cui.hbmBanner = NULL;
+    fSave = FALSE;
+
+    //  Create the UI asking for the credentials.
+    dwErr = CredUIPromptForCredentials(
+        &cui,                             //  CREDUI_INFO structure
+        TEXT(""),                         //  Target for credentials
+        NULL,                             //  Reserved
+        0,                                //  Reason
+        pszName,                          //  User name
+        CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
+        pszPwd,                           //  Password
+        CREDUI_MAX_PASSWORD_LENGTH,       //  Max number for password
+        &fSave,                           //  State of save check box
+        CREDUI_FLAGS_GENERIC_CREDENTIALS |  //  Flags
+        CREDUI_FLAGS_ALWAYS_SHOW_UI |
+        CREDUI_FLAGS_DO_NOT_PERSIST);
+
+    if (dwErr) {
+        cout << "Did not get credentials." << endl;
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        return 1;
+    }
+
+    //  ------------------------------------------------------
+    //  Save the task in the root folder.
+    IRegisteredTask * pRegisteredTask = NULL;
+    hr = pRootFolder->RegisterTaskDefinition(
+        _bstr_t(wszTaskName),
+        pTask,
+        TASK_CREATE_OR_UPDATE,
+        _variant_t(_bstr_t(pszName)),
+        _variant_t(_bstr_t(pszPwd)),
+        TASK_LOGON_PASSWORD,
+        _variant_t(L""),
+        &pRegisteredTask);
+    if (FAILED(hr)) {
+        printf("\nError saving the Task : %x", hr);
+        pRootFolder->Release();
+        pTask->Release();
+        CoUninitialize();
+        SecureZeroMemory(pszName, sizeof(pszName));
+        SecureZeroMemory(pszPwd, sizeof(pszPwd));
+        return 1;
+    }
+
+    printf("\n Success! Task successfully registered. ");
+
+    //  Clean up.
+    pRootFolder->Release();
+    pTask->Release();
+    pRegisteredTask->Release();
+    CoUninitialize();
+
+    // When you have finished using the credentials,
+    // erase them from memory.
+    SecureZeroMemory(pszName, sizeof(pszName));
+    SecureZeroMemory(pszPwd, sizeof(pszPwd));
+
+    return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/********************************************************************
  This sample enumerates through the tasks on the local computer and
  displays their name and state.
 ********************************************************************/

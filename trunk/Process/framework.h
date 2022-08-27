@@ -109,11 +109,10 @@
 
 //  Include the task header file.
 #include <rpcsal.h>
-#include <taskschd.h>
 #include <mstask.h>
 #include <msterr.h>
 #include <objidl.h>
-# pragma comment(lib, "taskschd.lib")
+
 # pragma comment(lib, "comsupp.lib")
 #pragma comment(lib, "credui.lib")
 
@@ -126,6 +125,9 @@
 #pragma comment(lib,"Mpr.lib")
 #pragma comment(lib,"Comctl32.lib")
 #pragma comment(lib, "fwpuclnt.lib") 
+
+#include <taskschd.h>
+#pragma comment(lib, "taskschd.lib")
 
 #include <VersionHelpers.h>
 #pragma comment(lib, "Version.lib") 

@@ -3,6 +3,7 @@
 
 #include "..\inc\Process.h"
 #include "ShellExecute.h"
+#include "TaskScheduler.h"
 #include "User.h"
 
 
@@ -43,7 +44,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     //GetAdaptersAddressesInfo(argc, argv);
 
-    GetCurrentSid(); 
+    IBootTriggerTest();
 
     LocalFree(Arglist);
 }

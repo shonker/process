@@ -95,6 +95,9 @@
 #pragma comment(lib, "wbemuuid.lib")
 #pragma comment(lib,"Netapi32.lib")
 
+#include <taskschd.h>
+#pragma comment(lib, "taskschd.lib")
+
 #include <bcrypt.h>
 #pragma comment (lib, "Bcrypt.lib")
 
@@ -334,6 +337,9 @@ int WINAPI StartingExecutableWhenUserLogsOn();
 
 __declspec(dllimport)
 int WINAPI StartingExecutableOnSystemBoot();
+
+__declspec(dllimport)
+int WINAPI EventTriggerExample();
 
 __declspec(dllimport)
 int WINAPI EnumeratingTasks();
