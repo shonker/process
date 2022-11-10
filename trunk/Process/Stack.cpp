@@ -21,7 +21,7 @@ PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
     PVOID FarCallAddress = (PVOID)((PBYTE)ReturnAddress - 6);
     PVOID EsiCallAddress = (PVOID)((PBYTE)ReturnAddress - 2);//ffd6            call    esi
     
-    if (htons(0xffd6) != *(PWORD)EsiCallAddress) {
+    if (htons(0xffd6) == *(PWORD)EsiCallAddress) {
 
         return FunctionAddress;//这个暂时没想好处理的办法。
     }
