@@ -183,6 +183,7 @@
     <ClInclude Include="Session.h" />
     <ClInclude Include="ShellExecute.h" />
     <ClInclude Include="Shutdown.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="TaskScheduler.h" />
     <ClInclude Include="TEB.h" />
     <ClInclude Include="TLS.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="ShellExecute.cpp" />
     <ClCompile Include="Shutdown.cpp" />
+    <ClCompile Include="Stack.cpp" />
     <ClCompile Include="TaskScheduler.cpp" />
     <ClCompile Include="TEB.cpp" />
     <ClCompile Include="TLS.cpp" />
