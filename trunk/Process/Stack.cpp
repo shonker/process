@@ -5,7 +5,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-PVOID GetFunctionAddressByReturnAddress64(PVOID ReturnAddress)
+PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
 /*
 功能：根据返回地址（call之后的第一个指令的地址）获取要call的函数的地址。
 */
@@ -19,6 +19,12 @@ PVOID GetFunctionAddressByReturnAddress64(PVOID ReturnAddress)
 
     PVOID NearCallAddress = (PVOID)((PBYTE)ReturnAddress - 5);
     PVOID FarCallAddress = (PVOID)((PBYTE)ReturnAddress - 6);
+    PVOID EsiCallAddress = (PVOID)((PBYTE)ReturnAddress - 2);//ffd6            call    esi
+    
+    if (htons(0xffd6) != *(PWORD)EsiCallAddress) {
+
+        return FunctionAddress;//这个暂时没想好处理的办法。
+    }
 
     if (0xe8 != *(PBYTE)NearCallAddress && htons(0xff15) != *(PWORD)FarCallAddress) {
 
@@ -80,7 +86,7 @@ void WINAPI DumpStack()
 
     USHORT i = 0;
     for (PVOID * pBackTrace = BackTrace; i < ncf; pBackTrace++, i++) {
-        PVOID FunctionAddress = GetFunctionAddressByReturnAddress64(*pBackTrace);
+        PVOID FunctionAddress = GetFunctionAddressByReturnAddress(*pBackTrace);
         printf("index:%d\tRetAddr:%p\tFunctionAddress:%p.\r\n", i, *pBackTrace, FunctionAddress);
     }
 
