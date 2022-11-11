@@ -40,6 +40,14 @@ https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk
 */
 
 
+/*
+If you want to print out a stack trace without having an exception, 
+you¡¯ll have to get the local context with the RtlCaptureContext() function.
+
+https://spin.atomicobject.com/2013/01/13/exceptions-stack-traces-c/
+*/
+
+
 #pragma once
 
 

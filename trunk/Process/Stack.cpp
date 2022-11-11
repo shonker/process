@@ -155,18 +155,34 @@ void WINAPI DumpStackByWalk()
 #error("Unknown Target Machine");
 #endif
 
-    for (;;) {
-        BOOL ret = FALSE;
+    /*
+    windbg的kv命令格式：
+    0:000> KV
+     # Child-SP          RetAddr           : Args to Child                                                           : Call Site
+    00 000000dc`0394f878 00007ffc`830ada88 : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!NtTerminateProcess+0x14
+    */
+    switch (MachineType) {
+    case IMAGE_FILE_MACHINE_AMD64:
+        printf(" # Child-SP         RetAddr          : Args to Child                                                       : Call Site\r\n");
+        break;
+    case IMAGE_FILE_MACHINE_I386:
+        printf(" # Child-SP RetAddr  : Args to Child                       : Call Site\r\n");
+        break;
+    default:
+        break;
+    }
+    
 
-        ret = StackWalk(MachineType,
-                        GetCurrentProcess(),
-                        GetCurrentThread(),
-                        &stackFrame,
-                        &threadContext,
-                        NULL, // Use ReadProcessMemory
-                        SymFunctionTableAccess,
-                        SymGetModuleBase,
-                        NULL);
+    for (int i = 0;; i++) {
+        BOOL ret = StackWalk(MachineType,
+                             GetCurrentProcess(),
+                             GetCurrentThread(),
+                             &stackFrame,
+                             &threadContext,
+                             NULL, // Use ReadProcessMemory
+                             SymFunctionTableAccess,
+                             SymGetModuleBase,
+                             NULL);
         if (!ret) {
             break;
         }
@@ -181,31 +197,36 @@ void WINAPI DumpStackByWalk()
         DWORD_PTR Displacement = 0;
         ret = SymGetSymFromAddr(GetCurrentProcess(), stackFrame.AddrPC.Offset, &Displacement, &Package.sym);
 
-        printf("ip(AddrPC):%llx, AddrReturn:%llx, AddrFrame(bp):%llx, AddrStack(sp):%llx, "
-               "Params0:%llx, Params1:%llx, Params2:%llx, Params3:%llx.\r\n",
-               (DWORD64)stackFrame.AddrPC.Offset,
-               (DWORD64)stackFrame.AddrReturn.Offset,
-               (DWORD64)stackFrame.AddrFrame.Offset,
-               (DWORD64)stackFrame.AddrStack.Offset,
-               (DWORD64)stackFrame.Params[0],
-               (DWORD64)stackFrame.Params[1],
-               (DWORD64)stackFrame.Params[2],
-               (DWORD64)stackFrame.Params[3]);
-
-        printf("Address:%llx, Name:%s!%s.\r\n",
-               (DWORD64)Package.sym.Address,
+        printf("% 2d %p %p : %p %p %p %p : %s!%s(%p)\r\n",
+               i,
+               (PVOID)(size_t)stackFrame.AddrStack.Offset,
+               (PVOID)(size_t)stackFrame.AddrReturn.Offset,
+               (PVOID)(size_t)stackFrame.Params[0],
+               (PVOID)(size_t)stackFrame.Params[1],
+               (PVOID)(size_t)stackFrame.Params[2],
+               (PVOID)(size_t)stackFrame.Params[3],
                moduleInfo.ModuleName,
-               Package.sym.Name);
+               Package.sym.Name,
+               (PVOID)(size_t)Package.sym.Address);
 
-        /*
-        windbg的kv命令格式：
-        0:000> KV
-         # Child-SP          RetAddr           : Args to Child                                                           : Call Site
-        00 000000dc`0394f878 00007ffc`830ada88 : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!NtTerminateProcess+0x14
-        */
+        //printf("ip(AddrPC):%llx, AddrReturn:%llx, AddrFrame(bp):%llx, AddrStack(sp):%llx, "
+        //       "Params0:%llx, Params1:%llx, Params2:%llx, Params3:%llx.\r\n",
+        //       (DWORD64)stackFrame.AddrPC.Offset,
+        //       (DWORD64)stackFrame.AddrReturn.Offset,
+        //       (DWORD64)stackFrame.AddrFrame.Offset,
+        //       (DWORD64)stackFrame.AddrStack.Offset,
+        //       (DWORD64)stackFrame.Params[0],
+        //       (DWORD64)stackFrame.Params[1],
+        //       (DWORD64)stackFrame.Params[2],
+        //       (DWORD64)stackFrame.Params[3]);
 
-        printf("\r\n\r\n\r\n");
-}
+        //printf("Address:%llx, Name:%s!%s.\r\n",
+        //       (DWORD64)Package.sym.Address,
+        //       moduleInfo.ModuleName,
+        //       Package.sym.Name);
+
+        //printf("\r\n\r\n\r\n");
+    }
 
     SymCleanup(GetCurrentProcess());
 }
