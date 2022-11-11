@@ -43,7 +43,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //SidTest(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
-    DumpStack();
+    DumpStackByWalk();
 
     LocalFree(Arglist);
 }

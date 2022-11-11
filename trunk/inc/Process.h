@@ -438,8 +438,14 @@ int WINAPI RetrievingTriggerStrings(int argc, char ** argv);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+__declspec(dllimport) 
+void WINAPI DumpStackByCapture();
+
 __declspec(dllimport)
-void WINAPI DumpStack();
+void WINAPI DumpStackByWalk();
+
+__declspec(dllimport)
+void WINAPI DumpStackByTrace();
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

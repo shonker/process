@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Stack.h"
+#include "Process.h"
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +62,7 @@ PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
 
 EXTERN_C
 __declspec(dllexport)
-void WINAPI DumpStack()
+void WINAPI DumpStackByCapture()
 /*
 功能：打印类似于windbg的kv命令。
 
@@ -91,6 +92,131 @@ void WINAPI DumpStack()
     }
 
     HeapFree(GetProcessHeap(), 0, BackTrace);
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI DumpStackByWalk()
+/*
+
+参考：\nt5src\Source\Win2K3\NT\admin\activec\base\mmcdebug.cpp的CTraceTag::DumpStack()
+*/
+{
+    SymInitialize(GetCurrentProcess(), NULL, TRUE);
+
+    DWORD MachineType = IMAGE_FILE_MACHINE_AMD64;
+
+#ifdef _WIN64    
+    if (IsWow64()) {
+        MachineType = IMAGE_FILE_MACHINE_I386;
+    }
+#else
+    MachineType = IMAGE_FILE_MACHINE_I386;
+#endif
+    
+    CONTEXT threadContext{};
+    threadContext.ContextFlags = CONTEXT_FULL;
+    GetThreadContext(GetCurrentThread(), &threadContext);
+
+    STACKFRAME stackFrame{};
+
+#if defined(_M_IX86)
+    //dwMachType = IMAGE_FILE_MACHINE_I386;
+
+    stackFrame.AddrPC.Offset = threadContext.Eip;
+    stackFrame.AddrPC.Mode = AddrModeFlat;
+
+    stackFrame.AddrStack.Offset = threadContext.Esp;
+    stackFrame.AddrStack.Mode = AddrModeFlat;
+
+    stackFrame.AddrFrame.Offset = threadContext.Ebp;
+    stackFrame.AddrFrame.Mode = AddrModeFlat;
+#elif defined(_M_AMD64)
+    //dwMachType = IMAGE_FILE_MACHINE_AMD64;
+
+    stackFrame.AddrPC.Offset = threadContext.Rip;
+    stackFrame.AddrPC.Mode = AddrModeFlat;
+
+    stackFrame.AddrFrame.Offset = threadContext.Rbp;
+    stackFrame.AddrFrame.Mode = AddrModeFlat;
+
+    stackFrame.AddrStack.Offset = threadContext.Rsp;
+    stackFrame.AddrStack.Mode = AddrModeFlat;
+#elif defined(_M_IA64)
+    //dwMachType = IMAGE_FILE_MACHINE_IA64;
+    stackFrame.AddrPC.Offset = threadContext.StIIP;
+    stackFrame.AddrPC.Mode = AddrModeFlat;
+
+    stackFrame.AddrStack.Offset = threadContext.IntSp;
+    stackFrame.AddrStack.Mode = AddrModeFlat;
+#else
+#error("Unknown Target Machine");
+#endif
+
+    for (;;) {
+        BOOL ret = FALSE;
+       
+        ret = StackWalk(MachineType,
+                        GetCurrentProcess(),
+                        GetCurrentThread(),
+                        &stackFrame,
+                        &threadContext,
+                        NULL, // Use ReadProcessMemory
+                        SymFunctionTableAccess,
+                        SymGetModuleBase,
+                        NULL);
+        if (!ret) {
+            break;
+        }
+
+        IMAGEHLP_MODULE  moduleInfo{sizeof(IMAGEHLP_MODULE)};
+        ret = SymGetModuleInfo(GetCurrentProcess(), stackFrame.AddrPC.Offset, &moduleInfo);
+        
+        IMAGEHLP_SYMBOL_PACKAGE Package{};        
+        Package.sym.SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
+        Package.sym.MaxNameLength = MAX_SYM_NAME;
+
+        DWORD_PTR Displacement = 0;
+        ret = SymGetSymFromAddr(GetCurrentProcess(), stackFrame.AddrPC.Offset, &Displacement, &Package.sym);
+
+        printf("ip(AddrPC):%llx, AddrReturn:%llx, AddrFrame(bp):%llx, AddrStack(sp):%llx, "
+               "Params0:%llx, Params1:%llx, Params2:%llx, Params3:%llx.\r\n",
+               (DWORD64)stackFrame.AddrPC.Offset,
+               (DWORD64)stackFrame.AddrReturn.Offset,
+               (DWORD64)stackFrame.AddrFrame.Offset,
+               (DWORD64)stackFrame.AddrStack.Offset,
+               (DWORD64)stackFrame.Params[0],
+               (DWORD64)stackFrame.Params[1],
+               (DWORD64)stackFrame.Params[2],
+               (DWORD64)stackFrame.Params[3]);
+
+        printf("Address:%llx, Name:%s!%s.\r\n", 
+               (DWORD64)Package.sym.Address, 
+               moduleInfo.ModuleName, 
+               Package.sym.Name);
+
+        /*
+        windbg的kv命令格式：
+        0:000> KV
+         # Child-SP          RetAddr           : Args to Child                                                           : Call Site
+        00 000000dc`0394f878 00007ffc`830ada88 : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!NtTerminateProcess+0x14
+        */
+
+        printf("\r\n\r\n\r\n");
+    }
+
+    SymCleanup(GetCurrentProcess());
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI DumpStackByTrace()
+{
+
+
+
 }
 
 

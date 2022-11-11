@@ -36,8 +36,8 @@ https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk
 
 #pragma once
 
+
 class Stack
 {
 
 };
-
