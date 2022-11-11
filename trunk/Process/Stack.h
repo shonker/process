@@ -30,7 +30,13 @@ StackWalk function
 StackWalk64 function
 StackWalkEx function
 
+心得：
+StackWalk的第三个参数如果是GetCurrentThread()，只能循环一两次。
+且最好先SuspendThread那个线程。
+
 https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk
+https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk64
+https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalkex
 */
 
 

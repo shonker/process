@@ -21,7 +21,7 @@ PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
     PVOID NearCallAddress = (PVOID)((PBYTE)ReturnAddress - 5);
     PVOID FarCallAddress = (PVOID)((PBYTE)ReturnAddress - 6);
     PVOID EsiCallAddress = (PVOID)((PBYTE)ReturnAddress - 2);//ffd6            call    esi
-    
+
     if (htons(0xffd6) == *(PWORD)EsiCallAddress) {
 
         return FunctionAddress;//这个暂时没想好处理的办法。
@@ -33,17 +33,17 @@ PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
     }
 
     if (0xe8 == *(PBYTE)NearCallAddress) {
-        Offset = *(PULONG)((PBYTE)NearCallAddress + 1);    
+        Offset = *(PULONG)((PBYTE)NearCallAddress + 1);
     }
 
     if (htons(0xff15) == *(PWORD)FarCallAddress) {
-        Offset = *(PULONG)((PBYTE)FarCallAddress + 2);        
+        Offset = *(PULONG)((PBYTE)FarCallAddress + 2);
     }
 
     if (!Offset) {
 
         return FunctionAddress;
-    }    
+    }
 
     if (Offset) {
         FunctionAddress = (PVOID)((SIZE_T)ReturnAddress + Offset);
@@ -78,7 +78,7 @@ void WINAPI DumpStackByCapture()
     PVOID CallersAddress = _ReturnAddress();
 
     PVOID * BackTrace = 0;//An array of pointers captured from the current stack trace. 
-    BackTrace = (PVOID *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, stacklength); 
+    BackTrace = (PVOID *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, stacklength);
     _ASSERTE(BackTrace);
 
     USHORT ncf = 0;//The number of captured frames
@@ -114,10 +114,11 @@ void WINAPI DumpStackByWalk()
 #else
     MachineType = IMAGE_FILE_MACHINE_I386;
 #endif
-    
+
     CONTEXT threadContext{};
     threadContext.ContextFlags = CONTEXT_FULL;
-    GetThreadContext(GetCurrentThread(), &threadContext);
+    //GetThreadContext(GetCurrentThread(), &threadContext);//这个只会返回一两个循环（帧）。
+    RtlCaptureContext(&threadContext);
 
     STACKFRAME stackFrame{};
 
@@ -156,7 +157,7 @@ void WINAPI DumpStackByWalk()
 
     for (;;) {
         BOOL ret = FALSE;
-       
+
         ret = StackWalk(MachineType,
                         GetCurrentProcess(),
                         GetCurrentThread(),
@@ -172,8 +173,8 @@ void WINAPI DumpStackByWalk()
 
         IMAGEHLP_MODULE  moduleInfo{sizeof(IMAGEHLP_MODULE)};
         ret = SymGetModuleInfo(GetCurrentProcess(), stackFrame.AddrPC.Offset, &moduleInfo);
-        
-        IMAGEHLP_SYMBOL_PACKAGE Package{};        
+
+        IMAGEHLP_SYMBOL_PACKAGE Package{};
         Package.sym.SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
         Package.sym.MaxNameLength = MAX_SYM_NAME;
 
@@ -191,9 +192,9 @@ void WINAPI DumpStackByWalk()
                (DWORD64)stackFrame.Params[2],
                (DWORD64)stackFrame.Params[3]);
 
-        printf("Address:%llx, Name:%s!%s.\r\n", 
-               (DWORD64)Package.sym.Address, 
-               moduleInfo.ModuleName, 
+        printf("Address:%llx, Name:%s!%s.\r\n",
+               (DWORD64)Package.sym.Address,
+               moduleInfo.ModuleName,
                Package.sym.Name);
 
         /*
@@ -204,7 +205,7 @@ void WINAPI DumpStackByWalk()
         */
 
         printf("\r\n\r\n\r\n");
-    }
+}
 
     SymCleanup(GetCurrentProcess());
 }
