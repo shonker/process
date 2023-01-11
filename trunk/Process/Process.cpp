@@ -127,7 +127,7 @@ EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI IsWow64()
 /*
-¹¦ÄÜ£ºÅĞ¶Ï±¾½ø³ÌÊÇ·ñÊÇWOW64½ø³Ì¡£
+åŠŸèƒ½ï¼šåˆ¤æ–­æœ¬è¿›ç¨‹æ˜¯å¦æ˜¯WOW64è¿›ç¨‹ã€‚
 */
 {
     BOOL bIsWow64 = FALSE;
@@ -263,13 +263,13 @@ EXTERN_C
 __declspec(dllexport)
 DWORD WINAPI GetProcessName(_In_ DWORD ProcessID, PWCHAR ProcessName)
 /*
-¹¦ÄÜ£º»ñÈ¡Ò»¸ö£¨ÔÚÏßµÄ£¬·ÇÍË³öµÄ£©½ø³ÌµÄ½ø³ÌÃû£¨·Ç½ø³ÌµÄÍêÕûÂ·¾¶£©¡£
+åŠŸèƒ½ï¼šè·å–ä¸€ä¸ªï¼ˆåœ¨çº¿çš„ï¼Œéé€€å‡ºçš„ï¼‰è¿›ç¨‹çš„è¿›ç¨‹åï¼ˆéè¿›ç¨‹çš„å®Œæ•´è·¯å¾„ï¼‰ã€‚
 
-²ÎÊı£º
-ProcessNameµÄÔªËØ´óĞ¡ >= pe32.szExeFileµÄMAX_PATH¡£
+å‚æ•°ï¼š
+ProcessNameçš„å…ƒç´ å¤§å° >= pe32.szExeFileçš„MAX_PATHã€‚
 
-×¢ÊÍ£ºÕâ¸ö×ÜÊÇÄÜ»ñÈ¡µ½µÄ£¬Ö»ÒªËüÃ»ÓĞÍË³ö¡£
-      µ«ÊÇ»ñÈ¡µ½µÄ½ö½öÊÇ½ø³ÌÃû£¬·ÇÍêÕû£¬²»ÄÜ¾İ´Ë»ñÈ¡½ø³ÌµÄIMAGE£¬Ö÷Òª×÷ÓÃÊÇÏÔÊ¾¡£
+æ³¨é‡Šï¼šè¿™ä¸ªæ€»æ˜¯èƒ½è·å–åˆ°çš„ï¼Œåªè¦å®ƒæ²¡æœ‰é€€å‡ºã€‚
+      ä½†æ˜¯è·å–åˆ°çš„ä»…ä»…æ˜¯è¿›ç¨‹åï¼Œéå®Œæ•´ï¼Œä¸èƒ½æ®æ­¤è·å–è¿›ç¨‹çš„IMAGEï¼Œä¸»è¦ä½œç”¨æ˜¯æ˜¾ç¤ºã€‚
 */
 {
     HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -489,22 +489,22 @@ https://docs.microsoft.com/en-us/windows/win32/shell/launch
 
 void GetSystemStartTime(char * SystemStartTime)
 /*
-¹¦ÄÜ£º»ñÈ¡²Ù×÷ÏµÍ³Æô¶¯Ê±¼ä¡£
+åŠŸèƒ½ï¼šè·å–æ“ä½œç³»ç»Ÿå¯åŠ¨æ—¶é—´ã€‚
 
-×¢Òâ£º´æ´¢µÄ¸ñÊ½ÊÇunixÊ±¼ä´Á¡£
+æ³¨æ„ï¼šå­˜å‚¨çš„æ ¼å¼æ˜¯unixæ—¶é—´æˆ³ã€‚
 */
 {
     time_t nowtime;
     time(&nowtime);
 
     /*
-    ×¢Òâ£ºÕâÁ½¸ö²Ù×÷Ö®Ç°²»¿ÉÓĞÈÎºÎ²Ù×÷£¬·ñÕßÓ°Ïì¼ÆËãµÄ½á¹û£¬°üÀ¨µ÷ÊÔÒ²²»ĞĞ¡£
+    æ³¨æ„ï¼šè¿™ä¸¤ä¸ªæ“ä½œä¹‹å‰ä¸å¯æœ‰ä»»ä½•æ“ä½œï¼Œå¦è€…å½±å“è®¡ç®—çš„ç»“æœï¼ŒåŒ…æ‹¬è°ƒè¯•ä¹Ÿä¸è¡Œã€‚
     */
 
     time_t StartTime = nowtime - (GetTickCount64() / 1000);
 
     /*
-    Ê±¼ä´Á×ª»»Îª±¾µØÊ±¼ä¡£
+    æ—¶é—´æˆ³è½¬æ¢ä¸ºæœ¬åœ°æ—¶é—´ã€‚
     */
     FILETIME fileTime;
     TimeStampToFileTime(StartTime, fileTime);
@@ -514,7 +514,7 @@ void GetSystemStartTime(char * SystemStartTime)
 
     FileTimeToTimeStamp(ftLocal, StartTime);
 
-    //Âú×ã±¾¹¤³ÌµÄĞèÇó¡£
+    //æ»¡è¶³æœ¬å·¥ç¨‹çš„éœ€æ±‚ã€‚
     wsprintfA(SystemStartTime, "%I64u", StartTime);
 }
 
@@ -523,7 +523,7 @@ void GetSystemStartTime(char * SystemStartTime)
 
 
 BOOL GetProcessIntegrityLevel(PDWORD pdwIntegrityLevel)
-//´úÂëÔ­Ê¼³ö´¦£ºCreate low-integrity process in C++ (CppCreateLowIntegrityProcess)
+//ä»£ç åŸå§‹å‡ºå¤„ï¼šCreate low-integrity process in C++ (CppCreateLowIntegrityProcess)
 //   PURPOSE: The function gets the integrity level of the current process. 
 //   Integrity level is only available on Windows Vista and newer operating systems, 
 //   thus GetProcessIntegrityLevel returns FALSE if it is called on on systems prior to Windows Vista.
@@ -627,7 +627,7 @@ Cleanup:
 
 
 BOOL CreateLowIntegrityProcess(PWSTR pszCommandLine)
-//´úÂëÔ­Ê¼³ö´¦£ºCreate low-integrity process in C++ (CppCreateLowIntegrityProcess)
+//ä»£ç åŸå§‹å‡ºå¤„ï¼šCreate low-integrity process in C++ (CppCreateLowIntegrityProcess)
 //   PURPOSE: The function launches an application at low integrity level. 
 //
 //   PARAMETERS:
@@ -724,7 +724,7 @@ Cleanup:
 
 
 BOOL IsProcessElevated()
-//Õª×Ô£ºUAC self-elevation (CppUACSelfElevation)
+//æ‘˜è‡ªï¼šUAC self-elevation (CppUACSelfElevation)
 //   PURPOSE: The function gets the elevation information of the current process. 
 //   It dictates whether the process is elevated or not. 
 //   Token elevation is only available on Windows Vista and newer operating systems, 
@@ -800,9 +800,9 @@ EXTERN_C
 __declspec(dllexport)
 HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId)
 /*
-¹¦ÄÜ£º»ñÈ¡Ò»¸ö½ø³ÌµÄ¸¸½ø³Ì¡£
+åŠŸèƒ½ï¼šè·å–ä¸€ä¸ªè¿›ç¨‹çš„çˆ¶è¿›ç¨‹ã€‚
 
-²ÎÊıºÍ·µ»ØÖµ£¬ÆäÊµ¶¼ÊÇDWORD¡£
+å‚æ•°å’Œè¿”å›å€¼ï¼Œå…¶å®éƒ½æ˜¯DWORDã€‚
 */
 {
     HANDLE ParentsPid = INVALID_HANDLE_VALUE;
@@ -844,11 +844,11 @@ EXTERN_C
 __declspec(dllexport)
 bool WINAPI IsWow64ProcessEx(_In_ HANDLE UniqueProcessId)
 /*
-¹¦ÄÜ£º¼ì²â½ø³ÌÊÇ²»ÊÇWow64Process¡£
+åŠŸèƒ½ï¼šæ£€æµ‹è¿›ç¨‹æ˜¯ä¸æ˜¯Wow64Processã€‚
 
-·ÂÕÕIsSecureProcess¶ø½¨¡£
+ä»¿ç…§IsSecureProcessè€Œå»ºã€‚
 
-×¢ÒâÊÊÓÃµÄ·¶Î§¡£
+æ³¨æ„é€‚ç”¨çš„èŒƒå›´ã€‚
 */
 {
     bool IsWow64 = false;

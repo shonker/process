@@ -2,7 +2,7 @@
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-//Ò»Ð©ÏµÍ³µÄÍ·ÎÄ¼þºÍ¿âµÄ°üº¬¡£
+//Ò»Ð©ÏµÍ³ï¿½ï¿½Í·ï¿½Ä¼ï¿½ï¿½Í¿ï¿½Ä°ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 //#define _WIN32_WINNT 0x0501
@@ -69,7 +69,7 @@
 #include <ws2spi.h>
 #include <comdef.h>
 
-#include <initguid.h> //×¢ÒâÇ°ºóË³Ðò¡£¾²Ì¬¶¨ÒåUUIDÓÃµÄ£¬·ñÔò£ºerror LNK2001¡£
+#include <initguid.h> //×¢ï¿½ï¿½Ç°ï¿½ï¿½Ë³ï¿½ò¡£¾ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½UUIDï¿½ÃµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½error LNK2001ï¿½ï¿½
 #include <usbioctl.h>
 #include <usbiodef.h>
 //#include <usbctypes.h>
@@ -190,7 +190,7 @@ __declspec(dllimport) BOOL WINAPI IsWow64Process2Ex(_In_ DWORD Pid);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//·þÎñÏà¹ØµÄº¯Êý¡£
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄºï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 __declspec(dllimport) BOOL WINAPI DriverInstallInf(PWSTR InfFile);
@@ -314,7 +314,7 @@ __declspec(dllimport) void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//¼Æ»®ÈÎÎñÏà¹Ø¡£
+//ï¿½Æ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¡ï¿½
 
 
 __declspec(dllimport)

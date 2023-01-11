@@ -1,25 +1,25 @@
 /*
-±¾ÎÄÄÚÈÝ£ºÕ»£¬Ö¡£¨º¯Êý£©Ïà¹ØµÄ¡£
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Õ»ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ¡ï¿½
 
-ºËÐÄÄÚÈÝ£ºÕ»»ØËÝ¡£
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Õ»ï¿½ï¿½ï¿½Ý¡ï¿½
 */
 
 
 /*
-¼ì²é¶ÑÕ»¸ú×Ù
-ÏîÄ¿
+ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½Ä¿
 2022/10/18
-1 ¸ö²ÎÓëÕß
+1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-µ÷ÓÃ ¶ÑÕ» °üº¬Ïß³Ì½øÐÐµÄº¯Êýµ÷ÓÃµÄÊý¾Ý¡£ 
-Ã¿¸öº¯Êýµ÷ÓÃµÄÊý¾Ý³ÆÎª¶ÑÕ» Ö¡ £¬°üÀ¨·µ»ØµØÖ·¡¢´«µÝ¸øº¯ÊýµÄ²ÎÊýÒÔ¼°º¯ÊýµÄ¾Ö²¿±äÁ¿¡£ 
-Ã¿´Îµ÷ÓÃº¯ÊýÊ±£¬ÐÂµÄ¶ÑÕ»Ö¡½«ÍÆËÍµ½¶ÑÕ»¶¥²¿¡£ 
-µ±¸Ãº¯Êý·µ»ØÊ±£¬¶ÑÕ»Ö¡´Ó¶ÑÕ»ÖÐµ¯³ö¡£
+ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Õ» ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì½ï¿½ï¿½ÐµÄºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ý¡ï¿½ 
+Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ý³ï¿½Îªï¿½ï¿½Õ» Ö¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+Ã¿ï¿½Îµï¿½ï¿½Ãºï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ÂµÄ¶ï¿½Õ»Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Õ»Ö¡ï¿½Ó¶ï¿½Õ»ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 
-Ã¿¸öÏß³Ì¶¼ÓÐ×Ô¼ºµÄµ÷ÓÃ¶ÑÕ»£¬±íÊ¾¸ÃÏß³ÌÖÐµ÷ÓÃ¡£
+Ã¿ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Äµï¿½ï¿½Ã¶ï¿½Õ»ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ß³ï¿½ï¿½Ðµï¿½ï¿½Ã¡ï¿½
 
-ÈôÒª»ñÈ¡¶ÑÕ»¸ú×Ù£¬ÇëÊ¹ÓÃ GetStackTrace ºÍ GetContextStackTrace ·½·¨¡£ 
-¿ÉÒÔÊ¹ÓÃ OutputStackTrace ºÍ OutputContextStackTrace ´òÓ¡¶ÑÕ»¸ú×Ù¡£
+ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½Õ»ï¿½ï¿½ï¿½Ù£ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ GetStackTrace ï¿½ï¿½ GetContextStackTrace ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ OutputStackTrace ï¿½ï¿½ OutputContextStackTrace ï¿½ï¿½Ó¡ï¿½ï¿½Õ»ï¿½ï¿½ï¿½Ù¡ï¿½
 
 https://learn.microsoft.com/zh-cn/windows-hardware/drivers/debugger/examining-the-stack-trace
 */
@@ -30,9 +30,9 @@ StackWalk function
 StackWalk64 function
 StackWalkEx function
 
-ÐÄµÃ£º
-StackWalkµÄµÚÈý¸ö²ÎÊýÈç¹ûÊÇGetCurrentThread()£¬Ö»ÄÜÑ­»·Ò»Á½´Î¡£
-ÇÒ×îºÃÏÈSuspendThreadÄÇ¸öÏß³Ì¡£
+ï¿½ÄµÃ£ï¿½
+StackWalkï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½GetCurrentThread()ï¿½ï¿½Ö»ï¿½ï¿½Ñ­ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Î¡ï¿½
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½SuspendThreadï¿½Ç¸ï¿½ï¿½ß³Ì¡ï¿½
 
 https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk
 https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk64
@@ -42,7 +42,7 @@ https://learn.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-stackwalk
 
 /*
 If you want to print out a stack trace without having an exception, 
-you¡¯ll have to get the local context with the RtlCaptureContext() function.
+youï¿½ï¿½ll have to get the local context with the RtlCaptureContext() function.
 
 https://spin.atomicobject.com/2013/01/13/exceptions-stack-traces-c/
 */

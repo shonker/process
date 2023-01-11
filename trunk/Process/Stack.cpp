@@ -8,7 +8,7 @@
 
 PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
 /*
-¹¦ÄÜ£º¸ù¾Ý·µ»ØµØÖ·£¨callÖ®ºóµÄµÚÒ»¸öÖ¸ÁîµÄµØÖ·£©»ñÈ¡ÒªcallµÄº¯ÊýµÄµØÖ·¡£
+åŠŸèƒ½ï¼šæ ¹æ®è¿”å›žåœ°å€ï¼ˆcallä¹‹åŽçš„ç¬¬ä¸€ä¸ªæŒ‡ä»¤çš„åœ°å€ï¼‰èŽ·å–è¦callçš„å‡½æ•°çš„åœ°å€ã€‚
 */
 {
     PVOID FunctionAddress = nullptr;
@@ -24,7 +24,7 @@ PVOID GetFunctionAddressByReturnAddress(PVOID ReturnAddress)
 
     if (htons(0xffd6) == *(PWORD)EsiCallAddress) {
 
-        return FunctionAddress;//Õâ¸öÔÝÊ±Ã»ÏëºÃ´¦ÀíµÄ°ì·¨¡£
+        return FunctionAddress;//è¿™ä¸ªæš‚æ—¶æ²¡æƒ³å¥½å¤„ç†çš„åŠžæ³•ã€‚
     }
 
     if (0xe8 != *(PBYTE)NearCallAddress && htons(0xff15) != *(PWORD)FarCallAddress) {
@@ -64,7 +64,7 @@ EXTERN_C
 __declspec(dllexport)
 void WINAPI DumpStackByCapture()
 /*
-¹¦ÄÜ£º´òÓ¡ÀàËÆÓÚwindbgµÄkvÃüÁî¡£
+åŠŸèƒ½ï¼šæ‰“å°ç±»ä¼¼äºŽwindbgçš„kvå‘½ä»¤ã€‚
 
 */
 {
@@ -73,7 +73,7 @@ void WINAPI DumpStackByCapture()
     ULONG FramesToCapture = 62;//The number of frames to be captured.     
 
     //http://msdn.microsoft.com/zh-cn/library/windows/hardware/Dn613940(v=vs.85).aspx
-    int stacklength = 32 * 1024;//È¡X86/X64/IA64µÄÕ»µÄ×î´óÖµ¡£
+    int stacklength = 32 * 1024;//å–X86/X64/IA64çš„æ ˆçš„æœ€å¤§å€¼ã€‚
 
     PVOID CallersAddress = _ReturnAddress();
 
@@ -100,7 +100,7 @@ __declspec(dllexport)
 void WINAPI DumpStackByWalk()
 /*
 
-²Î¿¼£º\nt5src\Source\Win2K3\NT\admin\activec\base\mmcdebug.cppµÄCTraceTag::DumpStack()
+å‚è€ƒï¼š\nt5src\Source\Win2K3\NT\admin\activec\base\mmcdebug.cppçš„CTraceTag::DumpStack()
 */
 {
     SymInitialize(GetCurrentProcess(), NULL, TRUE);
@@ -117,7 +117,7 @@ void WINAPI DumpStackByWalk()
 
     CONTEXT threadContext{};
     threadContext.ContextFlags = CONTEXT_FULL;
-    //GetThreadContext(GetCurrentThread(), &threadContext);//Õâ¸öÖ»»á·µ»ØÒ»Á½¸öÑ­»·£¨Ö¡£©¡£
+    //GetThreadContext(GetCurrentThread(), &threadContext);//è¿™ä¸ªåªä¼šè¿”å›žä¸€ä¸¤ä¸ªå¾ªçŽ¯ï¼ˆå¸§ï¼‰ã€‚
     RtlCaptureContext(&threadContext);
 
     STACKFRAME stackFrame{};
@@ -156,7 +156,7 @@ void WINAPI DumpStackByWalk()
 #endif
 
     /*
-    windbgµÄkvÃüÁî¸ñÊ½£º
+    windbgçš„kvå‘½ä»¤æ ¼å¼ï¼š
     0:000> KV
      # Child-SP          RetAddr           : Args to Child                                                           : Call Site
     00 000000dc`0394f878 00007ffc`830ada88 : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!NtTerminateProcess+0x14
