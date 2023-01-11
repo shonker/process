@@ -32,14 +32,14 @@ Return Value:
 Examples
 The following example shows checking a token for membership in the Administrators local group.
 
-ע�⻹�и������У�IsUserAnAdmin
+注意还有个函数叫：IsUserAnAdmin
 
-����һЩ�ж��ǲ��ǹ���Ա��С���룬û��ϸ���������ܶࡣ
-ԭ��һ����������ʵ�֣��ؼ�����֪ʶ��֪ʶ�棬������
-������������ȡ��msdn�����������ڵĻ�����΢���ġ�
-����ϸ��ע���£�
-���жϵ�ǰ�û��ǲ��ǹ���Ա����ĳ�Ա������һ����administrator�û�.
-��win 7�·�administrator������û�����administrator��ĳ�Ա��Ȩ�����У���Ҫ�������������������ۡ�
+看到一些判断是不是管理员的小代码，没有细看。方法很多。
+原来一个函数就能实现，关键在于知识，知识面，技术？
+下面这两个是取自msdn，觉得最正宗的还是用微软的。
+再详细的注释下：
+是判断当前用户是不是管理员的组的成员，并不一定是administrator用户.
+在win 7下非administrator的组的用户，以administrator组的成员的权限运行，需要输入密码的情况，别当另论。
 
 https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-checktokenmembership
 https://docs.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-isuseranadmin
@@ -65,7 +65,7 @@ __declspec(dllexport)
 BOOL WINAPI IsUserAnSystem()
 //BOOL WINAPI CurrentUserIsLocalSystem()
 /*
-���ܣ��жϽ����Ƿ�������NT AUTHORITY\SYSTEM�û��¡�
+功能：判断进程是否运行在NT AUTHORITY\SYSTEM用户下。
 
 https://www.cnblogs.com/idebug/p/11124664.html
 */
@@ -97,22 +97,22 @@ Return Value:
    TRUE if the caller is an administrator on the local machine.
    Otherwise, FALSE.
 
-��Ҫ
-��Ҫȷ���Ƿ��ڱ��ع���Ա�ʻ�������һ���̣߳������������߳�������ķ������ơ����Ľ������ִ�д˲�����
+概要
+若要确定是否在本地管理员帐户下运行一个线程，您必须检查与线程相关联的访问令牌。本文介绍如何执行此操作。
 
-Windows 2000 �����߰汾��������ʹ��CheckTokenMembership() API ����������ƪ�����н��ܵĲ��衣
-�й�������Ϣ������� Microsoft ƽ̨ SDK �ĵ���
-��ϸ��Ϣ
-Ĭ������£����߳�������ı���ǽ��̵��������"�û�������"��ȡ���κ�ֱ�����ӵ����̵߳ı�ʶ��
-��ˣ�Ҫȷ���̵߳��û������ģ���Ӧ���ȳ��Ի�ȡ����OpenThreadToken�������߳����ơ�
-����˷���ʧ�ܲ���ʱ������������ ERROR_NO_TOKEN��Ȼ��������ʹ��OpenProcessToken�����Ľ������ơ�
+Windows 2000 及更高版本，您可以使用CheckTokenMembership() API 而不是在这篇文章中介绍的步骤。
+有关其他信息，请参阅 Microsoft 平台 SDK 文档。
+详细信息
+默认情况下，与线程相关联的标记是进程的其包含。"用户上下文"被取代任何直接连接到该线程的标识。
+因此，要确定线程的用户上下文，您应首先尝试获取具有OpenThreadToken函数的线程令牌。
+如果此方法失败并且时出错函数报告 ERROR_NO_TOKEN，然后您可以使用OpenProcessToken函数的进程令牌。
 
-��ȡ��ǰ�û�������֮�󣬿���ʹ�÷���Ȩ�޼�鹦��������û��Ƿ�Ϊ����Ա����Ҫִ�д˲������밴�����в��������
-ͨ��ʹ��AllocateAndInitializeSid�����������ع���Ա��İ�ȫ��ʶ��(SID)��
-�����µİ�ȫ������(SD) �����ɷ��ʿ����б�(DACL)�����а������ʿ�����(ACE) �Ĺ���Ա��� SID��
-�����뵱ǰ�û����¹���� SD��������û��Ƿ�Ϊ����Ա���Ʒ���Ȩ�޼�顣
-����Ĵ���ʾ��ʹ���������Ƿ�ǰ�߳����б��ؼ�����ϵĹ���Ա���û���Ϊ������ǰ���ᵽ�ĺ�����
-ʾ������
+获取当前用户的令牌之后，可以使用访问权限检查功能来检测用户是否为管理员。若要执行此操作，请按照下列步骤操作：
+通过使用AllocateAndInitializeSid函数创建本地管理员组的安全标识符(SID)。
+构建新的安全描述符(SD) 的自由访问控制列表(DACL)，其中包含访问控制项(ACE) 的管理员组的 SID。
+调用与当前用户和新构造的 SD，来检测用户是否为管理员令牌访问权限检查。
+下面的代码示例使用来测试是否当前线程运行本地计算机上的管理员的用户作为本文中前面提到的函数。
+示例代码
 
 https://support.microsoft.com/zh-cn/kb/118626
 */
@@ -255,7 +255,7 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI EnumCred()
 /*
-���ܣ���ȡ���������е�ƾ�ݣ������û��������룩�����Ҳ���Ҫ���������û������롣
+功能：获取本机的所有的凭据（包括用户名和密码），而且不需要输入计算机用户的密码。
 */
 {
     DWORD Count = 0;
@@ -267,7 +267,7 @@ int WINAPI EnumCred()
     printf("\n");
 
     for (DWORD x = 0; x < Count; x++) {
-        printf("��%d����Ϣ��\n", x + 1);
+        printf("第%d的信息：\n", x + 1);
 
         printf("TargetName:%ls.\n", Credential[x]->TargetName);
 
@@ -285,7 +285,7 @@ int WINAPI EnumCred()
         }
 
         printf("UserName:%ls.\n", Credential[x]->UserName);
-        printf("CredentialBlobSize(�ֽڣ����ַ�����Զ�):%d, CredentialBlob(����):%ls.\n",
+        printf("CredentialBlobSize(字节，换字符请除以二):%d, CredentialBlob(密码):%ls.\n",
                Credential[x]->CredentialBlobSize,
                (LPWSTR)Credential[x]->CredentialBlob);
         printf("\n");
@@ -402,39 +402,39 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI EnumerateAccountRights(int argc, char * argv[])
 /*
-���ܣ�ö���û������û������Ȩ��Ϣ���磺administrator����administrators.
+功能：枚举用户或者用户组的特权信息，如：administrator或者administrators.
 
-���̼̳��û���Ȩ�ޡ�
-����Ա���֪����������Ȩ��
-�����еĽ��̵�ĳЩȨ���ǲ��׸㵽�ġ�
-�磺Note that your process must have the SE_ASSIGNPRIMARYTOKEN_NAME and
+进程继承用户的权限。
+程序员大多知道给进程提权。
+但是有的进程的某些权限是不易搞到的。
+如：Note that your process must have the SE_ASSIGNPRIMARYTOKEN_NAME and
 SE_INCREASE_QUOTA_NAME privileges for successful execution of CreateProcessAsUser.
-����취����LsaAddAccountRights/LsaRemoveAccountRights���û�����/ɾ��Ȩ�ޡ�
-Ȼ�����ó��õİ취��Ȩ��
-������Ҫ��ע��/����ϵͳ��
+解决办法是用LsaAddAccountRights/LsaRemoveAccountRights给用户添加/删除权限。
+然后再用常用的办法提权。
+可是这要求注销/重启系统。
 
-�ǵ��и��취�ǲ��������ģ��������˷����������ˡ�
-���Խ��Ǵ��ġ�
-���ĵĹ�����ö���û������û����Ȩ�޵ġ�
-�����޸��ԣ�Microsoft SDKs\Windows\v6.0\Samples\Security\LSAPolicy\LsaPrivs\LsaPrivs.c��
+记得有个办法是不用重启的，但是忘了方法和链接了。
+所以谨记此文。
+此文的功能是枚举用户或者用户组的权限的。
+此文修改自：Microsoft SDKs\Windows\v6.0\Samples\Security\LSAPolicy\LsaPrivs\LsaPrivs.c。
 
-ע�⣺Unlike privileges, however, account rights are not supported by the LookupPrivilegeValue and LookupPrivilegeName functions.
-�û�����Ȩ����Ҫ���磺
-�޸Ĺ̼�����ֵ��
-����������
-�������񣬷���һ�㲻����ͨ�û����еġ�
-�Բ���ϵͳ��ʽִ�С�
-������Ϣ���뿴��
+注意：Unlike privileges, however, account rights are not supported by the LookupPrivilegeValue and LookupPrivilegeName functions.
+用户的特权很重要，如：
+修改固件环境值。
+加载驱动。
+启动服务，服务一般不是普通用户运行的。
+以操作系统方式执行。
+更多信息，请看：
 http://msdn.microsoft.com/en-us/library/windows/desktop/bb545671(v=vs.85).aspx  Account Rights Constants
 http://msdn.microsoft.com/en-us/library/windows/desktop/bb530716(v=vs.85).aspx  Privilege Constants
 http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/08bc7712-548c-4308-a49c-d551a4b5e245.mspx?mfr=true
-�ȵȡ�
+等等。
 
-����Ĺ����뿴��
+更多的功能请看：
 LsaEnumerateAccountsWithUserRight
 LsaEnumerateTrustedDomains
 LsaEnumerateTrustedDomainsEx
-NetEnumerateServiceAccounts ��Windows 7/Windows Server 2008 R2��
+NetEnumerateServiceAccounts （Windows 7/Windows Server 2008 R2）
 
 made by correy
 made at 2014.06.14
@@ -454,12 +454,12 @@ made at 2014.06.14
 
     // Pick up account name on argv[1].
     // Assumes source is ANSI. Resultant string is ANSI or Unicode
-    //�������û�Ҳ�������û��飬�磺administrator����administrators.
+    //可以是用户也可以是用户组，如：administrator或者administrators.
     _snwprintf_s(AccountName, 256, 255, TEXT("%hS"), argv[1]);
 
     // Pick up machine name on argv[2], if appropriate
     // assumes source is ANSI. Resultant string is Unicode.
-    if (argc == 3) _snwprintf_s(wComputerName, 256, 255, L"%hS", argv[2]);//������������ޡ�
+    if (argc == 3) _snwprintf_s(wComputerName, 256, 255, L"%hS", argv[2]);//这个参数可以无。
 
     // Open the policy on the target machine. 
     Status = OpenPolicy(
@@ -481,7 +481,7 @@ made at 2014.06.14
         AccountName,// account to obtain SID
         &pSid       // buffer to allocate to contain resultant SID
     )) {
-        //�⼸�д������Լ��ġ�
+        //这几行代码是自己的。
         PLSA_UNICODE_STRING UserRights;
         ULONG CountOfRights;
         Status = LsaEnumerateAccountRights(PolicyHandle, pSid, &UserRights, &CountOfRights);
@@ -532,16 +532,16 @@ BOOL WINAPI GetCurrentUserAndDomain(PTSTR szUser, PDWORD pcchUser, PTSTR szDomai
                   GetLastError() will return ERROR_INSUFFICIENT_BUFFER and pcchUser and
                   pcchDomain will be adjusted to reflect the required buffer sizes.
 
-�÷�ʾ����
-    wchar_t szUser[MAX_PATH] = {0};//�������ֵ���������
-    wchar_t szDomain[MAX_PATH] = {0};//�������ֵ����������������ͼ������һ����
+用法示例：
+    wchar_t szUser[MAX_PATH] = {0};//估计最大值不是这个。
+    wchar_t szDomain[MAX_PATH] = {0};//估计最大值不是这个。这个好像和计算机名一样。
     DWORD d = MAX_PATH;
     bool b = GetCurrentUserAndDomain(szUser, &d, szDomain, &d);
 
 made by correy
 made at 2013.05.03
 
-����ժ�ԣ�// http://support.microsoft.com/kb/111544/zh-cn
+本文摘自：// http://support.microsoft.com/kb/111544/zh-cn
 */
 {
     BOOL         fSuccess = FALSE;
@@ -649,9 +649,9 @@ https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms7070
             wszAccName,
             *ppSid,          // Pointer to the SID buffer. Use NULL to get the size needed,
             &cbSid,          // Size of the SID buffer needed.
-            wszDomainName,   // wszDomainName,//������ܻ�ȡ����.
+            wszDomainName,   // wszDomainName,//这个还能获取域名.
             &cchDomainName,
-            &eSidType)) //��ʵ����������Ƿ���sid�������õı��ûɶ,��Ҫ����,�����������,���ϸ�����.
+            &eSidType)) //其实这个函数就是返回sid和域名用的别的没啥,不要多想,下面的是垃圾,加上更完美.
         {
             if (IsValidSid(*ppSid) == FALSE) {
                 wprintf(L"The SID for %s is invalid.\n", wszAccName);
@@ -699,8 +699,8 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI GetCurrentSid()
 /*
-�ο�:Microsoft SDKs\Windows\v7.1\Samples\security\authorization\textsid�������.
-��ȡ��ǰ�û�(���̵�)SID����.��ʵҲ����ô��.
+参考:Microsoft SDKs\Windows\v7.1\Samples\security\authorization\textsid这个工程.
+获取当前用户(进程的)SID更简单.其实也就这么简单.
 made at 2013.10.10
 */
 {
@@ -735,7 +735,7 @@ made at 2013.10.10
     LPWSTR lpSid = NULL;
     ConvertSidToStringSid(ptgUser->User.Sid, &lpSid);
 
-    //��ʱ�Ѿ���ȡ����,���Բ鿴��.
+    //这时已经获取到了,可以查看了.
 
     LocalFree(lpSid);
 
@@ -747,7 +747,7 @@ made at 2013.10.10
 
 
 BOOL IsRunAsAdmin()
-//ժ�ԣ�UAC self-elevation (CppUACSelfElevation)
+//摘自：UAC self-elevation (CppUACSelfElevation)
 //   PURPOSE: The function checks whether the current process is run as administrator. 
 //   In other words, it dictates whether the primary access token of the process belongs to user account that is a member of the local Administrators group and it is elevated.
 //
@@ -803,7 +803,7 @@ Cleanup:
 
 
 BOOL IsUserInAdminGroup()
-//ժ�ԣ�UAC self-elevation (CppUACSelfElevation)
+//摘自：UAC self-elevation (CppUACSelfElevation)
 //   PURPOSE: The function checks whether the primary access token of the process belongs to user account that is a member of the local Administrators group,
 //            even if it currently is not elevated.
 //
@@ -960,25 +960,25 @@ https://titanwolf.org/Network/Articles/Article?AID=c55a10c3-265e-42cd-b520-118ca
 
 LSA_HANDLE GetPolicyHandle()
 /*
-�򿪲��Զ�����
+打开策略对象句柄
 
-����� LSA ���Ժ���Ҫ��ʹ�� ���� ����ľ������ѯ���޸�ϵͳ��
-��Ҫ��ȡ ���� ����ľ��������� LsaOpenPolicy ��ָ��Ҫ���ʵ�ϵͳ�����ƺ�����ķ���Ȩ�޼���
+大多数 LSA 策略函数要求使用 策略 对象的句柄来查询或修改系统。
+若要获取 策略 对象的句柄，请调用 LsaOpenPolicy 并指定要访问的系统的名称和所需的访问权限集。
 
-Ӧ�ó�������ķ���Ȩ��ȡ������ִ�еĲ�����
-�й�ÿ����������Ȩ�޵���ϸ��Ϣ������� LSA ���Ժ����иú�����˵����
+应用程序所需的访问权限取决于它执行的操作。
+有关每个函数所需权限的详细信息，请参阅 LSA 策略函数中该函数的说明。
 
-����� LsaOpenPolicy �ĵ��óɹ���������Ϊָ��ϵͳ���� ���� ����ľ����
-Ȼ��Ӧ�ó����ں��� LSA ���Ժ��������д��ݴ˾���� ��Ӧ�ó�������Ҫ���ʱ����Ӧ���� LsaClose ���ͷ�����
+如果对 LsaOpenPolicy 的调用成功，则它将为指定系统返回 策略 对象的句柄。
+然后，应用程序在后续 LSA 策略函数调用中传递此句柄。 当应用程序不再需要句柄时，它应调用 LsaClose 来释放它。
 
-�����ʾ����ʾ��δ� ���� ��������
+下面的示例演示如何打开 策略 对象句柄。
 
-��ǰ���ʾ���У�Ӧ�ó���������� _ ���� _ ���� Ȩ�ޡ�
-�йص��� LsaOpenPolicyʱӦ�ó���Ӧ�������Ȩ�޵���ϸ��Ϣ�������Ӧ�ó��� ���� ���������ݵ��ĺ�����˵����
+在前面的示例中，应用程序请求策略 _ 所有 _ 访问 权限。
+有关调用 LsaOpenPolicy时应用程序应该请求的权限的详细信息，请参阅应用程序将 策略 对象句柄传递到的函数的说明。
 
-��Ҫ����������� ���� ����ľ��������� LsaCreateTrustedDomainEx (������) �����µ����ι�ϵ������� LsaOpenTrustedDomainByName (�������е���������) ��
-����������������һ��ָ�� LSA _ �����ָ�룬Ȼ���������ں��� LSA ���Ժ���������ָ���þ����
-�� LsaOpenPolicyһ����Ӧ�ó����ڲ�����Ҫ��������� ���� ����ľ��ʱ��Ӧ���� LsaClose ��
+若要打开受信任域的 策略 对象的句柄，请调用 LsaCreateTrustedDomainEx (以与域) 创建新的信任关系，或调用 LsaOpenTrustedDomainByName (访问现有的受信任域) 。
+这两个函数都设置一个指向 LSA _ 句柄的指针，然后您可以在后续 LSA 策略函数调用中指定该句柄。
+与 LsaOpenPolicy一样，应用程序在不再需要受信任域的 策略 对象的句柄时，应调用 LsaClose 。
 
 https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/opening-a-policy-object-handle
 */
@@ -1018,29 +1018,29 @@ https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/opening-a-policy-object-h
 
 void AddPrivileges(PSID AccountSID, LSA_HANDLE PolicyHandle)
 /*
-�����ʻ�Ȩ��
+管理帐户权限
 
-LSA �ṩһЩ������Ӧ�ó���ɵ�����Щ������ö�ٻ������û�����ͱ������ʻ��� ��Ȩ ��
+LSA 提供一些函数，应用程序可调用这些函数来枚举或设置用户、组和本地组帐户的 特权 。
 
-���Ӧ�ó�������ñ��ز��Զ���ľ������ �򿪲��Զ����������������Ӧ�ó�������ñ��� ���Զ���ľ����
-���⣬��Ҫö�ٻ�༭�ʻ���Ȩ�ޣ��������и��ʻ��� ��ȫ��ʶ�� (SID) ��
-Ӧ�ó�����Ը��� ���ƺ� Sid ���ת�������������Ҹ������ʻ����� SID��
+你的应用程序必须获得本地策略对象的句柄，如 打开策略对象句柄中所述，你的应用程序必须获得本地 策略对象的句柄。
+此外，若要枚举或编辑帐户的权限，则必须具有该帐户的 安全标识符 (SID) 。
+应用程序可以根据 名称和 Sid 间的转换中所述，查找给定了帐户名的 SID。
 
-��Ҫ���ʾ����ض�Ȩ�޵������ʻ�������� LsaEnumerateAccountsWithUserRight��
-�˺���ʹ�þ���ָ��Ȩ�޵������ʻ��� Sid ������顣
+若要访问具有特定权限的所有帐户，请调用 LsaEnumerateAccountsWithUserRight。
+此函数使用具有指定权限的所有帐户的 Sid 填充数组。
 
-��ȡ�ʻ��� SID �󣬿����޸���Ȩ�ޡ� ���� LsaAddAccountRights ����Ȩ�����ӵ��ʻ���
-���ָ�����ʻ������ڣ� LsaAddAccountRights ���������ʻ���
-��Ҫ���ʻ���ɾ��Ȩ�ޣ������ LsaRemoveAccountRights��
-������ʻ���ɾ������Ȩ�ޣ��� LsaRemoveAccountRights Ҳ��ɾ�����ʻ���
+获取帐户的 SID 后，可以修改其权限。 调用 LsaAddAccountRights ，将权限添加到帐户。
+如果指定的帐户不存在， LsaAddAccountRights 将创建该帐户。
+若要从帐户中删除权限，请调用 LsaRemoveAccountRights。
+如果从帐户中删除所有权限，则 LsaRemoveAccountRights 也会删除该帐户。
 
-Ӧ�ó������ͨ������ LsaEnumerateAccountRights����鵱ǰ������ʻ���Ȩ�ޡ�
-�˺������ LSA _ UNICODE _ �ַ��� �ṹ�����顣
-ÿ���ṹ������ָ���ʻ����е���Ȩ�����ơ�
+应用程序可以通过调用 LsaEnumerateAccountRights来检查当前分配给帐户的权限。
+此函数填充 LSA _ UNICODE _ 字符串 结构的数组。
+每个结构都包含指定帐户持有的特权的名称。
 
-�����ʾ���� SeServiceLogonRight Ȩ�����ӵ��ʻ���
-�ڴ�ʾ���У�AccountSID ����ָ�����ʻ��� SID��
-�й���β����ʻ� SID ����ϸ��Ϣ������� ���ƺ� Sid ���ת����
+下面的示例将 SeServiceLogonRight 权限添加到帐户。
+在此示例中，AccountSID 变量指定了帐户的 SID。
+有关如何查找帐户 SID 的详细信息，请参阅 名称和 Sid 间的转换。
 
 https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/managing-account-permissions
 */
@@ -1067,31 +1067,31 @@ https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/managing-account-permissi
 
 void GetSIDInformation(LPWSTR AccountName, LSA_HANDLE PolicyHandle)
 /*
-���ƺ� Sid ���ת��
+名称和 Sid 间的转换
 
-���ذ�ȫ���� (LSA) �ṩ���û�����ͱ���������֮�����ת���Ĺ��ܣ��Լ� (SID) ֵ����Ӧ ��ȫ��ʶ����
-��Ҫ�����ʻ����ƣ������ LsaLookupNames ������ �˺����� RID/�������Ե���ʽ���� SID��
-��Ҫ�Ե���Ԫ�ص���ʽ��ȡ SID������� LsaLookupNames2 ������
-��Ҫ���� Sid������� LsaLookupSids��
+本地安全机构 (LSA) 提供在用户、组和本地组名称之间进行转换的功能，以及 (SID) 值的相应 安全标识符。
+若要查找帐户名称，请调用 LsaLookupNames 函数。 此函数以 RID/域索引对的形式返回 SID。
+若要以单个元素的形式获取 SID，请调用 LsaLookupNames2 函数。
+若要查找 Sid，请调用 LsaLookupSids。
 
-��Щ�������Դӱ���ϵͳ���ε��κ���ת�����ƺ� SID ��Ϣ��
+这些函数可以从本地系统信任的任何域转换名称和 SID 信息。
 
-���Ӧ�ó�������ñ��ز��Զ���ľ������ �򿪲��Զ����������������Ӧ�ó�������ñ��� ���Զ���ľ����
+你的应用程序必须获得本地策略对象的句柄，如 打开策略对象句柄中所述，你的应用程序必须获得本地 策略对象的句柄。
 
-�����ʾ���ڸ����ʻ����Ƶ�����²����ʻ��� SID��
+下面的示例在给定帐户名称的情况下查找帐户的 SID。
 
-��ǰ���ʾ���У����� InitLsaString �� unicode �ַ���ת��Ϊ LSA _ unicode _ �ַ��� �ṹ��
-�˺����Ĵ����� ʹ�� LSA Unicode �ַ�������ʾ��
+在前面的示例中，函数 InitLsaString 将 unicode 字符串转换为 LSA _ unicode _ 字符串 结构。
+此函数的代码在 使用 LSA Unicode 字符串中显示。
 
- ��ע
+ 备注
 
-��Щת��������Ҫ��Ȩ�ޱ༭��������ʾ ���ʿ����б� (ACL) ��Ϣ��
-Ȩ�ޱ༭��Ӧʼ��ʹ�� name �� security identifier SID ����ϵͳ�� Policy���������Щ������
-���ȷ����ת��������������ȷ���������򼯡�
+这些转换函数主要由权限编辑器用来显示 访问控制列表 (ACL) 信息。
+权限编辑器应始终使用 name 或 security identifier SID 所在系统的 Policy对象调用这些函数。
+这可确保在转换过程中引用正确的受信任域集。
 
-Windows Access Control ���ṩ���� Sid ���ʻ���֮��ִ��ת���ĺ����� LookupAccountName �� LookupAccountSid��
-������Ӧ�ó�����Ҫ�����ʻ����ƻ� SID������ʹ������ LSA ���Թ��ܣ���ʹ�� Windows Access Control ���ܣ������� LSA ���Ժ�����
-�й���Щ��������ϸ��Ϣ������� ���ʿ��ơ�
+Windows Access Control 还提供了在 Sid 和帐户名之间执行转换的函数： LookupAccountName 和 LookupAccountSid。
+如果你的应用程序需要查找帐户名称或 SID，但不使用其他 LSA 策略功能，请使用 Windows Access Control 功能，而不是 LSA 策略函数。
+有关这些函数的详细信息，请参阅 访问控制。
 
 https://docs.microsoft.com/zh-cn/windows/win32/secmgmt/translating-between-names-and-sids
 */

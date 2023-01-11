@@ -20,7 +20,7 @@
 
 int PrintModules(DWORD processID)
 /*
-È±µã£ºÃ¶¾Ù²»µ½WOW64µÄDLL¡£
+ç¼ºç‚¹ï¼šæšä¸¾ä¸åˆ°WOW64çš„DLLã€‚
 */
 {
     HMODULE hMods[1024];
@@ -110,13 +110,13 @@ See Taking a Snapshot and Viewing Processes for a simple console application tha
 A simple error-reporting function, printError, displays the reason for any failures,
 which usually result from security restrictions.
 
-ÓÃ·¨Ê¾Àı£ºListProcessModules(GetCurrentProcessId());
+ç”¨æ³•ç¤ºä¾‹ï¼šListProcessModules(GetCurrentProcessId());
 
-½ûÖ¹WOW64ÏÂÔËĞĞ¡£
-WOW64·ÃÎÊ64»á³öÏÖ£ºWARNING: CreateToolhelp32Snapshot (of modules) failed with error 299 (½öÍê³É²¿·ÖµÄ ReadProcessMemory »ò WriteProcessMemory ÇëÇó¡£)
-µ¼ÖÂWOW64·ÃÎÊ64Ê§°Ü¡£
+ç¦æ­¢WOW64ä¸‹è¿è¡Œã€‚
+WOW64è®¿é—®64ä¼šå‡ºç°ï¼šWARNING: CreateToolhelp32Snapshot (of modules) failed with error 299 (ä»…å®Œæˆéƒ¨åˆ†çš„ ReadProcessMemory æˆ– WriteProcessMemory è¯·æ±‚ã€‚)
+å¯¼è‡´WOW64è®¿é—®64å¤±è´¥ã€‚
 
-¶ÔÓÚWOW64³ÌĞò»ñÈ¡²»µ½WOW64£¨Èç£ºC:\Windows\SysWOW64£©µÄDLL¡£
+å¯¹äºWOW64ç¨‹åºè·å–ä¸åˆ°WOW64ï¼ˆå¦‚ï¼šC:\Windows\SysWOW64ï¼‰çš„DLLã€‚
 
 https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-module-list
 */
@@ -167,17 +167,17 @@ EXTERN_C
 __declspec(dllexport)
 void CALLBACK RunDllApi(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 /*
-´Ëº¯Êı×¨ÃÅÓÃÓÚ±»rundll32.exeµ÷ÓÃ£¬ËùÒÔ´Ëº¯ÊıµÄÔ­ĞÍ¹Ì¶¨¡£
+æ­¤å‡½æ•°ä¸“é—¨ç”¨äºè¢«rundll32.exeè°ƒç”¨ï¼Œæ‰€ä»¥æ­¤å‡½æ•°çš„åŸå‹å›ºå®šã€‚
 
-±¾º¯µÄÌØÉ«£ººóÃæ¿É¸úµÄ²ÎÊıµÄ¸öÊı²»ÊÜÏŞÖÆ£¨ÏµÍ³/ÄÚ´æµÈµÄ³ıÍâ£©¡£
+æœ¬å‡½çš„ç‰¹è‰²ï¼šåé¢å¯è·Ÿçš„å‚æ•°çš„ä¸ªæ•°ä¸å—é™åˆ¶ï¼ˆç³»ç»Ÿ/å†…å­˜ç­‰çš„é™¤å¤–ï¼‰ã€‚
 
-ÓÃ·¨Ê¾Àı£º
+ç”¨æ³•ç¤ºä¾‹ï¼š
 rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt
-µ±È»ºóÃæ¿ÉÒÔ¸úÈÎÒâµÄ²ÎÊı£¬Èç£º
+å½“ç„¶åé¢å¯ä»¥è·Ÿä»»æ„çš„å‚æ•°ï¼Œå¦‚ï¼š
 rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
-×¢Òâ£ºÒıºÅµÄ×÷ÓÃ¡£
+æ³¨æ„ï¼šå¼•å·çš„ä½œç”¨ã€‚
 
-×¢Òâ£ºrundll32Ä¬ÈÏÊÇÃ»ÓĞ¿ØÖÆÌ¨µÄ¡£
+æ³¨æ„ï¼šrundll32é»˜è®¤æ˜¯æ²¡æœ‰æ§åˆ¶å°çš„ã€‚
 */
 {
     DWORD NumberOfCharsWritten = 0;
@@ -188,12 +188,12 @@ rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
 
     //HANDLE Output = GetStdHandle(STD_OUTPUT_HANDLE);
     //char buffer[MAX_PATH] = {0};
-    //wsprintfA(buffer, "µÚÈı¸ö²ÎÊı:%s.\n", lpszCmdLine);
+    //wsprintfA(buffer, "ç¬¬ä¸‰ä¸ªå‚æ•°:%s.\n", lpszCmdLine);
     //WriteConsole(Output, buffer, sizeof(buffer), &NumberOfCharsWritten, NULL);
-    MessageBoxA(0, lpszCmdLine, "µÚÈı¸ö²ÎÊı", 0);
+    MessageBoxA(0, lpszCmdLine, "ç¬¬ä¸‰ä¸ªå‚æ•°", 0);
 
     WCHAR Buffer[MAX_PATH] = {0};
-    MessageBox(0, GetCommandLineW(), L"ÃüÁîĞĞ", 0);
+    MessageBox(0, GetCommandLineW(), L"å‘½ä»¤è¡Œ", 0);
 
     WCHAR pwszDst[MAX_PATH];
     SHAnsiToUnicode(lpszCmdLine, pwszDst, MAX_PATH);
@@ -202,19 +202,19 @@ rundll32.exe Process.dll,RunDllApi notepad.exe d:\test.txt x y z
     int Args;
     LPWSTR * Arglist = CommandLineToArgvW(pwszDst, &Args);
     if (NULL == Arglist) {
-        wsprintf(Buffer, L"LastError£º%d.\n", GetLastError());
-        MessageBox(0, Buffer, L"CommandLineToArgvWÔËĞĞ´íÎó£º", 0);
+        wsprintf(Buffer, L"LastErrorï¼š%d.\n", GetLastError());
+        MessageBox(0, Buffer, L"CommandLineToArgvWè¿è¡Œé”™è¯¯ï¼š", 0);
         return;
     }
 
-    const WCHAR * temp = L"µÚÈı¸ö²ÎÊıµÄ½âÎö£º\n";
-    MessageBoxA(0, lpszCmdLine, "¿ªÊ¼½âÎöµÚÈı¸ö²ÎÊı£º", 0);
+    const WCHAR * temp = L"ç¬¬ä¸‰ä¸ªå‚æ•°çš„è§£æï¼š\n";
+    MessageBoxA(0, lpszCmdLine, "å¼€å§‹è§£æç¬¬ä¸‰ä¸ªå‚æ•°ï¼š", 0);
 
     wsprintf(Buffer, L"%d.\n", Args);
-    MessageBox(0, Buffer, L"µÚÈı¸ö²ÎÊıµÄ¸öÊı£º", 0);
+    MessageBox(0, Buffer, L"ç¬¬ä¸‰ä¸ªå‚æ•°çš„ä¸ªæ•°ï¼š", 0);
 
     for (int i = 0; i < Args; i++) {
-        wsprintf(Buffer, L"²ÎÊı£º%d.\n", i + 1);
+        wsprintf(Buffer, L"å‚æ•°ï¼š%d.\n", i + 1);
         MessageBox(0, Arglist[i], Buffer, 0);
     }
 
@@ -236,17 +236,17 @@ CRITICAL_SECTION g_ModuleLock;
 
 void GetAllModuleInfo(HANDLE hProcess)
 /*
-¹¦ÄÜ£º»ñÈ¡Ò»¸ö½ø³ÌµÄËùÓĞµÄÄ£¿éĞÅÏ¢¡£
+åŠŸèƒ½ï¼šè·å–ä¸€ä¸ªè¿›ç¨‹çš„æ‰€æœ‰çš„æ¨¡å—ä¿¡æ¯ã€‚
 
 To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS and compile with -DPSAPI_VERSION=1
 
-´Ë°ì·¨¿ÉÏÔÊ¾WOW64µÄdll,µ«ÏÔÊ¾µÄÂ·¾¶²»¶Ô£¬ÊÇ64µÄÂ·¾¶¡£
-ÕâÊÇGetModuleFileNameExµ¼ÖÂµÄ¡£
-¸Ä½øË¼Â·£ºÓÃGetMappedFileName£¬µ«ÊÇµÃµ½µÄÊÇNTÂ·¾¶¡£
+æ­¤åŠæ³•å¯æ˜¾ç¤ºWOW64çš„dll,ä½†æ˜¾ç¤ºçš„è·¯å¾„ä¸å¯¹ï¼Œæ˜¯64çš„è·¯å¾„ã€‚
+è¿™æ˜¯GetModuleFileNameExå¯¼è‡´çš„ã€‚
+æ”¹è¿›æ€è·¯ï¼šç”¨GetMappedFileNameï¼Œä½†æ˜¯å¾—åˆ°çš„æ˜¯NTè·¯å¾„ã€‚
 
-´Ëº¯Êı²»¿ÉÓÃÓÚWOW64,·ñÔò£¬ÓĞÌ«¶àµÄ½ø³Ì»ñÈ¡Îª¿Õ£¬¼´Ê¹ÌáÈ¨Ò²²»ĞĞ¡£
+æ­¤å‡½æ•°ä¸å¯ç”¨äºWOW64,å¦åˆ™ï¼Œæœ‰å¤ªå¤šçš„è¿›ç¨‹è·å–ä¸ºç©ºï¼Œå³ä½¿ææƒä¹Ÿä¸è¡Œã€‚
 
-²Î¿¼£º
+å‚è€ƒï¼š
 https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-modules-for-a-process
 https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from-a-file-handle
 */
@@ -254,13 +254,13 @@ https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from
     DWORD cbNeeded = 0;
     EnumProcessModulesEx(hProcess, NULL, 0, &cbNeeded, LIST_MODULES_ALL);
     if (0 == cbNeeded) {
-        //LOGW(IMPORTANT_INFO_LEVEL, "¾¯¸æ£ºLastError:%d, pid:%d", GetLastError(), GetProcessId(hProcess));
+        //LOGW(IMPORTANT_INFO_LEVEL, "è­¦å‘Šï¼šLastError:%d, pid:%d", GetLastError(), GetProcessId(hProcess));
         return;
     }
 
     HMODULE * hMods = (HMODULE *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cbNeeded);
     if (NULL == hMods) {
-        //LOGA(ERROR_LEVEL, "ÉêÇëÄÚ´æÊ§°Ü");
+        //LOGA(ERROR_LEVEL, "ç”³è¯·å†…å­˜å¤±è´¥");
         return;
     }
 
@@ -273,7 +273,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from
 #pragma warning(disable:6385)
             if (GetMappedFileName(hProcess, hMods[i], szModName, MAX_PATH)) {
 #pragma warning(pop)
-                Nt2Dos(szModName);//ÕâÀïÊÇNTÃû£¬ÒÔ\Device\HarddiskVolume6\¿ªÍ·¡£
+                Nt2Dos(szModName);//è¿™é‡Œæ˜¯NTåï¼Œä»¥\Device\HarddiskVolume6\å¼€å¤´ã€‚
                 lstrcat(szModName, L"\n");
                 g_Module.insert(szModName);
             } else {
@@ -288,9 +288,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from
 
 void GetProcessListInfo()
 /*
-×¢Òâ£º
-¶ÔÓÚÃ»ÓĞ¶ÔÓ¦ÎÄ¼şµÄÒ»Ğ©½ø³Ì£¬ÕâÀïÊÇOpenProcessÊ§°ÜµÄ¡£
-¶ÔÓÚÊÜ±£»¤µÄ½ø³Ì£¬ÕâÀïÊÇOpenProcessÊ§°ÜµÄ¡£
+æ³¨æ„ï¼š
+å¯¹äºæ²¡æœ‰å¯¹åº”æ–‡ä»¶çš„ä¸€äº›è¿›ç¨‹ï¼Œè¿™é‡Œæ˜¯OpenProcesså¤±è´¥çš„ã€‚
+å¯¹äºå—ä¿æŠ¤çš„è¿›ç¨‹ï¼Œè¿™é‡Œæ˜¯OpenProcesså¤±è´¥çš„ã€‚
 */
 {
     HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -312,12 +312,12 @@ void GetProcessListInfo()
             CloseHandle(hProcess);
         } else {
             switch (GetLastError()) {
-            case ERROR_ACCESS_DENIED://5£¨¾Ü¾ø·ÃÎÊ£¬¼´È¨ÏŞ²»×ã£©¡£
-            case ERROR_INVALID_PARAMETER://87£¨²ÎÊı´íÎó£¬¼´½ø³ÌÒÑ¾­ÍË³ö£©¡£
+            case ERROR_ACCESS_DENIED://5ï¼ˆæ‹’ç»è®¿é—®ï¼Œå³æƒé™ä¸è¶³ï¼‰ã€‚
+            case ERROR_INVALID_PARAMETER://87ï¼ˆå‚æ•°é”™è¯¯ï¼Œå³è¿›ç¨‹å·²ç»é€€å‡ºï¼‰ã€‚
                 break;
             default:
                 //LOGW(IMPORTANT_INFO_LEVEL, "pid:%#d", pe32.th32ProcessID);
-                //DbgPrintW("¾¯¸æ£º´ò¿ª½ø³ÌÊ§°Ü, pid:%#d, LastError:%d", pe32.th32ProcessID, GetLastError());
+                //DbgPrintW("è­¦å‘Šï¼šæ‰“å¼€è¿›ç¨‹å¤±è´¥, pid:%#d, LastError:%d", pe32.th32ProcessID, GetLastError());
                 break;
             }
         }
@@ -332,7 +332,7 @@ void PrintAllModule()
     wstring all;
     int n = 0;
 
-    //Ò»¸öÒ»¸öµÄ´òÓ¡ÓĞµãÂı¡£ËùÒÔÊÕ¼¯ÏÂ£¬Ò»ÏÂ´òÓ¡¡£
+    //ä¸€ä¸ªä¸€ä¸ªçš„æ‰“å°æœ‰ç‚¹æ…¢ã€‚æ‰€ä»¥æ”¶é›†ä¸‹ï¼Œä¸€ä¸‹æ‰“å°ã€‚
     if (!g_Module.empty()) {
         for (wstring temp : g_Module) {
             //printf("%ls.\n", temp.c_str());
@@ -345,9 +345,9 @@ void PrintAllModule()
     //printf("%d.\n", all.length());
     //printf("%d.\n", all.max_size());//-2.
     //printf("%d.\n", all._Mysize);
-    printf("Ä£¿é×Ü¸öÊı£º%d.\n", n);
+    printf("æ¨¡å—æ€»ä¸ªæ•°ï¼š%d.\n", n);
 
-    printf("Ä£¿éĞÅÏ¢ÈçÏÂ£º\n");
+    printf("æ¨¡å—ä¿¡æ¯å¦‚ä¸‹ï¼š\n");
     printf("\n");
 
     printf("%ls\n", all.c_str());
@@ -356,12 +356,12 @@ void PrintAllModule()
 
 void PrintAllModuleTest()
 /*
-¹¦ÄÜ£ºÃ¶¾ÙÏµÍ³µÄËùÓĞ½ø³Ì£¨ÅÅ³ıÃ»ÓĞ¶ÔÓ¦ÎÄ¼şµÄÒ»Ğ©½ø³ÌºÍÊÜ±£»¤µÄ½ø³Ì£©µÄËùÓĞÄ£¿é£¨È¥µôÖØ¸´£©¡£
+åŠŸèƒ½ï¼šæšä¸¾ç³»ç»Ÿçš„æ‰€æœ‰è¿›ç¨‹ï¼ˆæ’é™¤æ²¡æœ‰å¯¹åº”æ–‡ä»¶çš„ä¸€äº›è¿›ç¨‹å’Œå—ä¿æŠ¤çš„è¿›ç¨‹ï¼‰çš„æ‰€æœ‰æ¨¡å—ï¼ˆå»æ‰é‡å¤ï¼‰ã€‚
 
-¸Ğ¾õÕâ¸öº¯ÊıÊÇ²»ÊÇºÜÓĞÓÃ¡£
-1.Ò»Ğ©ÏµÍ³µÄ¹¤¾ß£¬Ò²ÓĞÀàËÆµÄ¹¦ÄÜ£¬Èç£ºtasklist /m.
-2.procexp.exe¿ÉÒÔËÑË÷¡£
-3.Listdlls.exeµÄÓĞÖØ¸´¡£
+æ„Ÿè§‰è¿™ä¸ªå‡½æ•°æ˜¯ä¸æ˜¯å¾ˆæœ‰ç”¨ã€‚
+1.ä¸€äº›ç³»ç»Ÿçš„å·¥å…·ï¼Œä¹Ÿæœ‰ç±»ä¼¼çš„åŠŸèƒ½ï¼Œå¦‚ï¼štasklist /m.
+2.procexp.exeå¯ä»¥æœç´¢ã€‚
+3.Listdlls.exeçš„æœ‰é‡å¤ã€‚
 */
 {
     GetProcessListInfo();
@@ -377,13 +377,13 @@ int PrintModulesEx(DWORD processID)
 /*
 To ensure correct resolution of symbols, add Psapi.lib to TARGETLIBS and compile with -DPSAPI_VERSION=1
 
-´Ë°ì·¨¿ÉÏÔÊ¾WOW64µÄdll,µ«ÏÔÊ¾µÄÂ·¾¶²»¶Ô£¬ÊÇ64µÄÂ·¾¶¡£
-ÕâÊÇGetModuleFileNameExµ¼ÖÂµÄ¡£
-¸Ä½øË¼Â·£ºÓÃGetMappedFileName£¬µ«ÊÇµÃµ½µÄÊÇNTÂ·¾¶¡£
+æ­¤åŠæ³•å¯æ˜¾ç¤ºWOW64çš„dll,ä½†æ˜¾ç¤ºçš„è·¯å¾„ä¸å¯¹ï¼Œæ˜¯64çš„è·¯å¾„ã€‚
+è¿™æ˜¯GetModuleFileNameExå¯¼è‡´çš„ã€‚
+æ”¹è¿›æ€è·¯ï¼šç”¨GetMappedFileNameï¼Œä½†æ˜¯å¾—åˆ°çš„æ˜¯NTè·¯å¾„ã€‚
 
-´Ëº¯Êı²»¿ÉÓÃÓÚWOW64,·ñÔò£¬ÓĞÌ«¶àµÄ½ø³Ì»ñÈ¡Îª¿Õ£¬¼´Ê¹ÌáÈ¨Ò²²»ĞĞ¡£
+æ­¤å‡½æ•°ä¸å¯ç”¨äºWOW64,å¦åˆ™ï¼Œæœ‰å¤ªå¤šçš„è¿›ç¨‹è·å–ä¸ºç©ºï¼Œå³ä½¿ææƒä¹Ÿä¸è¡Œã€‚
 
-²Î¿¼£º
+å‚è€ƒï¼š
 https://docs.microsoft.com/zh-cn/windows/win32/psapi/enumerating-all-modules-for-a-process
 https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from-a-file-handle
 */
@@ -451,7 +451,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/memory/obtaining-a-file-name-from
                     } while (!bFound && *p); // end of string
                 }
 
-                _tprintf(TEXT("\t%s (0x%p)\n"), szModName, hMods[i]);//ÕâÀïÊÇNTÃû£¬ÒÔ\Device\HarddiskVolume6\¿ªÍ·¡£
+                _tprintf(TEXT("\t%s (0x%p)\n"), szModName, hMods[i]);//è¿™é‡Œæ˜¯NTåï¼Œä»¥\Device\HarddiskVolume6\å¼€å¤´ã€‚
             }
         }
     }
