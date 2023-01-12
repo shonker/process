@@ -702,7 +702,7 @@ EXTERN_C
 __declspec(dllexport)
 LONG WINAPI TopLevelExceptionFilter(_In_  struct _EXCEPTION_POINTERS * ExceptionInfo)
 /*
-SetUnhandledExceptionFilter�Ĳ�����
+SetUnhandledExceptionFilter的参数。
 */
 {
     TCHAR dumpFileName[MAX_PATH] = {0};

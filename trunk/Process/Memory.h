@@ -1,7 +1,7 @@
 /*
-ÕâÀïµÄMemory½ö½öÖ¸Virtual memory
-µ«ÊÇ£¬ÅÅ³ıHeapºÍFile mapping
-¿ÉÒÔ°üÀ¨£ºData Execution Prevention (DEP)ºÍAddress Windowing Extensions (AWE)¡£
+è¿™é‡Œçš„Memoryä»…ä»…æŒ‡Virtual memory
+ä½†æ˜¯ï¼Œæ’é™¤Heapå’ŒFile mapping
+å¯ä»¥åŒ…æ‹¬ï¼šData Execution Prevention (DEP)å’ŒAddress Windowing Extensions (AWE)ã€‚
 */
 
 #pragma once
