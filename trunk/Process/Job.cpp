@@ -11,7 +11,7 @@
 
 HANDLE CreateJob()
 {
-    UUID Uuid = {0};
+    UUID Uuid = { 0 };
 
     RPC_STATUS STATUS = UuidCreate(&Uuid);
     if (RPC_S_OK != STATUS) {
@@ -25,27 +25,27 @@ HANDLE CreateJob()
     }
 
     /*
-    Èç¹ûÊÇÕâÑù£ºL"Global\\Job\\test"£¬·µ»ØµÄ´íÎóÂëµÄÈı£¬´ú±í£ºÏµÍ³ÕÒ²»µ½Ö¸¶¨µÄÂ·¾¶¡£
+    å¦‚æœæ˜¯è¿™æ ·ï¼šL"Global\\Job\\test"ï¼Œè¿”å›çš„é”™è¯¯ç çš„ä¸‰ï¼Œä»£è¡¨ï¼šç³»ç»Ÿæ‰¾ä¸åˆ°æŒ‡å®šçš„è·¯å¾„ã€‚
     */
-    WCHAR JobName[MAX_PATH] = {0};
+    WCHAR JobName[MAX_PATH] = { 0 };
 
     wsprintf(JobName, L"Global\\TestJob_{%s}", StringUuid);
 
     /*
-    SECURITY_ATTRIBUTESµÄÉèÖÃ²Î¿¼£ºCreating a Child Process with Redirected Input and Output
+    SECURITY_ATTRIBUTESçš„è®¾ç½®å‚è€ƒï¼šCreating a Child Process with Redirected Input and Output
     https://msdn.microsoft.com/zh-cn/library/windows/desktop/ms682499%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
     */
-    SECURITY_ATTRIBUTES sa = {0};
+    SECURITY_ATTRIBUTES sa = { 0 };
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.bInheritHandle = TRUE;
     sa.lpSecurityDescriptor = NULL;
 
     /*
-    1.Ö»ÓĞÕâ¸ö½ø³ÌÓĞÕâ¸ö¾ä±ú£¬Ò²¾ÍÊÇ´´½¨ËüµÄ½ø³Ì¡£
+    1.åªæœ‰è¿™ä¸ªè¿›ç¨‹æœ‰è¿™ä¸ªå¥æŸ„ï¼Œä¹Ÿå°±æ˜¯åˆ›å»ºå®ƒçš„è¿›ç¨‹ã€‚
     2.If lpJobAttributes is NULL, the job object gets a default security descriptor and the handle cannot be inherited.
-      ÕâÑù£º×Ó½ø³ÌÊÇ²»»á¼Ì³ĞJOB¾ä±úµÄ¡£
-    3.¼´Ê¹ÉèÖÃÁËSECURITY_ATTRIBUTES»òÕßSetHandleInformation + HANDLE_FLAG_INHERIT¶¼ÊÇÎŞĞ§µÄ¡£
-    ¿´À´Ö»ÄÜÊ¹ÓÃ£ºIsProcessInJobÁË¡£
+      è¿™æ ·ï¼šå­è¿›ç¨‹æ˜¯ä¸ä¼šç»§æ‰¿JOBå¥æŸ„çš„ã€‚
+    3.å³ä½¿è®¾ç½®äº†SECURITY_ATTRIBUTESæˆ–è€…SetHandleInformation + HANDLE_FLAG_INHERITéƒ½æ˜¯æ— æ•ˆçš„ã€‚
+    çœ‹æ¥åªèƒ½ä½¿ç”¨ï¼šIsProcessInJobäº†ã€‚
     */
     HANDLE hjob = CreateJobObject(&sa, JobName);//
     if (NULL == hjob) {
@@ -53,7 +53,7 @@ HANDLE CreateJob()
     }
 
     /*
-    º¯ÊıµÄÓÃ·¨²Î¼û£º
+    å‡½æ•°çš„ç”¨æ³•å‚è§ï¼š
     https://msdn.microsoft.com/en-us/library/windows/desktop/ms724935(v=vs.85).aspx
     https://support.microsoft.com/de-ch/kb/315939/zh-cn
     */
@@ -63,7 +63,7 @@ HANDLE CreateJob()
     }
 
     /*
-    ÔËĞĞ³É¹¦ÁË£¬µ«ÊÇ×Ó½ø³ÌËï½ø³ÌµÈ¶¼Ã»ÓĞ¼Ì³ĞÕâ¸ö¾ä±ú£¬Ò²¾ÍÊÇËµÃ»ÓĞ¿´µ½Õâ¸ö¶ÔÏó¡£
+    è¿è¡ŒæˆåŠŸäº†ï¼Œä½†æ˜¯å­è¿›ç¨‹å­™è¿›ç¨‹ç­‰éƒ½æ²¡æœ‰ç»§æ‰¿è¿™ä¸ªå¥æŸ„ï¼Œä¹Ÿå°±æ˜¯è¯´æ²¡æœ‰çœ‹åˆ°è¿™ä¸ªå¯¹è±¡ã€‚
     */
 
     STATUS = RpcStringFree(&StringUuid);
@@ -75,9 +75,9 @@ HANDLE CreateJob()
 }
 
 
-int TestJob(int argc, char * argv[])
+int TestJob(int argc, char* argv[])
 /*
-Ä¿µÄ£º²âÊÔJOBµÄÏà¹Ø¹¦ÄÜºÍÓÃ·¨¡£
+ç›®çš„ï¼šæµ‹è¯•JOBçš„ç›¸å…³åŠŸèƒ½å’Œç”¨æ³•ã€‚
 
 made by correy
 made at 2015.07.10
@@ -95,22 +95,22 @@ made at 2015.07.10
     ZeroMemory(&pi, sizeof(pi));
 
     // Start the child process. 
-    if (!CreateProcess(L"c:\\windows\\system32\\calc.exe" /*Õâ¸öÓ¦¸ÃÓĞ±ê×¼µÄ»ñÈ¡µÄ°ì·¨£¬ÕâÀïÊÇ²âÊÔ¡£*/,
-                       NULL,        // Command line
-                       NULL,           // Process handle not inheritable
-                       NULL,           // Thread handle not inheritable
-                       FALSE,          // Set handle inheritance to FALSE
-                       0,              // No creation flags
-                       NULL,           // Use parent's environment block
-                       NULL,           // Use parent's starting directory 
-                       &si,            // Pointer to STARTUPINFO structure
-                       &pi)           // Pointer to PROCESS_INFORMATION structure
+    if (!CreateProcess(L"c:\\windows\\system32\\calc.exe" /*è¿™ä¸ªåº”è¯¥æœ‰æ ‡å‡†çš„è·å–çš„åŠæ³•ï¼Œè¿™é‡Œæ˜¯æµ‹è¯•ã€‚*/,
+        NULL,        // Command line
+        NULL,           // Process handle not inheritable
+        NULL,           // Thread handle not inheritable
+        FALSE,          // Set handle inheritance to FALSE
+        0,              // No creation flags
+        NULL,           // Use parent's environment block
+        NULL,           // Use parent's starting directory 
+        &si,            // Pointer to STARTUPINFO structure
+        &pi)           // Pointer to PROCESS_INFORMATION structure
         ) {
         printf("CreateProcess failed (%d)\n", GetLastError());
         return 0;
     }
 
-    BOOL B = AssignProcessToJobObject(hjob, pi.hProcess);//Õâ¸ö½ø³ÌÃ»ÓĞ¿´µ½JOB¶ÔÏó¡£
+    BOOL B = AssignProcessToJobObject(hjob, pi.hProcess);//è¿™ä¸ªè¿›ç¨‹æ²¡æœ‰çœ‹åˆ°JOBå¯¹è±¡ã€‚
     if (0 == B) {
         int x = GetLastError();
     }
@@ -123,22 +123,22 @@ made at 2015.07.10
     }
 
     // Start the child process. 
-    if (!CreateProcess(L"c:\\windows\\system32\\cmd.exe" /*Õâ¸öÓ¦¸ÃÓĞ±ê×¼µÄ»ñÈ¡µÄ°ì·¨£¬ÕâÀïÊÇ²âÊÔ¡£*/,
-                       NULL,        // Command line
-                       NULL,           // Process handle not inheritable
-                       NULL,           // Thread handle not inheritable
-                       FALSE,          // Set handle inheritance to FALSE
-                       0,              // No creation flags
-                       NULL,           // Use parent's environment block
-                       NULL,           // Use parent's starting directory 
-                       &si,            // Pointer to STARTUPINFO structure
-                       &pi)           // Pointer to PROCESS_INFORMATION structure
+    if (!CreateProcess(L"c:\\windows\\system32\\cmd.exe" /*è¿™ä¸ªåº”è¯¥æœ‰æ ‡å‡†çš„è·å–çš„åŠæ³•ï¼Œè¿™é‡Œæ˜¯æµ‹è¯•ã€‚*/,
+        NULL,        // Command line
+        NULL,           // Process handle not inheritable
+        NULL,           // Thread handle not inheritable
+        FALSE,          // Set handle inheritance to FALSE
+        0,              // No creation flags
+        NULL,           // Use parent's environment block
+        NULL,           // Use parent's starting directory 
+        &si,            // Pointer to STARTUPINFO structure
+        &pi)           // Pointer to PROCESS_INFORMATION structure
         ) {
         printf("CreateProcess failed (%d)\n", GetLastError());
         return 0;
     }
 
-    B = AssignProcessToJobObject(hjob, pi.hProcess);//Õâ¸ö½ø³ÌÃ»ÓĞ¿´µ½JOB¶ÔÏó¡£
+    B = AssignProcessToJobObject(hjob, pi.hProcess);//è¿™ä¸ªè¿›ç¨‹æ²¡æœ‰çœ‹åˆ°JOBå¯¹è±¡ã€‚
     if (0 == B) {
         int x = GetLastError();
     }
@@ -151,15 +151,15 @@ made at 2015.07.10
     }
 
     /*
-    ÔÚÕâÀï¿ÉÒÔ×öÒ»Ğ©²Ù×÷£¬Èç´´½¨×Ó½ø³Ì£¬Ëï½ø³Ì£¬¸¸×Ó½ø³Ì£¬¶ÏÁ´£¨½áÊøÓĞ×Ó½ø³ÌµÄ½ø³Ì£©¡£
-    ¾­¹Û²ì£¬JOBµÄ¾ä±úÃ»ÓĞ¼Ì³Ğ/´«µİ¡£»òĞíÊÇÉèÖÃµÄÎÊÌâ£¨ SECURITY_ATTRIBUTES £©¡£
-    ¿´Ñù×ÓÖ»ÄÜ×Ô¼ºÊÖ¶¯ÉèÖÃÁË£¨AssignProcessToJobObject£©¡£
+    åœ¨è¿™é‡Œå¯ä»¥åšä¸€äº›æ“ä½œï¼Œå¦‚åˆ›å»ºå­è¿›ç¨‹ï¼Œå­™è¿›ç¨‹ï¼Œçˆ¶å­è¿›ç¨‹ï¼Œæ–­é“¾ï¼ˆç»“æŸæœ‰å­è¿›ç¨‹çš„è¿›ç¨‹ï¼‰ã€‚
+    ç»è§‚å¯Ÿï¼ŒJOBçš„å¥æŸ„æ²¡æœ‰ç»§æ‰¿/ä¼ é€’ã€‚æˆ–è®¸æ˜¯è®¾ç½®çš„é—®é¢˜ï¼ˆ SECURITY_ATTRIBUTES ï¼‰ã€‚
+    çœ‹æ ·å­åªèƒ½è‡ªå·±æ‰‹åŠ¨è®¾ç½®äº†ï¼ˆAssignProcessToJobObjectï¼‰ã€‚
     */
 
     /*
-    Õâ¸öº¯Êı»¹ÕæÊÇ£ºÄÜÉ±ËÀËùÓĞµÄÊôÓÚÄ³¸öJobµÄ½ø³Ì¡£
-    ¾¡¹ÜSetHandleInformationÉèÖÃÎª¿É¼Ì³Ğ£¬×ÓËï½ø³ÌÃ»ÓĞ¿´µ½Õâ¸ö¾ä±ú£¬
-    µ«ÊÇ»¹ÊÇ°ÑËùÓĞµÄ£¨ÊôÓÚJOB£©½ø³Ì¸ø½áÊøÁË£¬²»ÂÛ¶ÏÁ´Ã»ÓĞ¡£
+    è¿™ä¸ªå‡½æ•°è¿˜çœŸæ˜¯ï¼šèƒ½æ€æ­»æ‰€æœ‰çš„å±äºæŸä¸ªJobçš„è¿›ç¨‹ã€‚
+    å°½ç®¡SetHandleInformationè®¾ç½®ä¸ºå¯ç»§æ‰¿ï¼Œå­å­™è¿›ç¨‹æ²¡æœ‰çœ‹åˆ°è¿™ä¸ªå¥æŸ„ï¼Œ
+    ä½†æ˜¯è¿˜æ˜¯æŠŠæ‰€æœ‰çš„ï¼ˆå±äºJOBï¼‰è¿›ç¨‹ç»™ç»“æŸäº†ï¼Œä¸è®ºæ–­é“¾æ²¡æœ‰ã€‚
     */
     B = TerminateJobObject(hjob, 0);//STILL_ACTIVE
     if (0 == B) {

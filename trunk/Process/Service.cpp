@@ -2,15 +2,15 @@
 #include "Service.h"
 #include "Process.h"
 
-#pragma warning(disable:28159) //¿¼ÂÇÊ¹ÓÃ¡°GetTickCount64¡±¶ø²»ÊÇ¡°GetTickCount¡±¡£
-#pragma warning(disable:6242)  //´Ó´Ë×÷ÓÃÓòÌø×ª½«Ç¿ÖÆÖ´ĞĞ¾Ö²¿Õ¹¿ª¡£Õâ»áµ¼ÖÂĞÔÄÜÏÂ½µ¡£ÇëÊ¹ÓÃ __leave ÔÚ try µÄ×÷ÓÃÓòÖ®Íâ·µ»Ø¡£
+#pragma warning(disable:28159) //è€ƒè™‘ä½¿ç”¨â€œGetTickCount64â€è€Œä¸æ˜¯â€œGetTickCountâ€ã€‚
+#pragma warning(disable:6242)  //ä»æ­¤ä½œç”¨åŸŸè·³è½¬å°†å¼ºåˆ¶æ‰§è¡Œå±€éƒ¨å±•å¼€ã€‚è¿™ä¼šå¯¼è‡´æ€§èƒ½ä¸‹é™ã€‚è¯·ä½¿ç”¨ __leave åœ¨ try çš„ä½œç”¨åŸŸä¹‹å¤–è¿”å›ã€‚
 #pragma warning(disable:6387)
 #pragma warning(disable:28020)
 #pragma warning(disable:6011)
 
 
 #ifndef _DEBUG
-#pragma warning(disable:4189) //¾Ö²¿±äÁ¿ÒÑ³õÊ¼»¯µ«²»ÒıÓÃ¡£ÁÙÊ±´¦ÀíreleaseÏÂµÄ_ASSERTE±àÒë¾¯¸æ¡£
+#pragma warning(disable:4189) //å±€éƒ¨å˜é‡å·²åˆå§‹åŒ–ä½†ä¸å¼•ç”¨ã€‚ä¸´æ—¶å¤„ç†releaseä¸‹çš„_ASSERTEç¼–è¯‘è­¦å‘Šã€‚
 #endif // !_DEBUG
 
 
@@ -21,35 +21,35 @@ EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI DriverInstallInf(PWSTR InfFile)
 /*
-ÕâÀïµÄÂ·¾¶¼´Ê¹ÓĞ¿Õ¸ñ£¬Ò²²»ÒªÓÃË«ÒıºÅ¡£
-½â¾ö°ì·¨ÊÇÇĞ»»Ä¿Â¼£¬ÓÃÏà¶ÔÂ·¾¶¡£
+è¿™é‡Œçš„è·¯å¾„å³ä½¿æœ‰ç©ºæ ¼ï¼Œä¹Ÿä¸è¦ç”¨åŒå¼•å·ã€‚
+è§£å†³åŠæ³•æ˜¯åˆ‡æ¢ç›®å½•ï¼Œç”¨ç›¸å¯¹è·¯å¾„ã€‚
 
-²ÎÊı£º
-InfFile£ºINFÎÄ¼şµÄÈ«Â·¾¶¡£
+å‚æ•°ï¼š
+InfFileï¼šINFæ–‡ä»¶çš„å…¨è·¯å¾„ã€‚
 
-InstallHinfSectionÊ¹ÓÃ×¢ÒâÊÂÏî£º
-1.ÔÚwow64ÏÂÓĞÎÄ¼şÖØ¶¨Ïò¡£
-2.ĞèÒªÒ»Ğ©È¨ÏŞ¡£
-3.ÓĞ´°¿Ú¡£
+InstallHinfSectionä½¿ç”¨æ³¨æ„äº‹é¡¹ï¼š
+1.åœ¨wow64ä¸‹æœ‰æ–‡ä»¶é‡å®šå‘ã€‚
+2.éœ€è¦ä¸€äº›æƒé™ã€‚
+3.æœ‰çª—å£ã€‚
 
-²âÊÔ·¢ÏÖ£¬ÔÚ¹ÜÀíÔ±ÏÂ¿ÉÖ´ĞĞ£¬ÔÚsystemÕË»§ÏÂ¿ÉÖ´ĞĞ£¬ÔÚ·şÎñÏÂÖ´ĞĞÊ§°Ü¡£
-ÔÚ·şÎñÆô¶¯µÄ³ÌĞòÏÂÖ´ĞĞÒ²Ê§°Ü£¬Ã»ÓĞ×¨ÃÅĞ´³ÌĞò²âÊÔ£¬µ«ÊÇ³öÏÖµÄÎÊÌâ¾ÍÊÇÈç´Ë¡£
-·ÖÎö£ºÒòÎª·şÎñÊÇ²»×¼ÓĞ´°¿ÚÏûÏ¢²Ù×÷µÄ¡£
+æµ‹è¯•å‘ç°ï¼Œåœ¨ç®¡ç†å‘˜ä¸‹å¯æ‰§è¡Œï¼Œåœ¨systemè´¦æˆ·ä¸‹å¯æ‰§è¡Œï¼Œåœ¨æœåŠ¡ä¸‹æ‰§è¡Œå¤±è´¥ã€‚
+åœ¨æœåŠ¡å¯åŠ¨çš„ç¨‹åºä¸‹æ‰§è¡Œä¹Ÿå¤±è´¥ï¼Œæ²¡æœ‰ä¸“é—¨å†™ç¨‹åºæµ‹è¯•ï¼Œä½†æ˜¯å‡ºç°çš„é—®é¢˜å°±æ˜¯å¦‚æ­¤ã€‚
+åˆ†æï¼šå› ä¸ºæœåŠ¡æ˜¯ä¸å‡†æœ‰çª—å£æ¶ˆæ¯æ“ä½œçš„ã€‚
 
-ËùÒÔ£¬½â¾öµÄË¼Â·ÊÇ£º¸üĞÂ²»±ØÉ¾³ı·şÎñ£¬ËùÒÔÒ²ÎŞĞèÓÃÕâ¸öº¯Êı£¬Ö»Ğè¸´ÖÆÎÄ¼ş¼´¿É¡£
-ÁíÒ»¸öË¼Â·ÊÇ£ºÒÔµÇÂ¼ÓÃ»§Æô¶¯Õâ¸ö³ÌĞò¡£
+æ‰€ä»¥ï¼Œè§£å†³çš„æ€è·¯æ˜¯ï¼šæ›´æ–°ä¸å¿…åˆ é™¤æœåŠ¡ï¼Œæ‰€ä»¥ä¹Ÿæ— éœ€ç”¨è¿™ä¸ªå‡½æ•°ï¼Œåªéœ€å¤åˆ¶æ–‡ä»¶å³å¯ã€‚
+å¦ä¸€ä¸ªæ€è·¯æ˜¯ï¼šä»¥ç™»å½•ç”¨æˆ·å¯åŠ¨è¿™ä¸ªç¨‹åºã€‚
 */
 {
-    WCHAR test[MAX_PATH] = {0};
+    WCHAR test[MAX_PATH] = { 0 };
     lstrcpy(test, L"DefaultInstall 132 ");
     lstrcat(test, InfFile);
 
-    if (IsWow64()) {//ÔÚwow64ÏÂ±ØĞë¹Ø±ÕÎÄ¼şÖØ¶¨Ïò£¬·ñÔò¸´ÖÆÇı¶¯ÎÄ¼şÊ§°Ü¡£
+    if (IsWow64()) {//åœ¨wow64ä¸‹å¿…é¡»å…³é—­æ–‡ä»¶é‡å®šå‘ï¼Œå¦åˆ™å¤åˆ¶é©±åŠ¨æ–‡ä»¶å¤±è´¥ã€‚
         BOOLEAN bRet = Wow64EnableWow64FsRedirection(FALSE);
         _ASSERTE(bRet);
     }
 
-    InstallHinfSection(NULL, NULL, test, 0); //Ö»ÊÇ°²×°£¬Ã»ÓĞÆô¶¯¡£
+    InstallHinfSection(NULL, NULL, test, 0); //åªæ˜¯å®‰è£…ï¼Œæ²¡æœ‰å¯åŠ¨ã€‚
 
     if (IsWow64()) {
         BOOLEAN bRet = Wow64EnableWow64FsRedirection(TRUE);//Enable WOW64 file system redirection. 
@@ -87,26 +87,27 @@ http://msdn.microsoft.com/en-us/library/windows/desktop/ms683500(v=vs.85).aspx
         _ASSERTE(bRet);
     }
     schService = CreateService( // Create the service
-                               schSCManager,              // SCM database 
-                               ServiceName,                   // name of service 
-                               ServiceName,                   // service name to display 
-                               SERVICE_ALL_ACCESS,        // desired access 
-                               SERVICE_KERNEL_DRIVER, //SERVICE_WIN32_OWN_PROCESS, // service type ²»×¼ÊÇÕâ¸ö£¬·ñÔòÊ§°Ü£º0x57 SERVICE_DRIVER,
-                               SERVICE_SYSTEM_START, //SERVICE_DEMAND_START,      // start type  SERVICE_BOOT_START SERVICE_SYSTEM_START SERVICE_AUTO_START
-                               SERVICE_ERROR_NORMAL,      // error control type 
-                               BinaryPathName,            // path to service's binary 
-                               NULL,                      // no load ordering group 
-                               NULL,                      // no tag identifier 
-                               NULL,                      // no dependencies 
-                               NULL,                      // LocalSystem account 
-                               NULL);                     // no password 
+        schSCManager,              // SCM database 
+        ServiceName,                   // name of service 
+        ServiceName,                   // service name to display 
+        SERVICE_ALL_ACCESS,        // desired access 
+        SERVICE_KERNEL_DRIVER, //SERVICE_WIN32_OWN_PROCESS, // service type ä¸å‡†æ˜¯è¿™ä¸ªï¼Œå¦åˆ™å¤±è´¥ï¼š0x57 SERVICE_DRIVER,
+        SERVICE_SYSTEM_START, //SERVICE_DEMAND_START,      // start type  SERVICE_BOOT_START SERVICE_SYSTEM_START SERVICE_AUTO_START
+        SERVICE_ERROR_NORMAL,      // error control type 
+        BinaryPathName,            // path to service's binary 
+        NULL,                      // no load ordering group 
+        NULL,                      // no tag identifier 
+        NULL,                      // no dependencies 
+        NULL,                      // LocalSystem account 
+        NULL);                     // no password 
     if (IsWow64()) {
         Wow64EnableWow64FsRedirection(TRUE);//Enable WOW64 file system redirection. 
     }
     if (schService == NULL) {
         CloseServiceHandle(schSCManager);
         return false;
-    } else {
+    }
+    else {
         printf("Service installed successfully\n");
     }
 
@@ -120,8 +121,8 @@ http://msdn.microsoft.com/en-us/library/windows/desktop/ms683500(v=vs.85).aspx
 EXTERN_C
 __declspec(dllexport)
 VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
-                       _In_ LPCWSTR ServiceName,
-                       _In_opt_ LPCWSTR DisplayName
+    _In_ LPCWSTR ServiceName,
+    _In_opt_ LPCWSTR DisplayName
 )
 // Purpose: Installs a service in the SCM database
 //https://docs.microsoft.com/zh-cn/windows/win32/services/installing-a-service
@@ -130,28 +131,28 @@ VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
     SC_HANDLE schService;
 
     schSCManager = OpenSCManager(// Get a handle to the SCM database.  
-                                 NULL,                    // local computer
-                                 NULL,                    // ServicesActive database 
-                                 SC_MANAGER_ALL_ACCESS);  // full access rights 
+        NULL,                    // local computer
+        NULL,                    // ServicesActive database 
+        SC_MANAGER_ALL_ACCESS);  // full access rights 
     if (NULL == schSCManager) {
         printf("OpenSCManager failed (%d)\n", GetLastError());
         return;
     }
 
     schService = CreateService( // Create the service
-                               schSCManager,              // SCM database 
-                               ServiceName,               // name of service 
-                               DisplayName,               // service name to display 
-                               SERVICE_ALL_ACCESS,        // desired access 
-                               SERVICE_WIN32_OWN_PROCESS, // service type.SERVICE_INTERACTIVE_PROCESS£¬ Windows 10µÄÄ³¸ö°æ±¾¿ªÊ¼²»Ö§³ÖUI0Detect¡£
-                               SERVICE_AUTO_START,        // start type 
-                               SERVICE_ERROR_NORMAL,      // error control type 
-                               BinaryPathName,            // path to service's binary 
-                               NULL,                      // no load ordering group 
-                               NULL,                      // no tag identifier 
-                               NULL,                      // no dependencies 
-                               NULL,                      // LocalSystem account 
-                               NULL);                     // no password 
+        schSCManager,              // SCM database 
+        ServiceName,               // name of service 
+        DisplayName,               // service name to display 
+        SERVICE_ALL_ACCESS,        // desired access 
+        SERVICE_WIN32_OWN_PROCESS, // service type.SERVICE_INTERACTIVE_PROCESSï¼Œ Windows 10çš„æŸä¸ªç‰ˆæœ¬å¼€å§‹ä¸æ”¯æŒUI0Detectã€‚
+        SERVICE_AUTO_START,        // start type 
+        SERVICE_ERROR_NORMAL,      // error control type 
+        BinaryPathName,            // path to service's binary 
+        NULL,                      // no load ordering group 
+        NULL,                      // no tag identifier 
+        NULL,                      // no dependencies 
+        NULL,                      // LocalSystem account 
+        NULL);                     // no password 
     if (schService == NULL) {
         DWORD LastError = GetLastError();
         if (ERROR_SERVICE_EXISTS != LastError) {
@@ -159,7 +160,8 @@ VOID WINAPI SvcInstall(_In_opt_ LPCWSTR BinaryPathName,
             CloseServiceHandle(schSCManager);
             return;
         }
-    } else {
+    }
+    else {
         printf("Service installed successfully\n");
     }
 
@@ -235,7 +237,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
         dwWaitTime = ssStatus.dwWaitHint / 10;
         if (dwWaitTime < 1000) {
             dwWaitTime = 1000;
-        } else if (dwWaitTime > 10000) {
+        }
+        else if (dwWaitTime > 10000) {
             dwWaitTime = 10000;
         }
 
@@ -259,7 +262,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
             // Continue to wait and check.
             dwStartTickCount = GetTickCount();
             dwOldCheckPoint = ssStatus.dwCheckPoint;
-        } else {
+        }
+        else {
             if (GetTickCount() - dwStartTickCount > ssStatus.dwWaitHint) {
                 printf("Timeout waiting for service to stop\n");
                 CloseServiceHandle(schService);
@@ -280,7 +284,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
         CloseServiceHandle(schService);
         CloseServiceHandle(schSCManager);
         return;
-    } else {
+    }
+    else {
         printf("%ws Service start pending...\n", ServiceName);
     }
 
@@ -308,7 +313,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
         dwWaitTime = ssStatus.dwWaitHint / 10;
         if (dwWaitTime < 1000) {
             dwWaitTime = 1000;
-        } else if (dwWaitTime > 10000) {
+        }
+        else if (dwWaitTime > 10000) {
             dwWaitTime = 10000;
         }
 
@@ -330,7 +336,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
             // Continue to wait and check.
             dwStartTickCount = GetTickCount();
             dwOldCheckPoint = ssStatus.dwCheckPoint;
-        } else {
+        }
+        else {
             if (GetTickCount() - dwStartTickCount > ssStatus.dwWaitHint) {
                 break;// No progress made within the wait hint.
             }
@@ -340,7 +347,8 @@ VOID __stdcall StartSvc(_In_ LPCWSTR ServiceName)
     // Determine whether the service is running.
     if (ssStatus.dwCurrentState == SERVICE_RUNNING) {
         printf("%ws Service started successfully.\n", ServiceName);
-    } else {
+    }
+    else {
         printf("Service not started. \n");
         printf("  Current State: %d\n", ssStatus.dwCurrentState);
         printf("  Exit Code: %d\n", ssStatus.dwWin32ExitCode);
@@ -398,7 +406,8 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
     if (EnumDependentServices(schService, SERVICE_ACTIVE, lpDependencies, 0, &dwBytesNeeded, &dwCount)) {
         // If the Enum call succeeds, then there are no dependent services, so do nothing.
         return TRUE;
-    } else {
+    }
+    else {
         if (GetLastError() != ERROR_MORE_DATA)
             return FALSE; // Unexpected error
 
@@ -436,11 +445,13 @@ BOOL __stdcall StopDependentServices(_In_ LPCWSTR ServiceName)
                         if (GetTickCount() - dwStartTime > dwTimeout)
                             return FALSE;
                     }
-                } __finally {
+                }
+                __finally {
                     CloseServiceHandle(hDepService);// Always release the service handle.
                 }
             }
-        } __finally {
+        }
+        __finally {
             HeapFree(GetProcessHeap(), 0, lpDependencies);// Always free the enumeration buffer.
         }
     }
@@ -507,7 +518,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540474(v=vs.85).aspx
         dwWaitTime = ssp.dwWaitHint / 10;
         if (dwWaitTime < 1000) {
             dwWaitTime = 1000;
-        } else if (dwWaitTime > 10000) {
+        }
+        else if (dwWaitTime > 10000) {
             dwWaitTime = 10000;
         }
 
@@ -601,7 +613,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540473%28v=vs.85%29.a
     // Delete the service. 
     if (!DeleteService(schService)) {
         printf("DeleteService failed (%d)\n", GetLastError());
-    } else printf("Service deleted successfully\n");
+    }
+    else printf("Service deleted successfully\n");
 
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
@@ -650,7 +663,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540473%28v=vs.85%29.a
         if (ERROR_INSUFFICIENT_BUFFER == dwError) {
             cbBufSize = dwBytesNeeded;
             lpsc = (LPQUERY_SERVICE_CONFIG)LocalAlloc(LMEM_FIXED, cbBufSize);
-        } else {
+        }
+        else {
             printf("QueryServiceConfig failed (%d)", dwError);
             goto cleanup;
         }
@@ -666,7 +680,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/bb540473%28v=vs.85%29.a
         if (ERROR_INSUFFICIENT_BUFFER == dwError) {
             cbBufSize = dwBytesNeeded;
             lpsd = (LPSERVICE_DESCRIPTION)LocalAlloc(LMEM_FIXED, cbBufSize);
-        } else {
+        }
+        else {
             printf("QueryServiceConfig2 failed (%d)", dwError);
             goto cleanup;
         }
@@ -749,7 +764,8 @@ VOID __stdcall DisableSvc(_In_ LPCWSTR szSvcName)
         NULL))            // display name: no change
     {
         printf("ChangeServiceConfig failed (%d)\n", GetLastError());
-    } else printf("Service disabled successfully.\n");
+    }
+    else printf("Service disabled successfully.\n");
 
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
@@ -802,7 +818,8 @@ VOID __stdcall EnableSvc(_In_ LPCWSTR szSvcName)
         NULL))                // display name: no change
     {
         printf("ChangeServiceConfig failed (%d)\n", GetLastError());
-    } else printf("Service enabled successfully.\n");
+    }
+    else printf("Service enabled successfully.\n");
 
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
@@ -850,7 +867,8 @@ VOID __stdcall UpdateSvcDesc(_In_ LPCWSTR szSvcName)
         &sd))                      // new description
     {
         printf("ChangeServiceConfig2 failed\n");
-    } else printf("Service description updated successfully.\n");
+    }
+    else printf("Service description updated successfully.\n");
 
     CloseServiceHandle(schService);
     CloseServiceHandle(schSCManager);
@@ -865,7 +883,7 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
 //   control access to the Guest account.
 //   https://docs.microsoft.com/zh-cn/windows/win32/services/modifying-the-dacl-for-a-service
 {
-    EXPLICIT_ACCESS      ea = {0};
+    EXPLICIT_ACCESS      ea = { 0 };
     SECURITY_DESCRIPTOR  sd;
     PSECURITY_DESCRIPTOR psd = NULL;
     PACL                 pacl = NULL;
@@ -901,10 +919,10 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
 
     // Get the current security descriptor.
     if (!QueryServiceObjectSecurity(schService,
-                                    DACL_SECURITY_INFORMATION,
-                                    &psd,           // using NULL does not work on all versions
-                                    0,
-                                    &dwBytesNeeded)) {
+        DACL_SECURITY_INFORMATION,
+        &psd,           // using NULL does not work on all versions
+        0,
+        &dwBytesNeeded)) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
             dwSize = dwBytesNeeded;
             psd = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSize);
@@ -918,7 +936,8 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
                 printf("QueryServiceObjectSecurity failed (%d)\n", GetLastError());
                 goto dacl_cleanup;
             }
-        } else {
+        }
+        else {
             printf("QueryServiceObjectSecurity failed (%d)\n", GetLastError());
             goto dacl_cleanup;
         }
@@ -954,7 +973,8 @@ VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName)
     if (!SetServiceObjectSecurity(schService, DACL_SECURITY_INFORMATION, &sd)) {
         printf("SetServiceObjectSecurity failed(%d)\n", GetLastError());
         goto dacl_cleanup;
-    } else printf("Service DACL updated successfully\n");
+    }
+    else printf("Service DACL updated successfully\n");
 
 dacl_cleanup:
     CloseServiceHandle(schSCManager);

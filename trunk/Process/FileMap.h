@@ -1,5 +1,5 @@
 /*
-File mapping²»ÊôÓÚÎÄ¼ş£¬ÊôÓÚÄÚ´æ£¬Æä±¾ÖÊÊÇfile mapping object (also known as a section object)¡£
+File mappingä¸å±äºæ–‡ä»¶ï¼Œå±äºå†…å­˜ï¼Œå…¶æœ¬è´¨æ˜¯file mapping object (also known as a section object)ã€‚
 */
 
 #pragma once

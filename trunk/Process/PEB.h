@@ -27,7 +27,7 @@ typedef struct _PEB_LDR_DATA {
 //Windows Kits\8.0\Include\um\winternl.h
 typedef
 VOID
-(NTAPI * PPS_POST_PROCESS_INIT_ROUTINE) (
+(NTAPI* PPS_POST_PROCESS_INIT_ROUTINE) (
     VOID
     );
 
@@ -49,7 +49,7 @@ typedef struct _PEB {
 } PEB, * PPEB;
 
 
-//¸ÄÃû×ÔÏÂÃæµÄPEB£¬ÓÃÓÚ´¦ÀíWOW64½ø³Ì¡£
+//æ”¹åè‡ªä¸‹é¢çš„PEBï¼Œç”¨äºå¤„ç†WOW64è¿›ç¨‹ã€‚
 typedef struct _PEB_WOW64 {
     BYTE                          Reserved1[2];
     BYTE                          BeingDebugged;

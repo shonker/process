@@ -1,28 +1,28 @@
 #include "User.h"
 
 
-int SidTest(int argc, _TCHAR * argv[])
+int SidTest(int argc, _TCHAR* argv[])
 /*
-sidÒ»¸öÉñÃØµÄ¶«Î÷,±¾ÏëÊÇ»ñÈ¡»òÕßÃ¶¾ÙÓÃ»§ºÍËüµÄ¹ØÏµ.
-ÕâÀïÓĞÁ½¸ö´ÓÎ¢Èí°á¹ıÀ´µÄº¯Êı,
-Ò»¸öÊÇ´Ó¾ä±ú»ñµÃsid,Õâ¸öºÃÏñÓĞÎÊÌâ,ÄÑµÀÊÇÎÒÊ¹ÓÃµÄÎÊÌâ.
-Ò»¸öÊÇ´Ó(ÓÃ»§)Ãû×Ö»ñÈ¡sid.Õâ¸ö¾­ÊÔÑéÊÇºÃµÄ.
-ÕâÀïÖ÷ÒªÓÃÁËÁ½¸öº¯Êı:GetTokenInformation,LookupAccountNameW
-ÒòÎªÓÃGetTokenInformationµÄº¯Êı»ñÈ¡µÄ¶«Î÷ºÃÏñÓĞµãÎÊÌâ,ËùÒÔ´ËÎÄ¾ÍÃüÃûÎª:LookupAccountName.Cpp.
+sidä¸€ä¸ªç¥ç§˜çš„ä¸œè¥¿,æœ¬æƒ³æ˜¯è·å–æˆ–è€…æšä¸¾ç”¨æˆ·å’Œå®ƒçš„å…³ç³».
+è¿™é‡Œæœ‰ä¸¤ä¸ªä»å¾®è½¯æ¬è¿‡æ¥çš„å‡½æ•°,
+ä¸€ä¸ªæ˜¯ä»å¥æŸ„è·å¾—sid,è¿™ä¸ªå¥½åƒæœ‰é—®é¢˜,éš¾é“æ˜¯æˆ‘ä½¿ç”¨çš„é—®é¢˜.
+ä¸€ä¸ªæ˜¯ä»(ç”¨æˆ·)åå­—è·å–sid.è¿™ä¸ªç»è¯•éªŒæ˜¯å¥½çš„.
+è¿™é‡Œä¸»è¦ç”¨äº†ä¸¤ä¸ªå‡½æ•°:GetTokenInformation,LookupAccountNameW
+å› ä¸ºç”¨GetTokenInformationçš„å‡½æ•°è·å–çš„ä¸œè¥¿å¥½åƒæœ‰ç‚¹é—®é¢˜,æ‰€ä»¥æ­¤æ–‡å°±å‘½åä¸º:LookupAccountName.Cpp.
 */
 {
-    wchar_t sz_UserNamew[260] = {0};
+    wchar_t sz_UserNamew[260] = { 0 };
     int len = ARRAYSIZE(sz_UserNamew);
     GetUserName(sz_UserNamew, (LPDWORD)&len);
 
-    LPWSTR * wsz_sid = (LPWSTR *)HeapAlloc(GetProcessHeap(), 0, 0x200);
+    LPWSTR* wsz_sid = (LPWSTR*)HeapAlloc(GetProcessHeap(), 0, 0x200);
     _ASSERTE(wsz_sid);
 
-    PSID * ppSid = (PSID *)HeapAlloc(GetProcessHeap(), 0, 0x200);
+    PSID* ppSid = (PSID*)HeapAlloc(GetProcessHeap(), 0, 0x200);
     _ASSERTE(ppSid);
 
-    GetSid(sz_UserNamew, ppSid);//Administrator,DefaultapppoolÓ¦¸ÃÓĞÃ¶¾ÙµÄ°ì·¨.NetUserEnum,µ«²»È«.ÌØÊâµÄÃ»ÓĞ.
-    bool  b = ConvertSidToStringSid(*ppSid, (LPWSTR *)wsz_sid);
+    GetSid(sz_UserNamew, ppSid);//Administrator,Defaultapppoolåº”è¯¥æœ‰æšä¸¾çš„åŠæ³•.NetUserEnum,ä½†ä¸å…¨.ç‰¹æ®Šçš„æ²¡æœ‰.
+    bool  b = ConvertSidToStringSid(*ppSid, (LPWSTR*)wsz_sid);
     int x = GetLastError();
     //MessageBox(0, (LPCWSTR)(*(int *)wsz_sid), 0, 0);
 
@@ -33,11 +33,11 @@ sidÒ»¸öÉñÃØµÄ¶«Î÷,±¾ÏëÊÇ»ñÈ¡»òÕßÃ¶¾ÙÓÃ»§ºÍËüµÄ¹ØÏµ.
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY_SOURCE | TOKEN_QUERY, &hToken))
         return(FALSE);
 
-    GetLogonSID(hToken, ppSid);//×ÖÃæÒâË¼ÊÇµÇÂ¼µÄsid,ÓÃµÄÊÇµ±Ç°½ø³Ì»òÕßÏß³ÌµÄ¾ä±ú.
-    b = ConvertSidToStringSid(*ppSid, (LPWSTR *)wsz_sid);
+    GetLogonSID(hToken, ppSid);//å­—é¢æ„æ€æ˜¯ç™»å½•çš„sid,ç”¨çš„æ˜¯å½“å‰è¿›ç¨‹æˆ–è€…çº¿ç¨‹çš„å¥æŸ„.
+    b = ConvertSidToStringSid(*ppSid, (LPWSTR*)wsz_sid);
     x = GetLastError();
 
-    //µÃµ½µÄÕâ¸öÖµÔÚ×¢²á±íÖĞÕÒ²»µ½.HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
+    //å¾—åˆ°çš„è¿™ä¸ªå€¼åœ¨æ³¨å†Œè¡¨ä¸­æ‰¾ä¸åˆ°.HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
     //MessageBox(0, (LPCWSTR)(*(int *)wsz_sid), 0, 0);
 
     HeapFree(GetProcessHeap(), 0, wsz_sid);
@@ -59,7 +59,7 @@ sidÒ»¸öÉñÃØµÄ¶«Î÷,±¾ÏëÊÇ»ñÈ¡»òÕßÃ¶¾ÙÓÃ»§ºÍËüµÄ¹ØÏµ.
 
     LPTSTR StringSid;
     if (ConvertSidToStringSid(pSid, &StringSid) == 0) {
-        //¼ÌĞø×ßÏÂÃæµÄÊÍ·Åº¯Êı¡£
+        //ç»§ç»­èµ°ä¸‹é¢çš„é‡Šæ”¾å‡½æ•°ã€‚
     }
 
     if (LocalFree(StringSid) != NULL) {

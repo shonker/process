@@ -40,18 +40,18 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
     {
         HeapFree(GetProcessHeap(), 0, pSysHandleInfo);
         nSize += 4096;
-        pSysHandleInfo = (SYSTEM_HANDLE_INFORMATION *)HeapAlloc(GetProcessHeap(), 0, nSize);
+        pSysHandleInfo = (SYSTEM_HANDLE_INFORMATION*)HeapAlloc(GetProcessHeap(), 0, nSize);
         _ASSERTE(pSysHandleInfo);
     }
     /*
-    Õâ¸öº¯ÊıÒÑ¾­°ÑÕû¸öÏµÍ³µÄ¾ä±úĞÅÏ¢¶¼ÒÑ¾­»ñÈ¡ÁË¡£
-    µ±È»»¹ÓĞ±ğµÄĞÅÏ¢£¬Èç½ø³ÌµÈ¡£
-    ÏÂÃæ¾ÍÊÇ¸ù¾İÕâĞ©ĞÅÏ¢½øĞĞ·ÖÀà¶øÒÑ£¬Èç½ø³Ì¡£
+    è¿™ä¸ªå‡½æ•°å·²ç»æŠŠæ•´ä¸ªç³»ç»Ÿçš„å¥æŸ„ä¿¡æ¯éƒ½å·²ç»è·å–äº†ã€‚
+    å½“ç„¶è¿˜æœ‰åˆ«çš„ä¿¡æ¯ï¼Œå¦‚è¿›ç¨‹ç­‰ã€‚
+    ä¸‹é¢å°±æ˜¯æ ¹æ®è¿™äº›ä¿¡æ¯è¿›è¡Œåˆ†ç±»è€Œå·²ï¼Œå¦‚è¿›ç¨‹ã€‚
 
-    ÆäÊµÕâ¸öº¯Êı¿ÉÒÔÏÔÊ¾Õû¸öÏµÍ³µÄ¾ä±úµÄÏêÏ¸ĞÅÏ¢¡£
+    å…¶å®è¿™ä¸ªå‡½æ•°å¯ä»¥æ˜¾ç¤ºæ•´ä¸ªç³»ç»Ÿçš„å¥æŸ„çš„è¯¦ç»†ä¿¡æ¯ã€‚
     */
 
-    DWORD dwhandles = 0;//Ò»¸ö½ø³ÌµÄËùÓĞµÄ¾ä±úÊıÁ¿¡£
+    DWORD dwhandles = 0;//ä¸€ä¸ªè¿›ç¨‹çš„æ‰€æœ‰çš„å¥æŸ„æ•°é‡ã€‚
 
     // Get the handle of the target process.
     // The handle will be used to duplicate the handles in the process.
@@ -61,32 +61,32 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
         return -1;
     }
     /*
-    ´ò¿ªÕâ¸öº¯ÊıĞèÒªÈ¨ÏŞ£¬¾­²âÊÔÏµÍ³½ø³ÌÌáÈ¨Ò²´ò²»¿ª¡£
-    ¾­²âÊÔ£º
-    ÔÚXPÉÏ¿ÉÒÔ´ò¿ªÏµÍ³½ø³Ì£¨system£©¡£
-    ÔÚWindows 7ÉÏ£¬ÌáÈ¨£¬ÒÔ¹ÜÀíÔ±£¨administrator£©È¨ÏŞ£¬ÉõÖÁÒÔ·şÎñµÄÈ¨ÏŞ£¨NT AUTHORITY\SYSTEM£©¶¼²»ĞĞ£¬¹À¼ÆµÄ»á»°¸ôÀëµ¼ÖÂ£¨¿É·şÎñÓ¦¸ÃÒ²ÔÚ»á»°0£¬ËùÒÔ»¹ÊÇÇı¶¯µÄÈ¨ÏŞ´ó£©¡£
+    æ‰“å¼€è¿™ä¸ªå‡½æ•°éœ€è¦æƒé™ï¼Œç»æµ‹è¯•ç³»ç»Ÿè¿›ç¨‹ææƒä¹Ÿæ‰“ä¸å¼€ã€‚
+    ç»æµ‹è¯•ï¼š
+    åœ¨XPä¸Šå¯ä»¥æ‰“å¼€ç³»ç»Ÿè¿›ç¨‹ï¼ˆsystemï¼‰ã€‚
+    åœ¨Windows 7ä¸Šï¼Œææƒï¼Œä»¥ç®¡ç†å‘˜ï¼ˆadministratorï¼‰æƒé™ï¼Œç”šè‡³ä»¥æœåŠ¡çš„æƒé™ï¼ˆNT AUTHORITY\SYSTEMï¼‰éƒ½ä¸è¡Œï¼Œä¼°è®¡çš„ä¼šè¯éš”ç¦»å¯¼è‡´ï¼ˆå¯æœåŠ¡åº”è¯¥ä¹Ÿåœ¨ä¼šè¯0ï¼Œæ‰€ä»¥è¿˜æ˜¯é©±åŠ¨çš„æƒé™å¤§ï¼‰ã€‚
     */
 
     for (ULONG i = 0; i < pSysHandleInfo->NumberOfHandles; i++) {
         PSYSTEM_HANDLE pHandle = &(pSysHandleInfo->Handles[i]);
 
-        //¸ù¾İ½ø³Ì½øĞĞËÑË÷¡£
+        //æ ¹æ®è¿›ç¨‹è¿›è¡Œæœç´¢ã€‚
         if (pHandle->ProcessId == pid) {
             dwhandles++;	// Increase the number of handles
 
             /*
-            ¾­²âÊÔ·¢ÏÖ£ºEtwRegistration(39)ÀàĞÍµÄ¾ä±ú»áÊ§°Ü¡£
-            0x00000032 ²»Ö§³Ö¸ÃÇëÇó¡£
+            ç»æµ‹è¯•å‘ç°ï¼šEtwRegistration(39)ç±»å‹çš„å¥æŸ„ä¼šå¤±è´¥ã€‚
+            0x00000032 ä¸æ”¯æŒè¯¥è¯·æ±‚ã€‚
             */
             HANDLE hCopy;// Duplicate the handle in the current process
             if (!DuplicateHandle(hProcess, (HANDLE)pHandle->Handle, GetCurrentProcess(), &hCopy, MAXIMUM_ALLOWED, FALSE, 0)) {
                 wprintf(L"DuplicateHandle fail with 0x%x,HANDLE:0x%x,ObjectTypeNumber:%d\n",
-                        GetLastError(), pHandle->Handle, pHandle->ObjectTypeNumber);
+                    GetLastError(), pHandle->Handle, pHandle->ObjectTypeNumber);
                 continue;
             }
 
             /*
-            ÔÚÕâÀï¿ÉÒÔÀûÓÃ¸´ÖÆµÄ¾ä±ú½øĞĞÒ»Ğ©²Ù×÷£¬Èç²éÑ¯Öµ¡£
+            åœ¨è¿™é‡Œå¯ä»¥åˆ©ç”¨å¤åˆ¶çš„å¥æŸ„è¿›è¡Œä¸€äº›æ“ä½œï¼Œå¦‚æŸ¥è¯¢å€¼ã€‚
             */
             ULONG  ObjectInformationLength = sizeof(OBJECT_NAME_INFORMATION) + 512;
             POBJECT_NAME_INFORMATION poni = (POBJECT_NAME_INFORMATION)HeapAlloc(GetProcessHeap(), 0, ObjectInformationLength);
@@ -95,8 +95,8 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             ULONG  ReturnLength;
 
             /*
-            Èç¹û¾ä±úµÄÀàĞÍÊÇTOKEN£¬Ïß³Ì£¬½ø³ÌµÈÀàĞÍµÄ£¬ĞèÒªÔÙÌØÊâµÄ´¦Àí¡£
-            Ò²¾ÍÊÇËµÕâ¸öº¯ÊıÊÇ²éÑ¯²»µ½µÄ¡£
+            å¦‚æœå¥æŸ„çš„ç±»å‹æ˜¯TOKENï¼Œçº¿ç¨‹ï¼Œè¿›ç¨‹ç­‰ç±»å‹çš„ï¼Œéœ€è¦å†ç‰¹æ®Šçš„å¤„ç†ã€‚
+            ä¹Ÿå°±æ˜¯è¯´è¿™ä¸ªå‡½æ•°æ˜¯æŸ¥è¯¢ä¸åˆ°çš„ã€‚
             */
             if (NtQueryObject(hCopy, (OBJECT_INFORMATION_CLASS)1, poni, ObjectInformationLength, &ReturnLength) != STATUS_SUCCESS) {
                 wprintf(L"NtQueryObject fail!\n");
@@ -110,7 +110,7 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
             CloseHandle(hCopy);
         }
 
-        //¿ÉÒÔÏÔÊ¾Õû¸öÏµÍ³µÄ¾ä±úĞÅÏ¢¡£
+        //å¯ä»¥æ˜¾ç¤ºæ•´ä¸ªç³»ç»Ÿçš„å¥æŸ„ä¿¡æ¯ã€‚
         //wprintf(L"PID:0x%x\n", pHandle->ProcessId);
         //wprintf(L"\tHANDLE:0x%x\n", pHandle->Handle);
     }
@@ -121,17 +121,17 @@ DWORD WINAPI EnumerateProcessHandles(ULONG pid)
 }
 
 
-int EnumerateCurrentProcessHandles(int argc, _TCHAR * argv[])
+int EnumerateCurrentProcessHandles(int argc, _TCHAR* argv[])
 /*
-Ã¶¾ÙÒ»¸ö½ø³ÌµÄ¾ä±úĞÅÏ¢¡£
-ÕâÊÇÒ»¸ö»ù±¾µÄ¹¦ÄÜ¡£
+æšä¸¾ä¸€ä¸ªè¿›ç¨‹çš„å¥æŸ„ä¿¡æ¯ã€‚
+è¿™æ˜¯ä¸€ä¸ªåŸºæœ¬çš„åŠŸèƒ½ã€‚
 
-Ò»Ö±Ïë×ö¶øÃ»ÓĞ×ö¡£
-ÍøÉÏÒ²ÓĞºÃ¶àµÄ´úÂë¡£
-½ñÌìËãÊÇÊµÏÖÁË¡£
+ä¸€ç›´æƒ³åšè€Œæ²¡æœ‰åšã€‚
+ç½‘ä¸Šä¹Ÿæœ‰å¥½å¤šçš„ä»£ç ã€‚
+ä»Šå¤©ç®—æ˜¯å®ç°äº†ã€‚
 
-±¾ÎÄĞŞ¸Ä×ÔÎ¢ÈíµÄCppFileHandle¹¤³Ì¡£
-ÓĞÒ»¶¨µÄ¿ÉĞÅ¶È¡£
+æœ¬æ–‡ä¿®æ”¹è‡ªå¾®è½¯çš„CppFileHandleå·¥ç¨‹ã€‚
+æœ‰ä¸€å®šçš„å¯ä¿¡åº¦ã€‚
 
 made by correy
 made at 2014.06.25
@@ -197,7 +197,7 @@ DWORD EnumerateFileHandles(ULONG pid)
     while (NtQuerySystemInformation(SystemHandleInformation, pSysHandleInfo, nSize, &nReturn) == STATUS_INFO_LENGTH_MISMATCH) {
         HeapFree(GetProcessHeap(), 0, pSysHandleInfo);
         nSize += 4096;
-        pSysHandleInfo = (SYSTEM_HANDLE_INFORMATION *)HeapAlloc(GetProcessHeap(), 0, nSize);
+        pSysHandleInfo = (SYSTEM_HANDLE_INFORMATION*)HeapAlloc(GetProcessHeap(), 0, nSize);
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -233,9 +233,9 @@ DWORD EnumerateFileHandles(ULONG pid)
                 // Get the file name and print it
                 WCHAR wszFileName[MAX_PATH + 1];
                 StringCchCopyNW(wszFileName,
-                                MAX_PATH + 1,
-                                pNameInfo->FileName,
-                                /*must be WCHAR*/ pNameInfo->FileNameLength /*in bytes*/ / 2);
+                    MAX_PATH + 1,
+                    pNameInfo->FileName,
+                    /*must be WCHAR*/ pNameInfo->FileNameLength /*in bytes*/ / 2);
                 wprintf(L"0x%x:\t%s\n", pHandle->Handle, wszFileName);
             }
             free(pNameInfo);
@@ -287,7 +287,7 @@ BOOL GetFileNameFromHandle(HANDLE hFile)
         return FALSE;
     }
 
-    void * pMem = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 1);
+    void* pMem = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 1);
     if (!pMem) {
         _tprintf(_T("MapViewOfFile failed w/err 0x%08lx\n"), GetLastError());
         CloseHandle(hFileMap);
@@ -311,7 +311,7 @@ BOOL GetFileNameFromHandle(HANDLE hFile)
             TCHAR szName[MAX_PATH];
             TCHAR szDrive[3] = _T(" :");
             BOOL bFound = FALSE;
-            TCHAR * p = szTemp;
+            TCHAR* p = szTemp;
 
             do {
                 // Copy the drive letter to the template string
@@ -349,9 +349,9 @@ BOOL GetFileNameFromHandle(HANDLE hFile)
 #pragma endregion
 
 
-int FileHandleTest(int argc, _TCHAR * argv[])
+int FileHandleTest(int argc, _TCHAR* argv[])
 /*
-Ô­±¾¹¤³ÌÃû×Ö£ºFile handle operations demo (CppFileHandle)
+åŸæœ¬å·¥ç¨‹åå­—ï¼šFile handle operations demo (CppFileHandle)
 */
 {
     // Enumerate file handles of a process using undocumented APIs
@@ -373,10 +373,10 @@ int FileHandleTest(int argc, _TCHAR * argv[])
 
     // Write 11 bytes from the buffer to the file 
     if (!WriteFile(hFile,                // File handle 
-                   bWriteBuffer,                    // Buffer to be write from 
-                   sizeof(bWriteBuffer),            // Number of bytes to write 
-                   &dwBytesWritten,                 // Number of bytes that were written 
-                   NULL))                           // No overlapped structure 
+        bWriteBuffer,                    // Buffer to be write from 
+        sizeof(bWriteBuffer),            // Number of bytes to write 
+        &dwBytesWritten,                 // Number of bytes that were written 
+        NULL))                           // No overlapped structure 
     {
         // WriteFile returns FALSE because of some error  
         _tprintf(TEXT("Could not write to file w/err 0x%08lx\n"), GetLastError());
@@ -398,30 +398,30 @@ EXTERN_C
 __declspec(dllexport)
 NTSTATUS WINAPI ZwEnumerateDirectoryObject(_In_ PCWSTR ObjectDirectory, _In_ PCWSTR TypeNameFilter)
 /*
-¹¦ÄÜ£ºÃ¶¾ÙÒ»¸öDirectoryObjectÏÂµÄ¶ÔÏó¡£
+åŠŸèƒ½ï¼šæšä¸¾ä¸€ä¸ªDirectoryObjectä¸‹çš„å¯¹è±¡ã€‚
 
-ObjectDirectoryµÄÈ¡Öµ£¬¿ÉÒÔÊÇ£º
+ObjectDirectoryçš„å–å€¼ï¼Œå¯ä»¥æ˜¯ï¼š
 1.L"\\KnownDlls"
 2.L"\\KnownDlls32"
-3.µÈµÈ£¬
+3.ç­‰ç­‰ï¼Œ
 
-TypeNameFilterÊÇ¹ıÂË£¬¿ÉÈ¡µÄÖµÓĞ£º
+TypeNameFilteræ˜¯è¿‡æ»¤ï¼Œå¯å–çš„å€¼æœ‰ï¼š
 1.SymbolicLink
 2.Section
-3.µÈµÈ¡£
+3.ç­‰ç­‰ã€‚
 */
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     OBJECT_ATTRIBUTES oa;
     HANDLE FileHandle = 0;
-    IO_STATUS_BLOCK  IoStatusBlock = {0};
+    IO_STATUS_BLOCK  IoStatusBlock = { 0 };
     PVOID FileInformation = 0;
-    ULONG Length = sizeof(FILE_DIRECTORY_INFORMATION);//Õâ¸öÊıÉèÖÃµÄÌ«Ğ¡»áµ¼ÖÂZwQueryDirectoryFileÀ¶ÆÁ¡£    
+    ULONG Length = sizeof(FILE_DIRECTORY_INFORMATION);//è¿™ä¸ªæ•°è®¾ç½®çš„å¤ªå°ä¼šå¯¼è‡´ZwQueryDirectoryFileè“å±ã€‚    
     BOOLEAN           RestartScan;
     ULONG             Context = 0;
     ULONG             ReturnedLength;
     //UNICODE_STRING driver = RTL_CONSTANT_STRING(L"section");
-    UNICODE_STRING Directory = {0};
+    UNICODE_STRING Directory = { 0 };
 
     Directory.Buffer = (PWSTR)ObjectDirectory;
     Directory.MaximumLength = (USHORT)(wcslen(ObjectDirectory) * sizeof(WCHAR));
@@ -442,7 +442,7 @@ TypeNameFilterÊÇ¹ıÂË£¬¿ÉÈ¡µÄÖµÓĞ£º
         return status;
     }
 
-    Length = Length + 520;//ÎªºÎ¼ÓÕâ¸öÊı×Ö£¬Çë¿´ZwEnumerateFile1µÄËµÃ÷¡£
+    Length = Length + 520;//ä¸ºä½•åŠ è¿™ä¸ªæ•°å­—ï¼Œè¯·çœ‹ZwEnumerateFile1çš„è¯´æ˜ã€‚
     FileInformation = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, Length);
     if (FileInformation == NULL) {
         status = STATUS_UNSUCCESSFUL;
@@ -453,14 +453,14 @@ TypeNameFilterÊÇ¹ıÂË£¬¿ÉÈ¡µÄÖµÓĞ£º
     RtlZeroMemory(FileInformation, Length);
 
     do {
-        UNICODE_STRING FileName = {0};
+        UNICODE_STRING FileName = { 0 };
         POBJECT_DIRECTORY_INFORMATION podi = 0;
-        UNICODE_STRING FullName = {0};
+        UNICODE_STRING FullName = { 0 };
 
-        RestartScan = FALSE;//ÎªTRUE»áµ¼ÖÂËÀÑ­»·;
+        RestartScan = FALSE;//ä¸ºTRUEä¼šå¯¼è‡´æ­»å¾ªç¯;
         status = NtQueryDirectoryObject(FileHandle, FileInformation, Length, TRUE, RestartScan, &Context, &ReturnedLength);
         if (status != STATUS_NO_MORE_FILES && status != STATUS_SUCCESS) {
-            break;//ÕâÀïºÃÏñÃ»ÓĞ×ß¹ı¡£
+            break;//è¿™é‡Œå¥½åƒæ²¡æœ‰èµ°è¿‡ã€‚
         }
 
         podi = (POBJECT_DIRECTORY_INFORMATION)FileInformation;
@@ -493,14 +493,14 @@ EXTERN_C
 __declspec(dllexport)
 void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink)
 /*
-¹¦ÄÜ£º»ñÈ¡Ïñ\\KnownDlls\\KnownDllPathÕâÑùµÄ·ûºÅÁ´½ÓµÄÖµ¡£
+åŠŸèƒ½ï¼šè·å–åƒ\\KnownDlls\\KnownDllPathè¿™æ ·çš„ç¬¦å·é“¾æ¥çš„å€¼ã€‚
 
-×¢Òâ64Î»ÏÂ»¹ÓĞ¸ö\\KnownDlls\\KnownDllPath32£¬ÕâÆäÊµÊÇ¸ö·ûºÅÁ´½Ó¡£
+æ³¨æ„64ä½ä¸‹è¿˜æœ‰ä¸ª\\KnownDlls\\KnownDllPath32ï¼Œè¿™å…¶å®æ˜¯ä¸ªç¬¦å·é“¾æ¥ã€‚
 */
 {
     ULONG ActualLength;
     HANDLE LinkHandle;
-    WCHAR NameBuffer[128] = {0};//Õâ¸ö¿ÉÄÜ¶¨ÒåµÄĞ¡ÁË.
+    WCHAR NameBuffer[128] = { 0 };//è¿™ä¸ªå¯èƒ½å®šä¹‰çš„å°äº†.
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING LinkString, NameString;
 
@@ -515,14 +515,14 @@ void WINAPI QuerySymbolicLinkName(_In_ PCWSTR SymbolicLink)
     NameString.Buffer = (PWSTR)SymbolicLink;
     NameString.MaximumLength = (USHORT)(wcslen(SymbolicLink) * sizeof(WCHAR));
     NameString.Length = NameString.MaximumLength;
-    //RtlInitUnicodeString(&NameString, L"\\KnownDlls\\KnownDllPath");//²»¿ÉÒÔÓÃ//,²»È»»áZwOpenSymbolicLinkObjectµ÷ÓÃÊ§°Ü.¾ÍÊÇµÃµ½µÄ¾ä±úÎª0.
+    //RtlInitUnicodeString(&NameString, L"\\KnownDlls\\KnownDllPath");//ä¸å¯ä»¥ç”¨//,ä¸ç„¶ä¼šZwOpenSymbolicLinkObjectè°ƒç”¨å¤±è´¥.å°±æ˜¯å¾—åˆ°çš„å¥æŸ„ä¸º0.
 
     InitializeObjectAttributes(&ObjectAttributes, &NameString, OBJ_CASE_INSENSITIVE, NULL, NULL);
     NtOpenSymbolicLinkObject(&LinkHandle, GENERIC_READ, &ObjectAttributes);//SYMBOLIC_LINK_QUERY
 
     LinkString.Buffer = NameBuffer;
     LinkString.MaximumLength = sizeof(NameBuffer);
-    NtQuerySymbolicLinkObject(LinkHandle, &LinkString, &ActualLength);//LinkString¾ÍÊÇÏëÒªµÄÖµ.
+    NtQuerySymbolicLinkObject(LinkHandle, &LinkString, &ActualLength);//LinkStringå°±æ˜¯æƒ³è¦çš„å€¼.
     //KdPrint(("KnownDllPath: %wZ \n", &LinkString));
 
     CloseHandle(LinkHandle);

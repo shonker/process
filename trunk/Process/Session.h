@@ -1,7 +1,7 @@
 /*
-ÕâÀïµÄSessionÌØÖ¸²Ù×÷ÏµÍ³µÄÓÃ»§µÄµÇÂ¼µÄSession¡£
+è¿™é‡Œçš„Sessionç‰¹æŒ‡æ“ä½œç³»ç»Ÿçš„ç”¨æˆ·çš„ç™»å½•çš„Sessionã€‚
 
-ËùÒÔSession±ØĞë°üº¬Logon¡£
+æ‰€ä»¥Sessionå¿…é¡»åŒ…å«Logonã€‚
 */
 
 #pragma once

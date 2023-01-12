@@ -9,11 +9,11 @@ EXTERN_C
 __declspec(dllexport)
 bool WINAPI GetCurrentToken(OUT PHANDLE hToken)
 /*
-¹¦ÄÜ£º»ñÈ¡µ±Ç°£¨½ø³Ì/Ïß³Ì£©µÄTOKEN¡£
-×¢Òâ£ºÇëÇóµÄÈ¨ÏŞ¡£
+åŠŸèƒ½ï¼šè·å–å½“å‰ï¼ˆè¿›ç¨‹/çº¿ç¨‹ï¼‰çš„TOKENã€‚
+æ³¨æ„ï¼šè¯·æ±‚çš„æƒé™ã€‚
 
-±ØĞë¼Ó£ºTOKEN_ASSIGN_PRIMARY
-¼û£ºhttp://blogs.msdn.com/b/s4cd/archive/2007/04/16/guest-blog-user-account-control-for-developers.aspx
+å¿…é¡»åŠ ï¼šTOKEN_ASSIGN_PRIMARY
+è§ï¼šhttp://blogs.msdn.com/b/s4cd/archive/2007/04/16/guest-blog-user-account-control-for-developers.aspx
 */
 {
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY, TRUE, hToken)) {
@@ -21,7 +21,8 @@ bool WINAPI GetCurrentToken(OUT PHANDLE hToken)
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY, hToken)) {
                 return FALSE;
             }
-        } else {
+        }
+        else {
             return FALSE;
         }
     }
@@ -30,11 +31,11 @@ bool WINAPI GetCurrentToken(OUT PHANDLE hToken)
 }
 
 
-bool GetComSpec(OUT TCHAR * cmd)
+bool GetComSpec(OUT TCHAR* cmd)
 /*
-¹¦ÄÜ£º»ñÈ¡ ÃüÁîÌáÊ¾·ûµÄÍêÕûÂ·¾¶¡£
+åŠŸèƒ½ï¼šè·å– å‘½ä»¤æç¤ºç¬¦çš„å®Œæ•´è·¯å¾„ã€‚
 
-Õâ¸ö·½·¨Ó¦¸Ã±È½Ï±ê×¼¡£
+è¿™ä¸ªæ–¹æ³•åº”è¯¥æ¯”è¾ƒæ ‡å‡†ã€‚
 https://technet.microsoft.com/en-us/library/cc976142.aspx
 HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 */
@@ -43,8 +44,8 @@ HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
         return false;
     }
 
-    TCHAR  infoBuf[MAX_PATH] = {0};
-    DWORD  bufCharCount = ExpandEnvironmentStrings(L"%ComSpec%", infoBuf, MAX_PATH);//ÆäÊµÒ²¿ÉÒÔ¶¯Ì¬»ñÈ¡ĞèÒªµÄÄÚ´æµÄ´óĞ¡.
+    TCHAR  infoBuf[MAX_PATH] = { 0 };
+    DWORD  bufCharCount = ExpandEnvironmentStrings(L"%ComSpec%", infoBuf, MAX_PATH);//å…¶å®ä¹Ÿå¯ä»¥åŠ¨æ€è·å–éœ€è¦çš„å†…å­˜çš„å¤§å°.
     if (bufCharCount > MAX_PATH || bufCharCount == 0) {
         int x = GetLastError();
         return false;
@@ -59,9 +60,9 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI RemoveShutdownPrivilegeStartProcess()
 /*
-¹¦ÄÜ£ºÈ¥µô¹Ø»úµÄÈ¨ÏŞ£¬È»ºóÆô¶¯½ø³Ì¡£
-      ¼´£ºÒÔÃ»ÓĞ¹Ø»úµÄÈ¨ÏŞÆô¶¯½ø³Ì¡£
-      Í¨Ë×µÄËµÊÇ£º½ûÖ¹Æô¶¯µÄÄÇ¸ö½ø³Ì¹Ø»ú¡£
+åŠŸèƒ½ï¼šå»æ‰å…³æœºçš„æƒé™ï¼Œç„¶åå¯åŠ¨è¿›ç¨‹ã€‚
+      å³ï¼šä»¥æ²¡æœ‰å…³æœºçš„æƒé™å¯åŠ¨è¿›ç¨‹ã€‚
+      é€šä¿—çš„è¯´æ˜¯ï¼šç¦æ­¢å¯åŠ¨çš„é‚£ä¸ªè¿›ç¨‹å…³æœºã€‚
 */
 {
     HANDLE hToken = 0;
@@ -71,12 +72,12 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
     DWORD DisableSidCount = 0;
     PSID_AND_ATTRIBUTES SidsToDisable = NULL;
     DWORD DeletePrivilegeCount = 0;
-    LUID_AND_ATTRIBUTES PrivilegesToDelete = {0};
+    LUID_AND_ATTRIBUTES PrivilegesToDelete = { 0 };
     DWORD RestrictedSidCount = 0;
     PSID_AND_ATTRIBUTES SidsToRestrict = NULL;
     HANDLE NewTokenHandle = NULL;
 
-    LUID shutdownPrivilege = {0};
+    LUID shutdownPrivilege = { 0 };
 
     if (!LookupPrivilegeValue(
         NULL,            // lookup privilege on local system
@@ -106,7 +107,7 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
         return x;
     }
 
-    TCHAR ComSpec[MAX_PATH] = {0};
+    TCHAR ComSpec[MAX_PATH] = { 0 };
     GetComSpec(ComSpec);
 
     LPCTSTR lpApplicationName = NULL;
@@ -116,8 +117,8 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
     DWORD dwCreationFlags = NORMAL_PRIORITY_CLASS;
     LPVOID lpEnvironment = NULL;
     LPCTSTR lpCurrentDirectory = NULL;
-    STARTUPINFO StartupInfo = {0};
-    PROCESS_INFORMATION ProcessInformation = {0};
+    STARTUPINFO StartupInfo = { 0 };
+    PROCESS_INFORMATION ProcessInformation = { 0 };
     StartupInfo.cb = sizeof(STARTUPINFO);
     B = CreateProcessAsUser(
         NewTokenHandle,
@@ -132,7 +133,7 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
         &StartupInfo,
         &ProcessInformation);
     if (B == 0) {
-        int x = GetLastError();//5 ¾Ü¾ø·ÃÎÊ¡£ 
+        int x = GetLastError();//5 æ‹’ç»è®¿é—®ã€‚ 
         return x;
     }
 
@@ -163,7 +164,7 @@ int WINAPI RemoveShutdownPrivilegeStartProcess()
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI MySystemShutdown()
-//¹Ø»úµÄ·½·¨Ò»£º
+//å…³æœºçš„æ–¹æ³•ä¸€ï¼š
 {
     HANDLE hToken; // Get a token for this process. 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) return(FALSE);
@@ -179,7 +180,7 @@ BOOL WINAPI MySystemShutdown()
     if (GetLastError() != ERROR_SUCCESS) return FALSE;
 
 #pragma prefast(push)
-#pragma prefast(disable: 28159, "¿¼ÂÇÊ¹ÓÃ¡°InitiateSystemShutdownEx¡±")
+#pragma prefast(disable: 28159, "è€ƒè™‘ä½¿ç”¨â€œInitiateSystemShutdownExâ€")
     // Shut down the system and force all applications to close. 
     if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_UPGRADE | SHTDN_REASON_FLAG_PLANNED))
         return FALSE;
@@ -192,7 +193,7 @@ BOOL WINAPI MySystemShutdown()
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI MySystemShutdownWithDialogbox(LPCTSTR lpMsg)
-//´øÌáÊ¾µÄ¹Ø»ú¡£
+//å¸¦æç¤ºçš„å…³æœºã€‚
 {
     HANDLE hToken;              // handle to process token 
     // Get the current process token handle so we can get shutdown privilege. 
@@ -213,14 +214,14 @@ BOOL WINAPI MySystemShutdownWithDialogbox(LPCTSTR lpMsg)
     if (GetLastError() != ERROR_SUCCESS) return FALSE;
 
 #pragma prefast(push)
-#pragma prefast(disable: 28159, "¿¼ÂÇÊ¹ÓÃ¡°InitiateSystemShutdownEx¡±")
+#pragma prefast(disable: 28159, "è€ƒè™‘ä½¿ç”¨â€œInitiateSystemShutdownExâ€")
     BOOL fResult;               // system shutdown flag 
     // Display the shutdown dialog box and start the countdown. 
     fResult = InitiateSystemShutdown(NULL,    // shut down local computer 
-                                     (LPWSTR)lpMsg,   // message for user
-                                     30,      // time-out period, in seconds 
-                                     FALSE,   // ask user to close apps 
-                                     TRUE);   // reboot after shutdown 
+        (LPWSTR)lpMsg,   // message for user
+        30,      // time-out period, in seconds 
+        FALSE,   // ask user to close apps 
+        TRUE);   // reboot after shutdown 
     if (!fResult)
         return FALSE;
 #pragma prefast(pop)      
@@ -236,7 +237,7 @@ BOOL WINAPI MySystemShutdownWithDialogbox(LPCTSTR lpMsg)
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI PreventSystemShutdown()
-//×èÖ¹¹Ø»ú¡£
+//é˜»æ­¢å…³æœºã€‚
 {
     HANDLE hToken;              // handle to process token 
     // Get the current process token handle  so we can get shutdown privilege. 
@@ -264,19 +265,19 @@ BOOL WINAPI PreventSystemShutdown()
 
 int __cdecl ShutdownTest()
 {
-    //Ëø¶¨¼ÆËã»ú
-    int r = MessageBox(NULL, (LPCWSTR)L"ÒªËø¶¨¼ÆËã»úÂğ£¿", (LPCWSTR)L"Ëø¶¨¼ÆËã»ú²âÊÔ", MB_YESNO);
+    //é”å®šè®¡ç®—æœº
+    int r = MessageBox(NULL, (LPCWSTR)L"è¦é”å®šè®¡ç®—æœºå—ï¼Ÿ", (LPCWSTR)L"é”å®šè®¡ç®—æœºæµ‹è¯•", MB_YESNO);
     if (r == IDYES) LockWorkStation();
 
-    //×¢Ïúµ±Ç°ÓÃ»§µÄ·½·¨Ò»£º
-    r = MessageBox(NULL, (LPCWSTR)L"Òª×¢Ïúµ±Ç°ÓÃ»§Âğ£¿", (LPCWSTR)L"×¢Ïúµ±Ç°ÓÃ»§²âÊÔÒ»", MB_YESNO);
+    //æ³¨é”€å½“å‰ç”¨æˆ·çš„æ–¹æ³•ä¸€ï¼š
+    r = MessageBox(NULL, (LPCWSTR)L"è¦æ³¨é”€å½“å‰ç”¨æˆ·å—ï¼Ÿ", (LPCWSTR)L"æ³¨é”€å½“å‰ç”¨æˆ·æµ‹è¯•ä¸€", MB_YESNO);
     if (r == IDYES) ExitWindows(0, 0);
 
-    //×¢Ïúµ±Ç°ÓÃ»§µÄ·½·¨¶ş£º
-    r = MessageBox(NULL, (LPCWSTR)L"Òª×¢Ïúµ±Ç°ÓÃ»§Âğ£¿", (LPCWSTR)L"×¢Ïúµ±Ç°ÓÃ»§²âÊÔ¶ş", MB_YESNO);
+    //æ³¨é”€å½“å‰ç”¨æˆ·çš„æ–¹æ³•äºŒï¼š
+    r = MessageBox(NULL, (LPCWSTR)L"è¦æ³¨é”€å½“å‰ç”¨æˆ·å—ï¼Ÿ", (LPCWSTR)L"æ³¨é”€å½“å‰ç”¨æˆ·æµ‹è¯•äºŒ", MB_YESNO);
     if (r == IDYES) ExitWindowsEx(EWX_LOGOFF, 0);
 
-    /*ÔÚÓ¦ÓÃ£¨½çÃæ£©³ÌĞòÖĞ×èÖ¹×¢ÏúµÄ°ì·¨£º¾ÍÊÇ·µ»ØÊ§°Ü¡£
+    /*åœ¨åº”ç”¨ï¼ˆç•Œé¢ï¼‰ç¨‹åºä¸­é˜»æ­¢æ³¨é”€çš„åŠæ³•ï¼šå°±æ˜¯è¿”å›å¤±è´¥ã€‚
     case WM_QUERYENDSESSION:
     {
     int r = MessageBox(NULL,(LPCWSTR)L"End the session?",(LPCWSTR)L"WM_QUERYENDSESSION",MB_YESNO);
@@ -285,26 +286,26 @@ int __cdecl ShutdownTest()
     }
     */
 
-    //¹Ø»ú²âÊÔÒ»£º
-    r = MessageBox(NULL, (LPCWSTR)L"Òª¹Ø»úÂğ£¿", (LPCWSTR)L"¹Ø»ú²âÊÔÒ»", MB_YESNO);
-    if (r == IDYES) MySystemShutdown();//ÒÑ¾­¿ªÊ¼¹Ø»ú£¬ºóÃæÓÃsleep£¬±¾ÈËÏëÒ²Ã»ÓĞÓÃ¡£
+    //å…³æœºæµ‹è¯•ä¸€ï¼š
+    r = MessageBox(NULL, (LPCWSTR)L"è¦å…³æœºå—ï¼Ÿ", (LPCWSTR)L"å…³æœºæµ‹è¯•ä¸€", MB_YESNO);
+    if (r == IDYES) MySystemShutdown();//å·²ç»å¼€å§‹å…³æœºï¼Œåé¢ç”¨sleepï¼Œæœ¬äººæƒ³ä¹Ÿæ²¡æœ‰ç”¨ã€‚
 
-    //¾­²âÊÔ£¬ÉÏÃæµÄ¹Ø»ú£¬ºÜÄÑÈ¡Ïû£¬²»ÖªÓÃÏûÏ¢ÄÜ·ñÀ¹½Ø¡£hook ExitWindowsExÊÇ¿ÉÒÔµÄ¡£
-    //¼´Ê¹ÄÜÔËĞĞÏÂÃæµÄÈ¡Ïû¹Ø»úº¯Êı£¬Ò²ÎŞ¼ÃÓÚÊÂ¡£
-    /*È¡Ïû¹Ø»ú
-    r = MessageBox(NULL,(LPCWSTR)L"ÒªÈ¡Ïû¹Ø»úÂğ£¿",(LPCWSTR)L"È¡Ïû¹Ø»ú",MB_YESNO);
+    //ç»æµ‹è¯•ï¼Œä¸Šé¢çš„å…³æœºï¼Œå¾ˆéš¾å–æ¶ˆï¼Œä¸çŸ¥ç”¨æ¶ˆæ¯èƒ½å¦æ‹¦æˆªã€‚hook ExitWindowsExæ˜¯å¯ä»¥çš„ã€‚
+    //å³ä½¿èƒ½è¿è¡Œä¸‹é¢çš„å–æ¶ˆå…³æœºå‡½æ•°ï¼Œä¹Ÿæ— æµäºäº‹ã€‚
+    /*å–æ¶ˆå…³æœº
+    r = MessageBox(NULL,(LPCWSTR)L"è¦å–æ¶ˆå…³æœºå—ï¼Ÿ",(LPCWSTR)L"å–æ¶ˆå…³æœº",MB_YESNO);
     if (r == IDYES) PreventSystemShutdown();
     */
 
-    //¹Ø»ú²âÊÔ¶ş£º
-    r = MessageBox(NULL, (LPCWSTR)L"Òª¹Ø»úÂğ£¿", (LPCWSTR)L"¹Ø»ú²âÊÔ¶ş", MB_YESNO);
-    if (r == IDYES)MySystemShutdownWithDialogbox(L"made by correy");//ÔÚxpÏÂ¾ÍÊÇµ¯³öÄÇ¸ö¾­µäµÄÏûÏ¢¿ò£¬Win 7ÏÂÒ²µ¯³öÏûÏ¢¡£
+    //å…³æœºæµ‹è¯•äºŒï¼š
+    r = MessageBox(NULL, (LPCWSTR)L"è¦å…³æœºå—ï¼Ÿ", (LPCWSTR)L"å…³æœºæµ‹è¯•äºŒ", MB_YESNO);
+    if (r == IDYES)MySystemShutdownWithDialogbox(L"made by correy");//åœ¨xpä¸‹å°±æ˜¯å¼¹å‡ºé‚£ä¸ªç»å…¸çš„æ¶ˆæ¯æ¡†ï¼ŒWin 7ä¸‹ä¹Ÿå¼¹å‡ºæ¶ˆæ¯ã€‚
 
-    //È¡Ïû¹Ø»ú
-    r = MessageBox(NULL, (LPCWSTR)L"ÒªÈ¡Ïû¹Ø»úÂğ£¿", (LPCWSTR)L"È¡Ïû¹Ø»ú", MB_YESNO);
-    if (r == IDYES) PreventSystemShutdown();//Ïàµ±ÓÚshutdon -a
+    //å–æ¶ˆå…³æœº
+    r = MessageBox(NULL, (LPCWSTR)L"è¦å–æ¶ˆå…³æœºå—ï¼Ÿ", (LPCWSTR)L"å–æ¶ˆå…³æœº", MB_YESNO);
+    if (r == IDYES) PreventSystemShutdown();//ç›¸å½“äºshutdon -a
 
-    //ÖØÆôµÄ¾Í²»ËµÁË£¬±ğµÄº¯ÊıÒ²ÄÜÊµÏÖ¡£
+    //é‡å¯çš„å°±ä¸è¯´äº†ï¼Œåˆ«çš„å‡½æ•°ä¹Ÿèƒ½å®ç°ã€‚
 
     return 0;
 }

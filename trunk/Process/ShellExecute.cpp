@@ -12,7 +12,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 
 
-HRESULT GetShellViewForDesktop(REFIID riid, void ** ppv)
+HRESULT GetShellViewForDesktop(REFIID riid, void** ppv)
 // use the shell view for the desktop using the shell windows automation to find the
 // desktop web browser and then grabs its view
 //
@@ -21,17 +21,17 @@ HRESULT GetShellViewForDesktop(REFIID riid, void ** ppv)
 {
     *ppv = NULL;
 
-    IShellWindows * psw;
+    IShellWindows* psw;
     HRESULT hr = CoCreateInstance(CLSID_ShellWindows, NULL, CLSCTX_LOCAL_SERVER, IID_PPV_ARGS(&psw));
     if (SUCCEEDED(hr)) {
         HWND hwnd;
-        IDispatch * pdisp;
+        IDispatch* pdisp;
         VARIANT vEmpty = {}; // VT_EMPTY
-        if (S_OK == psw->FindWindowSW(&vEmpty, &vEmpty, SWC_DESKTOP, (long *)&hwnd, SWFO_NEEDDISPATCH, &pdisp)) {
-            IShellBrowser * psb;
+        if (S_OK == psw->FindWindowSW(&vEmpty, &vEmpty, SWC_DESKTOP, (long*)&hwnd, SWFO_NEEDDISPATCH, &pdisp)) {
+            IShellBrowser* psb;
             hr = IUnknown_QueryService(pdisp, SID_STopLevelBrowser, IID_PPV_ARGS(&psb));
             if (SUCCEEDED(hr)) {
-                IShellView * psv;
+                IShellView* psv;
                 hr = psb->QueryActiveShellView(&psv);
                 if (SUCCEEDED(hr)) {
                     hr = psv->QueryInterface(riid, ppv);
@@ -40,7 +40,8 @@ HRESULT GetShellViewForDesktop(REFIID riid, void ** ppv)
                 psb->Release();
             }
             pdisp->Release();
-        } else {
+        }
+        else {
             hr = E_FAIL;
         }
         psw->Release();
@@ -49,19 +50,19 @@ HRESULT GetShellViewForDesktop(REFIID riid, void ** ppv)
 }
 
 
-HRESULT GetShellDispatchFromView(IShellView * psv, REFIID riid, void ** ppv)
+HRESULT GetShellDispatchFromView(IShellView* psv, REFIID riid, void** ppv)
 // From a shell view object gets its automation interface and from that gets the shell
 // application object that implements IShellDispatch2 and related interfaces.
 {
     *ppv = NULL;
 
-    IDispatch * pdispBackground;
+    IDispatch* pdispBackground;
     HRESULT hr = psv->GetItemObject(SVGIO_BACKGROUND, IID_PPV_ARGS(&pdispBackground));
     if (SUCCEEDED(hr)) {
-        IShellFolderViewDual * psfvd;
+        IShellFolderViewDual* psfvd;
         hr = pdispBackground->QueryInterface(IID_PPV_ARGS(&psfvd));
         if (SUCCEEDED(hr)) {
-            IDispatch * pdisp;
+            IDispatch* pdisp;
             hr = psfvd->get_Application(&pdisp);
             if (SUCCEEDED(hr)) {
                 hr = pdisp->QueryInterface(riid, ppv);
@@ -79,23 +80,23 @@ EXTERN_C
 __declspec(dllexport)
 HRESULT WINAPI ShellExecInExplorerProcess(PCWSTR pszFile)
 /*
-Ω¯≥Ã∆Ù∂Ø∫Û£¨∏∏Ω¯≥Ã «Explorer°£
+ËøõÁ®ãÂêØÂä®ÂêéÔºåÁà∂ËøõÁ®ãÊòØExplorer„ÄÇ
 
-’™◊‘£∫
+ÊëòËá™Ôºö
 \Windows-classic-samples\Samples\Win7Samples\winui\shell\appplatform\ExecInExplorer\ExecInExplorer.cpp
 */
 {
-    IShellView * psv;
+    IShellView* psv;
     HRESULT hr = GetShellViewForDesktop(IID_PPV_ARGS(&psv));
     if (SUCCEEDED(hr)) {
-        IShellDispatch2 * psd;
+        IShellDispatch2* psd;
         hr = GetShellDispatchFromView(psv, IID_PPV_ARGS(&psd));
         if (SUCCEEDED(hr)) {
             BSTR bstrFile = SysAllocString(pszFile);
             hr = bstrFile ? S_OK : E_OUTOFMEMORY;
             if (SUCCEEDED(hr)) {
                 VARIANT vtEmpty = {}; // VT_EMPTY
-                hr = psd->ShellExecute(bstrFile, vtEmpty, vtEmpty, vtEmpty, vtEmpty);//error C2039: "ShellExecuteW": ≤ª « "IShellDispatch2" µƒ≥…‘±
+                hr = psd->ShellExecute(bstrFile, vtEmpty, vtEmpty, vtEmpty, vtEmpty);//error C2039: "ShellExecuteW": ‰∏çÊòØ "IShellDispatch2" ÁöÑÊàêÂëò
                 SysFreeString(bstrFile);
             }
 
@@ -112,7 +113,7 @@ HRESULT WINAPI ShellExecInExplorerProcess(PCWSTR pszFile)
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void FindDesktopFolderView(REFIID riid, void ** ppv)
+void FindDesktopFolderView(REFIID riid, void** ppv)
 //https://devblogs.microsoft.com/oldnewthing/20130318-00/?p=4933
 {
     CComPtr<IShellWindows> spShellWindows;
@@ -134,7 +135,7 @@ void FindDesktopFolderView(REFIID riid, void ** ppv)
 }
 
 
-void GetDesktopAutomationObject(REFIID riid, void ** ppv)
+void GetDesktopAutomationObject(REFIID riid, void** ppv)
 //http://blogs.msdn.com/b/oldnewthing/archive/2013/11/18/10468726.aspx
 {
     CComPtr<IShellView> spsv;
@@ -147,10 +148,10 @@ void GetDesktopAutomationObject(REFIID riid, void ** ppv)
 
 
 void ShellExecuteFromExplorer(PCWSTR pszFile,
-                              PCWSTR pszParameters = nullptr,
-                              PCWSTR pszDirectory = nullptr,
-                              PCWSTR pszOperation = nullptr,
-                              int nShowCmd = SW_SHOWNORMAL
+    PCWSTR pszParameters = nullptr,
+    PCWSTR pszDirectory = nullptr,
+    PCWSTR pszOperation = nullptr,
+    int nShowCmd = SW_SHOWNORMAL
 )
 //http://blogs.msdn.com/b/oldnewthing/archive/2013/11/18/10468726.aspx
 {
@@ -159,16 +160,16 @@ void ShellExecuteFromExplorer(PCWSTR pszFile,
     CComPtr<IDispatch> spdispShell;
     spFolderView->get_Application(&spdispShell);
 
-    //error C2039: "ShellExecuteW": ≤ª « "IShellDispatch2" µƒ≥…‘±
+    //error C2039: "ShellExecuteW": ‰∏çÊòØ "IShellDispatch2" ÁöÑÊàêÂëò
     CComQIPtr<IShellDispatch2>(spdispShell)->ShellExecute(CComBSTR(pszFile),
-                                                          CComVariant(pszParameters ? pszParameters : L""),
-                                                          CComVariant(pszDirectory ? pszDirectory : L""),
-                                                          CComVariant(pszOperation ? pszOperation : L""),
-                                                          CComVariant(nShowCmd));
+        CComVariant(pszParameters ? pszParameters : L""),
+        CComVariant(pszDirectory ? pszDirectory : L""),
+        CComVariant(pszOperation ? pszOperation : L""),
+        CComVariant(nShowCmd));
 }
 
 
-int __cdecl ShellExecuteFromExplorerTest(int argc, wchar_t ** argv)
+int __cdecl ShellExecuteFromExplorerTest(int argc, wchar_t** argv)
 {
     if (argc < 2) return 0;
 

@@ -1,12 +1,12 @@
 /*
-ÆäÊµNT_TIBÒÑ¾­ÔÚ
+å…¶å®NT_TIBå·²ç»åœ¨
 \Windows Kits\10\Include\10.0.19041.0\km\ntddk.h
-ºÍ
+å’Œ
 \Windows Kits\10\Include\10.0.19041.0\um\winnt.h
-ÖĞ¶¨Òå£¬
-»¹ÓĞNT_TIB32ºÍNT_TIB64£¬ÉõÖÁKUSER_SHARED_DATA¡£
+ä¸­å®šä¹‰ï¼Œ
+è¿˜æœ‰NT_TIB32å’ŒNT_TIB64ï¼Œç”šè‡³KUSER_SHARED_DATAã€‚
 
-NtCurrentTebÒÑ¾­¶¨ÒåÔÚwinnt.hÖĞ£¬µ«ÊÇÕâ¸öÎÄ¼şÔÚ£ºWindows Kits\10\Include\10.0.19041.0\um
+NtCurrentTebå·²ç»å®šä¹‰åœ¨winnt.hä¸­ï¼Œä½†æ˜¯è¿™ä¸ªæ–‡ä»¶åœ¨ï¼šWindows Kits\10\Include\10.0.19041.0\um
 https://docs.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-ntcurrentteb
 */
 
@@ -20,46 +20,46 @@ https://docs.microsoft.com/en-us/windows/win32/api/winnt/nf-winnt-ntcurrentteb
 
 
 /*
-¹¦ÄÜ£º»ñÈ¡TEBµÄ°ì·¨£º
+åŠŸèƒ½ï¼šè·å–TEBçš„åŠæ³•ï¼š
 
-×¢Òâ£º64Î»ÏµÍ³ÏÂµÄWOW64.
+æ³¨æ„ï¼š64ä½ç³»ç»Ÿä¸‹çš„WOW64.
 
 1.
-void* _rdteb();//Reads the thread pointer register (IntR13) and returns its value, 
+void* _rdteb();//Reads the thread pointer register (IntR13) and returns its value,
                //which is the base address of the current thread environment block (TEB).
 void * __cdecl _rdtebex(void);
-ÒòÎªÊÇ±àÒëÆ÷Ìá¹©µÄÖ¸Áî£¬ËùÒÔÔÚÓÃ»§ºÍÄÚºË¶¼¿ÉÒÔÊ¹ÓÃ¡£
-°üº¬ÔÚ£º\Include\um\winnt.h¡£
+å› ä¸ºæ˜¯ç¼–è¯‘å™¨æä¾›çš„æŒ‡ä»¤ï¼Œæ‰€ä»¥åœ¨ç”¨æˆ·å’Œå†…æ ¸éƒ½å¯ä»¥ä½¿ç”¨ã€‚
+åŒ…å«åœ¨ï¼š\Include\um\winnt.hã€‚
 
 2.
-ÓÃ»§²ãµÄº¯Êı£ºGetTebAddress£¬ÕâÊÇÒ»¸öÓĞÔ´ÂëµÄº¯Êı¡£
-ÔÚWinDDK\7600.16385.1\inc\api\WDBGEXTS.H
+ç”¨æˆ·å±‚çš„å‡½æ•°ï¼šGetTebAddressï¼Œè¿™æ˜¯ä¸€ä¸ªæœ‰æºç çš„å‡½æ•°ã€‚
+åœ¨WinDDK\7600.16385.1\inc\api\WDBGEXTS.H
 
 3.
-ÓÃ»§²ãµÄº¯Êı£ºNtCurrentTeb(void);
-²»Í¬µÄ»·¾³ÏÂÊÇ²»Í¬µÄ»ã±àÖ¸Áî¡£
-ÕâÊÇÒ»¸öºê/__inlineµÄº¯Êı£¬ËùÒÔÕâ¸öº¯ÊıÊÇ²»»áµ¼³öµÄ¡£
+ç”¨æˆ·å±‚çš„å‡½æ•°ï¼šNtCurrentTeb(void);
+ä¸åŒçš„ç¯å¢ƒä¸‹æ˜¯ä¸åŒçš„æ±‡ç¼–æŒ‡ä»¤ã€‚
+è¿™æ˜¯ä¸€ä¸ªå®/__inlineçš„å‡½æ•°ï¼Œæ‰€ä»¥è¿™ä¸ªå‡½æ•°æ˜¯ä¸ä¼šå¯¼å‡ºçš„ã€‚
 
 4.
-ZwQueryInformationThreadµÄThreadTebInformation¡£
-ÓÃ»§ºÍÄÚºË¶¼¿ÉÒÔÊ¹ÓÃ¡£
+ZwQueryInformationThreadçš„ThreadTebInformationã€‚
+ç”¨æˆ·å’Œå†…æ ¸éƒ½å¯ä»¥ä½¿ç”¨ã€‚
 
 5.
-ZwQueryInformationThreadµÄThreadBasicInformation¡£
-ÓÃ»§ºÍÄÚºË¶¼¿ÉÒÔÊ¹ÓÃ¡£
+ZwQueryInformationThreadçš„ThreadBasicInformationã€‚
+ç”¨æˆ·å’Œå†…æ ¸éƒ½å¯ä»¥ä½¿ç”¨ã€‚
 
 6.
-PsGetCurrentThreadTeb¡£
-²»¹ıĞèÒª£º(NTDDI_VERSION >= NTDDI_WS03SP1)
-Ò²¾ÍÊÇËµXPÃ»ÓĞµ¼³ö´Ëº¯Êı¡£
-ÄÚºË×¨ÓÃ¡£
+PsGetCurrentThreadTebã€‚
+ä¸è¿‡éœ€è¦ï¼š(NTDDI_VERSION >= NTDDI_WS03SP1)
+ä¹Ÿå°±æ˜¯è¯´XPæ²¡æœ‰å¯¼å‡ºæ­¤å‡½æ•°ã€‚
+å†…æ ¸ä¸“ç”¨ã€‚
 https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-psgetcurrentthreadteb
 
 7.
 PsGetThreadTeb
-XPÏÂÒÑ¾­µ¼³ö¡£
+XPä¸‹å·²ç»å¯¼å‡ºã€‚
 
-WDK°ïÖúÎÄµµÉÏµÄ¶¨Òå£¬
+WDKå¸®åŠ©æ–‡æ¡£ä¸Šçš„å®šä¹‰ï¼Œ
 typedef struct _TEB {
     BYTE Reserved1[1952];
     PVOID Reserved2[412];
@@ -70,12 +70,12 @@ typedef struct _TEB {
     PVOID Reserved5[4];
     PVOID TlsExpansionSlots;
 } TEB,  *PTEB;
-Õâ¸ö£¬Í¬Ê±ºÍ
+è¿™ä¸ªï¼ŒåŒæ—¶å’Œ
 https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-teb
-ÉÏ¶¨ÒåµÄÒ»Ñù¡£
-µ«ÊÇÓĞÓÃµÄĞÅÏ¢Ì«ÉÙ¡£
+ä¸Šå®šä¹‰çš„ä¸€æ ·ã€‚
+ä½†æ˜¯æœ‰ç”¨çš„ä¿¡æ¯å¤ªå°‘ã€‚
 
-ÍøÂçÉÏ¾¹È»Ã»ÓĞËÑË÷µ½£º
+ç½‘ç»œä¸Šç«Ÿç„¶æ²¡æœ‰æœç´¢åˆ°ï¼š
 https://msdn.microsoft.com/en-us/library/ms686708(v=vs.85).aspx
 
 
@@ -145,16 +145,16 @@ urlmon!_TEB
    +0xf20 DbgSsReserved    : [2] Ptr32 Void
    +0xf28 HardErrorMode    : Uint4B
    +0xf2c Instrumentation  : [9] Ptr32 Void
-   +0xf50 ActivityId       : _GUID  ¶àÒ»¸ö¡£
+   +0xf50 ActivityId       : _GUID  å¤šä¸€ä¸ªã€‚
    +0xf60 SubProcessTag    : Ptr32 Void
-   +0xf64 EtwLocalData     : Ptr32 Void ¶àÒ»¸ö¡£
+   +0xf64 EtwLocalData     : Ptr32 Void å¤šä¸€ä¸ªã€‚
    +0xf68 EtwTraceData     : Ptr32 Void
    +0xf6c WinSockData      : Ptr32 Void
    +0xf70 GdiBatchCount    : Uint4B
    +0xf74 SpareBool0       : UChar
    +0xf75 SpareBool1       : UChar
    +0xf76 SpareBool2       : UChar
-   +0xf77 IdealProcessor   : UChar ²»Ò»ÑùÁË£¬¶¨ÒåµÄÊÇTlsExpansionSlots¡£
+   +0xf77 IdealProcessor   : UChar ä¸ä¸€æ ·äº†ï¼Œå®šä¹‰çš„æ˜¯TlsExpansionSlotsã€‚
    +0xf78 GuaranteedStackBytes : Uint4B
    +0xf7c ReservedForPerf  : Ptr32 Void
    +0xf80 ReservedForOle   : Ptr32 Void
@@ -197,7 +197,7 @@ urlmon!_TEB
    +0xfe8 TotalSwitchOutTime : Uint8B
    +0xff0 WaitReasonBitMap : _LARGE_INTEGER
 
-±¾ÎÄµÄÒ»Ğ©½á¹¹Õª×ÔWRK¡£
+æœ¬æ–‡çš„ä¸€äº›ç»“æ„æ‘˜è‡ªWRKã€‚
 
 made by correy
 made at 2015.07.08.
@@ -246,12 +246,12 @@ typedef struct _NT_TIB {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//Õª×Ô£º\Windows Kits\10\Include\10.0.19041.0\km\wdm.h
+//æ‘˜è‡ªï¼š\Windows Kits\10\Include\10.0.19041.0\km\wdm.h
 typedef struct _CLIENT_ID {
     HANDLE UniqueProcess;
     HANDLE UniqueThread;
 } CLIENT_ID;
-typedef CLIENT_ID * PCLIENT_ID;
+typedef CLIENT_ID* PCLIENT_ID;
 
 
 //typedef struct _PEB * PPEB;
@@ -297,7 +297,7 @@ typedef CLIENT_ID * PCLIENT_ID;
 #define TLS_MINIMUM_AVAILABLE 64    // winnt
 
 typedef struct PEBTEB_STRUCT(_ACTIVATION_CONTEXT_STACK) {
-    PEBTEB_POINTER(struct _RTL_ACTIVATION_CONTEXT_STACK_FRAME *) ActiveFrame;
+    PEBTEB_POINTER(struct _RTL_ACTIVATION_CONTEXT_STACK_FRAME*) ActiveFrame;
     PEBTEB_STRUCT(LIST_ENTRY) FrameListCache;
     ULONG Flags;
     ULONG NextCookieSequenceNumber;
@@ -318,16 +318,16 @@ typedef struct PEBTEB_STRUCT(_TEB_ACTIVE_FRAME_CONTEXT) {
     PEBTEB_POINTER(PCSTR) FrameName;
 } PEBTEB_STRUCT(TEB_ACTIVE_FRAME_CONTEXT), * PEBTEB_STRUCT(PTEB_ACTIVE_FRAME_CONTEXT);
 
-typedef const PEBTEB_STRUCT(TEB_ACTIVE_FRAME_CONTEXT) * PEBTEB_STRUCT(PCTEB_ACTIVE_FRAME_CONTEXT);
+typedef const PEBTEB_STRUCT(TEB_ACTIVE_FRAME_CONTEXT)* PEBTEB_STRUCT(PCTEB_ACTIVE_FRAME_CONTEXT);
 
 typedef struct PEBTEB_STRUCT(_TEB_ACTIVE_FRAME) {
     ULONG Flags;
-    PEBTEB_POINTER(struct _TEB_ACTIVE_FRAME *) Previous;
+    PEBTEB_POINTER(struct _TEB_ACTIVE_FRAME*) Previous;
     PEBTEB_POINTER(PCTEB_ACTIVE_FRAME_CONTEXT) Context;
 } PEBTEB_STRUCT(TEB_ACTIVE_FRAME), * PEBTEB_STRUCT(PTEB_ACTIVE_FRAME);
 
 
-typedef PVOID * PPVOID;
+typedef PVOID* PPVOID;
 
 /* for searching
 typedef struct _TEB
@@ -335,7 +335,7 @@ typedef struct _TEB32
 typedef struct _TEB64
 */
 typedef struct PEBTEB_STRUCT(_TEB) {
-    PEBTEB_STRUCT(NT_TIB) NtTib;//Õâ¸ö½á¹¹µ¹ÊÇ¹«¿ªÁË£¬°üÀ¨_NT_TIB32£¬_NT_TIB64¡£
+    PEBTEB_STRUCT(NT_TIB) NtTib;//è¿™ä¸ªç»“æ„å€’æ˜¯å…¬å¼€äº†ï¼ŒåŒ…æ‹¬_NT_TIB32ï¼Œ_NT_TIB64ã€‚
     PEBTEB_POINTER(PVOID) EnvironmentPointer;
     PEBTEB_STRUCT(CLIENT_ID) ClientId;
     PEBTEB_POINTER(PVOID) ActiveRpcHandle;

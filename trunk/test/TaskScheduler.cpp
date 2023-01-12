@@ -8,10 +8,10 @@
 
 int WINAPI ITimeTriggerTest()
 /*
-ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
+ITimeTrigger+IRepetitionPatternçš„æµ‹è¯•ã€‚
 
-Ä¬ÈÏÉèÖÃÊÇ£ºÇëÎðÆô¶¯ÐÂÊ¾Àý¡£
-ËùÒÔÆô¶¯Ò»¸ö¼ÇÊÂ±¾£¬²»¹Ø±Õ£¬²»»áÔÙÆô¶¯¼ÇÊÂ±¾¡£·´Ö®£¬¹Ø±Õ¼ÇÊÂ±¾Ö®ºó£¬»áÆô¶¯¼ÇÊÂ±¾¡£
+é»˜è®¤è®¾ç½®æ˜¯ï¼šè¯·å‹¿å¯åŠ¨æ–°ç¤ºä¾‹ã€‚
+æ‰€ä»¥å¯åŠ¨ä¸€ä¸ªè®°äº‹æœ¬ï¼Œä¸å…³é—­ï¼Œä¸ä¼šå†å¯åŠ¨è®°äº‹æœ¬ã€‚åä¹‹ï¼Œå…³é—­è®°äº‹æœ¬ä¹‹åŽï¼Œä¼šå¯åŠ¨è®°äº‹æœ¬ã€‚
 */
 {
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
@@ -35,8 +35,8 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService* pService = NULL;
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -54,7 +54,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
 
     //  Get the pointer to the root task folder.  
     //  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder* pRootFolder = NULL;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root folder pointer: %x", hr);
@@ -66,7 +66,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task definition object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition* pTask = NULL;
     hr = pService->NewTask(0, &pTask);
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
@@ -77,7 +77,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo* pRegInfo = NULL;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -98,7 +98,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Create the principal for the task - these credentials are overwritten with the credentials passed to RegisterTaskDefinition
-    IPrincipal * pPrincipal = NULL;
+    IPrincipal* pPrincipal = NULL;
     hr = pTask->get_Principal(&pPrincipal);
     if (FAILED(hr)) {
         printf("\nCannot get principal pointer: %x", hr);
@@ -120,7 +120,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings* pSettings = NULL;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -142,7 +142,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     // Set the idle settings for the task.
-    IIdleSettings * pIdleSettings = NULL;
+    IIdleSettings* pIdleSettings = NULL;
     hr = pSettings->get_IdleSettings(&pIdleSettings);
     if (FAILED(hr)) {
         printf("\nCannot get idle setting information: %x", hr);
@@ -163,7 +163,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Get the trigger collection to insert the time trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection* pTriggerCollection = NULL;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -174,7 +174,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Add the time trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger* pTrigger = NULL;
     hr = pTriggerCollection->Create(TASK_TRIGGER_TIME, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -185,8 +185,8 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         return 1;
     }
 
-    ITimeTrigger * pTimeTrigger = NULL;
-    hr = pTrigger->QueryInterface(IID_ITimeTrigger, (void **)&pTimeTrigger);
+    ITimeTrigger* pTimeTrigger = NULL;
+    hr = pTrigger->QueryInterface(IID_ITimeTrigger, (void**)&pTimeTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for ITimeTrigger: %x", hr);
@@ -198,7 +198,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
 
     {
         // Add a repetition to the trigger so that it repeats five times.
-        IRepetitionPattern * pRepetitionPattern = NULL;
+        IRepetitionPattern* pRepetitionPattern = NULL;
         hr = pTimeTrigger->get_Repetition(&pRepetitionPattern);
         //pTimeTrigger->Release();
         if (FAILED(hr)) {
@@ -219,8 +219,8 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         //    return 1;
         //}
 
-        //Ö¸¶¨Ã¿´ÎÖØÐÂÆô¶¯ÈÎÎñÖ®¼äµÄÊ±¼äÁ¿¡£´Ë×Ö·û´®µÄ¸ñÊ½Îª£¨ÀýÈç£¬¡°PT5M¡±Îª 5 ·ÖÖÓ£¬¡°PT1H¡±Îª 1 Ð¡Ê±£¬¡°PT20M¡±Îª 20 ·ÖÖÓ£©¡£
-        //ÔÊÐíµÄ×î³¤Ê±¼äÎª 31 Ìì£¬ÔÊÐíµÄ×î¶ÌÊ±¼äÎª 1 ·ÖÖÓ¡£
+        //æŒ‡å®šæ¯æ¬¡é‡æ–°å¯åŠ¨ä»»åŠ¡ä¹‹é—´çš„æ—¶é—´é‡ã€‚æ­¤å­—ç¬¦ä¸²çš„æ ¼å¼ä¸ºï¼ˆä¾‹å¦‚ï¼Œâ€œPT5Mâ€ä¸º 5 åˆ†é’Ÿï¼Œâ€œPT1Hâ€ä¸º 1 å°æ—¶ï¼Œâ€œPT20Mâ€ä¸º 20 åˆ†é’Ÿï¼‰ã€‚
+        //å…è®¸çš„æœ€é•¿æ—¶é—´ä¸º 31 å¤©ï¼Œå…è®¸çš„æœ€çŸ­æ—¶é—´ä¸º 1 åˆ†é’Ÿã€‚
         //https://docs.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-interval-repetitiontype-element
         hr = pRepetitionPattern->put_Interval(_bstr_t(L"PT1M"));
         pRepetitionPattern->Release();
@@ -244,7 +244,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     //  Set the task to start at a certain time. 
     //  The time format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
     //  For example, the start boundary below is January 1st 2005 at 12:05
-    hr = pTimeTrigger->put_StartBoundary(_bstr_t(L"2022-01-01T00:00:00"));//Õâ¸ö²»ÄÜÃ»ÓÐ¡£
+    hr = pTimeTrigger->put_StartBoundary(_bstr_t(L"2022-01-01T00:00:00"));//è¿™ä¸ªä¸èƒ½æ²¡æœ‰ã€‚
     pTimeTrigger->Release();
     if (FAILED(hr)) {
         printf("\nCannot add start boundary to trigger: %x", hr);
@@ -255,7 +255,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Add an action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection* pActionCollection = NULL;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -268,7 +268,7 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction* pAction = NULL;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -279,9 +279,9 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction* pExecAction = NULL;
     //  QI for the executable task pointer.
-    hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
+    hr = pAction->QueryInterface(IID_IExecAction, (void**)&pExecAction);
     pAction->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for IExecAction: %x", hr);
@@ -303,15 +303,15 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask* pRegisteredTask = NULL;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
-                                             pTask,
-                                             TASK_CREATE_OR_UPDATE,
-                                             _variant_t(),
-                                             _variant_t(),
-                                             TASK_LOGON_INTERACTIVE_TOKEN,
-                                             _variant_t(L""),
-                                             &pRegisteredTask);
+        pTask,
+        TASK_CREATE_OR_UPDATE,
+        _variant_t(),
+        _variant_t(),
+        TASK_LOGON_INTERACTIVE_TOKEN,
+        _variant_t(L""),
+        &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -333,10 +333,10 @@ ITimeTrigger+IRepetitionPatternµÄ²âÊÔ¡£
 
 int WINAPI IBootTriggerTest()
 /*
-IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
+IBootTrigger+IRepetitionPatternçš„æµ‹è¯•ã€‚
 
-×¢Òâ£ºÄ¬ÈÏÔËÐÐÕË»§ÊÇL"Local Service"¡£
-      ²»½¨ÒéÔËÐÐ´ý´°¿ÚµÄ³ÌÐò¡£
+æ³¨æ„ï¼šé»˜è®¤è¿è¡Œè´¦æˆ·æ˜¯L"Local Service"ã€‚
+      ä¸å»ºè®®è¿è¡Œå¾…çª—å£çš„ç¨‹åºã€‚
 */
 {
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
@@ -360,8 +360,8 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     wstrExecutablePath += L"\\SYSTEM32\\cmd.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService* pService = NULL;
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -379,7 +379,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
 
     //  Get the pointer to the root task folder.  
     //  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder* pRootFolder = NULL;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -392,7 +392,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition* pTask = NULL;
     hr = pService->NewTask(0, &pTask);
 
     pService->Release();  // COM clean up.  Pointer is no longer used.
@@ -404,7 +404,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo* pRegInfo = NULL;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -425,7 +425,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings* pSettings = NULL;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -447,7 +447,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Get the trigger collection to insert the boot trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection* pTriggerCollection = NULL;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -458,7 +458,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Add the boot trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger* pTrigger = NULL;
     hr = pTriggerCollection->Create(TASK_TRIGGER_BOOT, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -469,8 +469,8 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         return 1;
     }
 
-    IBootTrigger * pBootTrigger = NULL;
-    hr = pTrigger->QueryInterface(IID_IBootTrigger, (void **)&pBootTrigger);
+    IBootTrigger* pBootTrigger = NULL;
+    hr = pTrigger->QueryInterface(IID_IBootTrigger, (void**)&pBootTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for IBootTrigger: %x", hr);
@@ -482,7 +482,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
 
     {
         // Add a repetition to the trigger so that it repeats five times.
-        IRepetitionPattern * pRepetitionPattern = NULL;
+        IRepetitionPattern* pRepetitionPattern = NULL;
         hr = pBootTrigger->get_Repetition(&pRepetitionPattern);
         if (FAILED(hr)) {
             printf("\nCannot get repetition pattern: %x", hr);
@@ -502,8 +502,8 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         //    return 1;
         //}
 
-        //Ö¸¶¨Ã¿´ÎÖØÐÂÆô¶¯ÈÎÎñÖ®¼äµÄÊ±¼äÁ¿¡£´Ë×Ö·û´®µÄ¸ñÊ½Îª£¨ÀýÈç£¬¡°PT5M¡±Îª 5 ·ÖÖÓ£¬¡°PT1H¡±Îª 1 Ð¡Ê±£¬¡°PT20M¡±Îª 20 ·ÖÖÓ£©¡£
-        //ÔÊÐíµÄ×î³¤Ê±¼äÎª 31 Ìì£¬ÔÊÐíµÄ×î¶ÌÊ±¼äÎª 1 ·ÖÖÓ¡£
+        //æŒ‡å®šæ¯æ¬¡é‡æ–°å¯åŠ¨ä»»åŠ¡ä¹‹é—´çš„æ—¶é—´é‡ã€‚æ­¤å­—ç¬¦ä¸²çš„æ ¼å¼ä¸ºï¼ˆä¾‹å¦‚ï¼Œâ€œPT5Mâ€ä¸º 5 åˆ†é’Ÿï¼Œâ€œPT1Hâ€ä¸º 1 å°æ—¶ï¼Œâ€œPT20Mâ€ä¸º 20 åˆ†é’Ÿï¼‰ã€‚
+        //å…è®¸çš„æœ€é•¿æ—¶é—´ä¸º 31 å¤©ï¼Œå…è®¸çš„æœ€çŸ­æ—¶é—´ä¸º 1 åˆ†é’Ÿã€‚
         //https://docs.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-interval-repetitiontype-element
         hr = pRepetitionPattern->put_Interval(_bstr_t(L"PT1M"));
         pRepetitionPattern->Release();
@@ -543,7 +543,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Add an Action to the task. This task will execute Notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection* pActionCollection = NULL;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -556,7 +556,7 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Create the action, specifying it as an executable action.
-    IAction * pAction = NULL;
+    IAction* pAction = NULL;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -567,9 +567,9 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction* pExecAction = NULL;
     //  QI for the executable task pointer.
-    hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
+    hr = pAction->QueryInterface(IID_IExecAction, (void**)&pExecAction);
     pAction->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for IExecAction: %x", hr);
@@ -591,17 +591,17 @@ IBootTrigger+IRepetitionPatternµÄ²âÊÔ¡£
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask* pRegisteredTask = NULL;
     VARIANT varPassword;
     varPassword.vt = VT_EMPTY;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
-                                             pTask,
-                                             TASK_CREATE_OR_UPDATE,
-                                             _variant_t(L"Local Service"), //_variant_t(L"Administrator"),
-                                             varPassword,
-                                             TASK_LOGON_SERVICE_ACCOUNT,
-                                             _variant_t(L""),
-                                             &pRegisteredTask);
+        pTask,
+        TASK_CREATE_OR_UPDATE,
+        _variant_t(L"Local Service"), //_variant_t(L"Administrator"),
+        varPassword,
+        TASK_LOGON_SERVICE_ACCOUNT,
+        _variant_t(L""),
+        &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();
@@ -625,7 +625,7 @@ int WINAPI ILogonTriggerTest()
 /*
 ILogonTrigger + IRepetitionPattern.
 
-×¢²á³É¹¦ÁË£¬µ«½ø³ÌÃ»Æô¶¯¡£ÐèÒªÍ£Ö¹£¬È»ºó¿ªÊ¼£¬²ÅÆô¶¯½ø³Ì£¬ÇÒÒ²Ã»ÓÐ¶¨Ê±Æô¶¯½ø³Ì£¬¼´Ê¹½ø³ÌÒÑ¾­ÍË³ö¡£
+æ³¨å†ŒæˆåŠŸäº†ï¼Œä½†è¿›ç¨‹æ²¡å¯åŠ¨ã€‚éœ€è¦åœæ­¢ï¼Œç„¶åŽå¼€å§‹ï¼Œæ‰å¯åŠ¨è¿›ç¨‹ï¼Œä¸”ä¹Ÿæ²¡æœ‰å®šæ—¶å¯åŠ¨è¿›ç¨‹ï¼Œå³ä½¿è¿›ç¨‹å·²ç»é€€å‡ºã€‚
 */
 {
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
@@ -649,8 +649,8 @@ ILogonTrigger + IRepetitionPattern.
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService* pService = NULL;
+    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void**)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -668,7 +668,7 @@ ILogonTrigger + IRepetitionPattern.
 
     //  Get the pointer to the root task folder.  This folder will hold the
     //  new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder* pRootFolder = NULL;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -681,7 +681,7 @@ ILogonTrigger + IRepetitionPattern.
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition* pTask = NULL;
     hr = pService->NewTask(0, &pTask);
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
@@ -692,7 +692,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo* pRegInfo = NULL;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -713,7 +713,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings* pSettings = NULL;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -735,7 +735,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Get the trigger collection to insert the logon trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection* pTriggerCollection = NULL;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -746,7 +746,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Add the logon trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger* pTrigger = NULL;
     hr = pTriggerCollection->Create(TASK_TRIGGER_LOGON, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -757,8 +757,8 @@ ILogonTrigger + IRepetitionPattern.
         return 1;
     }
 
-    ILogonTrigger * pLogonTrigger = NULL;
-    hr = pTrigger->QueryInterface(IID_ILogonTrigger, (void **)&pLogonTrigger);
+    ILogonTrigger* pLogonTrigger = NULL;
+    hr = pTrigger->QueryInterface(IID_ILogonTrigger, (void**)&pLogonTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for ILogonTrigger: %x", hr);
@@ -770,7 +770,7 @@ ILogonTrigger + IRepetitionPattern.
 
     {
         // Add a repetition to the trigger so that it repeats five times.
-        IRepetitionPattern * pRepetitionPattern = NULL;
+        IRepetitionPattern* pRepetitionPattern = NULL;
         hr = pLogonTrigger->get_Repetition(&pRepetitionPattern);
         if (FAILED(hr)) {
             printf("\nCannot get repetition pattern: %x", hr);
@@ -790,8 +790,8 @@ ILogonTrigger + IRepetitionPattern.
         //    return 1;
         //}
 
-        //Ö¸¶¨Ã¿´ÎÖØÐÂÆô¶¯ÈÎÎñÖ®¼äµÄÊ±¼äÁ¿¡£´Ë×Ö·û´®µÄ¸ñÊ½Îª£¨ÀýÈç£¬¡°PT5M¡±Îª 5 ·ÖÖÓ£¬¡°PT1H¡±Îª 1 Ð¡Ê±£¬¡°PT20M¡±Îª 20 ·ÖÖÓ£©¡£
-        //ÔÊÐíµÄ×î³¤Ê±¼äÎª 31 Ìì£¬ÔÊÐíµÄ×î¶ÌÊ±¼äÎª 1 ·ÖÖÓ¡£
+        //æŒ‡å®šæ¯æ¬¡é‡æ–°å¯åŠ¨ä»»åŠ¡ä¹‹é—´çš„æ—¶é—´é‡ã€‚æ­¤å­—ç¬¦ä¸²çš„æ ¼å¼ä¸ºï¼ˆä¾‹å¦‚ï¼Œâ€œPT5Mâ€ä¸º 5 åˆ†é’Ÿï¼Œâ€œPT1Hâ€ä¸º 1 å°æ—¶ï¼Œâ€œPT20Mâ€ä¸º 20 åˆ†é’Ÿï¼‰ã€‚
+        //å…è®¸çš„æœ€é•¿æ—¶é—´ä¸º 31 å¤©ï¼Œå…è®¸çš„æœ€çŸ­æ—¶é—´ä¸º 1 åˆ†é’Ÿã€‚
         //https://docs.microsoft.com/en-us/windows/win32/taskschd/taskschedulerschema-interval-repetitiontype-element
         hr = pRepetitionPattern->put_Interval(_bstr_t(L"PT1M"));
         pRepetitionPattern->Release();
@@ -841,7 +841,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Add an Action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection* pActionCollection = NULL;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -854,7 +854,7 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction* pAction = NULL;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -865,9 +865,9 @@ ILogonTrigger + IRepetitionPattern.
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction* pExecAction = NULL;
     //  QI for the executable task pointer.
-    hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
+    hr = pAction->QueryInterface(IID_IExecAction, (void**)&pExecAction);
     pAction->Release();
     if (FAILED(hr)) {
         printf("\nQueryInterface call failed for IExecAction: %x", hr);
@@ -889,16 +889,16 @@ ILogonTrigger + IRepetitionPattern.
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask* pRegisteredTask = NULL;
 
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
-                                             pTask,
-                                             TASK_CREATE_OR_UPDATE,
-                                             _variant_t(L"S-1-5-32-544"),
-                                             _variant_t(),
-                                             TASK_LOGON_GROUP,
-                                             _variant_t(L""),
-                                             &pRegisteredTask);
+        pTask,
+        TASK_CREATE_OR_UPDATE,
+        _variant_t(L"S-1-5-32-544"),
+        _variant_t(),
+        TASK_LOGON_GROUP,
+        _variant_t(L""),
+        &pRegisteredTask);
     if (FAILED(hr)) {
         printf("\nError saving the Task : %x", hr);
         pRootFolder->Release();

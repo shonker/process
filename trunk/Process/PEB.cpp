@@ -10,16 +10,16 @@ EXTERN_C
 __declspec(dllexport)
 DWORD WINAPI GetCommandLineEx(_In_ HANDLE UniqueProcessId)
 /*
-¹¦ÄÜ£º»ñÈ¡Ò»¸ö½ø³ÌµÄÃüÁîĞĞ¡£
+åŠŸèƒ½ï¼šè·å–ä¸€ä¸ªè¿›ç¨‹çš„å‘½ä»¤è¡Œã€‚
 
-ÊµÏÖË¼Â·£º¶ÁÈ¡ÁíÍâÒ»¸ö½ø³ÌµÄPEBĞÅÏ¢¡£
+å®ç°æ€è·¯ï¼šè¯»å–å¦å¤–ä¸€ä¸ªè¿›ç¨‹çš„PEBä¿¡æ¯ã€‚
 
-×¢Òâ£º
-1.32Î»²Ù×÷ÏµÍ³µÄ32Î»³ÌĞò¡£
-2.64Î»²Ù×÷ÏµÍ³µÄ64Î»³ÌĞò¡£
-3.64Î»²Ù×÷ÏµÍ³µÄ32Î»³ÌĞò¡£
+æ³¨æ„ï¼š
+1.32ä½æ“ä½œç³»ç»Ÿçš„32ä½ç¨‹åºã€‚
+2.64ä½æ“ä½œç³»ç»Ÿçš„64ä½ç¨‹åºã€‚
+3.64ä½æ“ä½œç³»ç»Ÿçš„32ä½ç¨‹åºã€‚
 
-²ÎÊı£¬ÆäÊµ¶¼ÊÇDWORD¡£
+å‚æ•°ï¼Œå…¶å®éƒ½æ˜¯DWORDã€‚
 
 https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
 */
@@ -33,14 +33,14 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
     }
 
     HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                  FALSE,
-                                  HandleToULong(UniqueProcessId));
+        FALSE,
+        HandleToULong(UniqueProcessId));
     if (NULL == hProcess) {
         printf("LastError:%d\n", GetLastError());
         return GetLastError();
     }
 
-    PROCESS_BASIC_INFORMATION ProcessBasicInfo = {0};
+    PROCESS_BASIC_INFORMATION ProcessBasicInfo = { 0 };
     ULONG ReturnLength = 0;
     NTSTATUS status = ZwQueryInformationProcess(hProcess, ProcessBasicInformation, &ProcessBasicInfo, sizeof(PROCESS_BASIC_INFORMATION), &ReturnLength);
     if (!NT_SUCCESS(status)) {
@@ -53,7 +53,8 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
 #ifdef _WIN64    
         Offset = FIELD_OFFSET(PEB_WOW64, ProcessParameters);
 #endif        
-    } else {
+    }
+    else {
         Offset = FIELD_OFFSET(PEB, ProcessParameters);
     }
 
@@ -64,7 +65,7 @@ https://wj32.org/wp/2009/01/24/howto-get-the-command-line-of-processes/
         return GetLastError();
     }
 
-    RTL_USER_PROCESS_PARAMETERS ProcessParameter = {0};
+    RTL_USER_PROCESS_PARAMETERS ProcessParameter = { 0 };
     if (!ReadProcessMemory(hProcess, ProcessParameters, &ProcessParameter, sizeof(RTL_USER_PROCESS_PARAMETERS), NULL)) {
         printf("LastError:%d\n", GetLastError());
         CloseHandle(hProcess);

@@ -53,11 +53,12 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
     if (NumberOfHeaps == 0) {
         _tprintf(TEXT("Failed to retrieve heaps with LastError %d.\n"), GetLastError());
         return 1;
-    } else if (NumberOfHeaps > HeapsLength) {
+    }
+    else if (NumberOfHeaps > HeapsLength) {
         // Compare the latest number of heaps with the original number of heaps.
         // If the latest number is larger than the original number, another component has created a new heap and the buffer is too small.
         _tprintf(TEXT("Another component created a heap between calls. ") \
-                 TEXT("Please try again.\n"));
+            TEXT("Please try again.\n"));
         return 1;
     }
 
@@ -107,7 +108,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/dd299432(v=vs.85).aspx
 
             hl.dwSize = sizeof(HEAPLIST32);
         } while (Heap32ListNext(hHeapSnap, &hl));
-    } else {
+    }
+    else {
         printf("Cannot list first heap (%d)\n", GetLastError());
     }
 
@@ -152,26 +154,29 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
             if ((Entry.wFlags & PROCESS_HEAP_ENTRY_DDESHARE) != 0) {
                 _tprintf(TEXT(", DDESHARE"));
             }
-        } else if ((Entry.wFlags & PROCESS_HEAP_REGION) != 0) {
+        }
+        else if ((Entry.wFlags & PROCESS_HEAP_REGION) != 0) {
             _tprintf(TEXT("Region\n  %d bytes committed\n") \
-                     TEXT("  %d bytes uncommitted\n  First block address: %#p\n") \
-                     TEXT("  Last block address: %#p\n"),
-                     Entry.Region.dwCommittedSize,
-                     Entry.Region.dwUnCommittedSize,
-                     Entry.Region.lpFirstBlock,
-                     Entry.Region.lpLastBlock);
-        } else if ((Entry.wFlags & PROCESS_HEAP_UNCOMMITTED_RANGE) != 0) {
+                TEXT("  %d bytes uncommitted\n  First block address: %#p\n") \
+                TEXT("  Last block address: %#p\n"),
+                Entry.Region.dwCommittedSize,
+                Entry.Region.dwUnCommittedSize,
+                Entry.Region.lpFirstBlock,
+                Entry.Region.lpLastBlock);
+        }
+        else if ((Entry.wFlags & PROCESS_HEAP_UNCOMMITTED_RANGE) != 0) {
             _tprintf(TEXT("Uncommitted range\n"));
-        } else {
+        }
+        else {
             _tprintf(TEXT("Block\n"));
         }
 
         _tprintf(TEXT("  Data portion begins at: %#p\n  Size: %d bytes\n") \
-                 TEXT("  Overhead: %d bytes\n  Region index: %d\n\n"),
-                 Entry.lpData,
-                 Entry.cbData,
-                 Entry.cbOverhead,
-                 Entry.iRegionIndex);
+            TEXT("  Overhead: %d bytes\n  Region index: %d\n\n"),
+            Entry.lpData,
+            Entry.cbData,
+            Entry.cbOverhead,
+            Entry.iRegionIndex);
     }
 
     DWORD LastError = GetLastError();
@@ -235,7 +240,8 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-heap-list
             }
             hl.dwSize = sizeof(HEAPLIST32);
         } while (Heap32ListNext(hHeapSnap, &hl));
-    } else printf("Cannot list first heap (%d)\n", GetLastError());
+    }
+    else printf("Cannot list first heap (%d)\n", GetLastError());
 
     CloseHandle(hHeapSnap);
 
@@ -259,14 +265,15 @@ https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapsetinf
     // check the return value and exit on failure as shown in this example.
     BOOL bResult = HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
     if (bResult != FALSE) {
-        //DbgPrintA("–≈œ¢£∫Heap terminate-on-corruption has been enabled");
-    } else {
-        //DbgPrintA("¥ÌŒÛ£∫LastError %d", GetLastError());
+        //DbgPrintA("‰ø°ÊÅØÔºöHeap terminate-on-corruption has been enabled");
+    }
+    else {
+        //DbgPrintA("ÈîôËØØÔºöLastError %d", GetLastError());
     }
 
     HANDLE hHeap = GetProcessHeap();
     if (hHeap == NULL) {
-        //DbgPrintA("¥ÌŒÛ£∫LastError %d", GetLastError());
+        //DbgPrintA("ÈîôËØØÔºöLastError %d", GetLastError());
         return;
     }
 
@@ -280,9 +287,9 @@ https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapsetinf
     //                             &HeapInformation,
     //                             sizeof(SIZE_T));
     //if (bResult != FALSE) {
-    //    DbgPrintA("–≈œ¢£∫The low-fragmentation heap has been enabled");
+    //    DbgPrintA("‰ø°ÊÅØÔºöThe low-fragmentation heap has been enabled");
     //} else {
-    //    DbgPrintA("¥ÌŒÛ£∫LastError %d", GetLastError());//ERROR_INVALID_PARAMETER
+    //    DbgPrintA("ÈîôËØØÔºöLastError %d", GetLastError());//ERROR_INVALID_PARAMETER
     //}
 }
 

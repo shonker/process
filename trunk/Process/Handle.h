@@ -11,9 +11,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//’™◊‘£∫\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntexapi.h
+//ÊëòËá™Ôºö\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntexapi.h
 // System Information Classes.
-//\Windows Kits\10\Include\10.0.19041.0\um\winternl.h“—æ≠”–’‚∏ˆ∂®“Â°£
+//\Windows Kits\10\Include\10.0.19041.0\um\winternl.hÂ∑≤ÁªèÊúâËøô‰∏™ÂÆö‰πâ„ÄÇ
 //typedef enum _SYSTEM_INFORMATION_CLASS {
 //    SystemBasicInformation,
 //    SystemProcessorInformation,             // obsolete...delete
@@ -31,7 +31,7 @@
 //    SystemStackTraceInformation,
 //    SystemPagedPoolInformation,
 //    SystemNonPagedPoolInformation,
-//    SystemHandleInformation,//ExpGetHandleInformation¥¶¿Ìµƒ°£
+//    SystemHandleInformation,//ExpGetHandleInformationÂ§ÑÁêÜÁöÑ„ÄÇ
 //    SystemObjectInformation,
 //    SystemPageFileInformation,
 //    SystemVdmInstemulInformation,
@@ -105,7 +105,7 @@
 
 // The NtQuerySystemInformation function and the structures that it returns are internal to the operating system and subject to change from one  release of Windows to another.
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * QUERYSYSTEMINFORMATION)(
+typedef NTSTATUS(WINAPI* QUERYSYSTEMINFORMATION)(
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
     OUT PVOID SystemInformation,
     IN ULONG SystemInformationLength,
@@ -119,7 +119,7 @@ typedef NTSTATUS(WINAPI * QUERYSYSTEMINFORMATION)(
 //    ObjectTypeInformation = 2
 //} OBJECT_INFORMATION_CLASS;
 
-typedef NTSTATUS(WINAPI * QueryObject)(
+typedef NTSTATUS(WINAPI* QueryObject)(
     __in_opt HANDLE  Handle,
     __in OBJECT_INFORMATION_CLASS  ObjectInformationClass,
     __out_bcount_opt(ObjectInformationLength) PVOID  ObjectInformation,
@@ -146,7 +146,7 @@ typedef struct _SYSTEM_HANDLE_INFORMATION
 } SYSTEM_HANDLE_INFORMATION, * PSYSTEM_HANDLE_INFORMATION;
 
 
-////’™◊‘£∫\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntobapi.h
+////ÊëòËá™Ôºö\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntobapi.h
 //typedef enum _OBJECT_INFORMATION_CLASS {
 //    ObjectBasicInformation,
 //    ObjectNameInformation,
@@ -157,7 +157,7 @@ typedef struct _SYSTEM_HANDLE_INFORMATION
 //    MaxObjectInfoClass  // MaxObjectInfoClass should always be the last enum
 //} OBJECT_INFORMATION_CLASS;
 
-//’™◊‘£∫\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntobapi.h
+//ÊëòËá™Ôºö\wrk\WindowsResearchKernel-WRK\WRK-v1.2\public\sdk\inc\ntobapi.h
 typedef struct _OBJECT_NAME_INFORMATION {               // ntddk wdm nthal
     UNICODE_STRING Name;                                // ntddk wdm nthal
 } OBJECT_NAME_INFORMATION, * POBJECT_NAME_INFORMATION;   // ntddk wdm nthal
@@ -181,7 +181,7 @@ const SYSTEM_INFORMATION_CLASS SystemHandleInformation = (SYSTEM_INFORMATION_CLA
 
 // The NtQuerySystemInformation function and the structures that it returns are internal to the operating system and subject to change from one release of Windows to another. 
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * QUERYSYSTEMINFORMATION)(
+typedef NTSTATUS(WINAPI* QUERYSYSTEMINFORMATION)(
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
     OUT PVOID SystemInformation,
     IN ULONG SystemInformationLength,
@@ -212,7 +212,7 @@ const FILE_INFORMATION_CLASS FileNameInformation = (FILE_INFORMATION_CLASS)9;
 
 // The NtQueryInformationFile function and the structures that it returns are internal to the operating system and subject to change from one release of Windows to another. 
 // To maintain the compatibility of your application, it is better not to use the function.
-typedef NTSTATUS(WINAPI * QUERYINFORMATIONFILE)(
+typedef NTSTATUS(WINAPI* QUERYINFORMATIONFILE)(
     IN HANDLE FileHandle,
     OUT PIO_STATUS_BLOCK IoStatusBlock,
     OUT PVOID FileInformation,
@@ -250,11 +250,11 @@ typedef struct _FILE_DIRECTORY_INFORMATION {
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntopendirectoryobject
 typedef
-NTSTATUS (WINAPI * OpenDirectoryObject)(
+NTSTATUS(WINAPI* OpenDirectoryObject)(
     _Out_ PHANDLE            DirectoryHandle,
     _In_  ACCESS_MASK        DesiredAccess,
     _In_  POBJECT_ATTRIBUTES ObjectAttributes
-);
+    );
 
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntquerydirectoryobject
@@ -266,7 +266,7 @@ typedef struct _OBJECT_DIRECTORY_INFORMATION {
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntquerydirectoryobject
 typedef
-NTSTATUS (WINAPI *QueryDirectoryObject)(
+NTSTATUS(WINAPI* QueryDirectoryObject)(
     _In_      HANDLE  DirectoryHandle,
     _Out_opt_ PVOID   Buffer,
     _In_      ULONG   Length,
@@ -274,25 +274,25 @@ NTSTATUS (WINAPI *QueryDirectoryObject)(
     _In_      BOOLEAN RestartScan,
     _Inout_   PULONG  Context,
     _Out_opt_ PULONG  ReturnLength
-);
+    );
 
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntopensymboliclinkobject
 typedef
-NTSTATUS (WINAPI *OpenSymbolicLinkObject)(
+NTSTATUS(WINAPI* OpenSymbolicLinkObject)(
     _Out_ PHANDLE            LinkHandle,
     _In_  ACCESS_MASK        DesiredAccess,
     _In_  POBJECT_ATTRIBUTES ObjectAttributes
-);
+    );
 
 
 //https://docs.microsoft.com/en-us/windows/win32/devnotes/ntquerysymboliclinkobject
 typedef
-NTSTATUS (WINAPI *QuerySymbolicLinkObject)(
+NTSTATUS(WINAPI* QuerySymbolicLinkObject)(
     _In_      HANDLE          LinkHandle,
     _Inout_   PUNICODE_STRING LinkTarget,
     _Out_opt_ PULONG          ReturnedLength
-);
+    );
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,8 +27,8 @@ The following example retrieves the process's environment block using GetEnviron
     while (*lpszVariable) {
         _tprintf(TEXT("%s\n"), lpszVariable);
 
-        //¾­²âÊÔ£¬ÕâÀïÓÉÎŞĞ§µÄ»·¾³±äÁ¿¡£
-        //½¨ÒéÓÃscanf»òÕßÕıÔò±í´ïÊ½ÌáÈ¡³öÃû×Ö£¬È»ºóÓÃExpandEnvironmentStringsÑéÖ¤¡£
+        //ç»æµ‹è¯•ï¼Œè¿™é‡Œç”±æ— æ•ˆçš„ç¯å¢ƒå˜é‡ã€‚
+        //å»ºè®®ç”¨scanfæˆ–è€…æ­£åˆ™è¡¨è¾¾å¼æå–å‡ºåå­—ï¼Œç„¶åç”¨ExpandEnvironmentStringséªŒè¯ã€‚
 
         lpszVariable += (size_t)lstrlen(lpszVariable) + 1;
     }

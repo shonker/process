@@ -20,7 +20,7 @@ First, the ListProcessThreads function takes a snapshot of the currently executi
 and then it walks through the list recorded in the snapshot using the Thread32First and Thread32Next functions.
 The parameter for ListProcessThreads is the process identifier of the process whose threads are to be listed.
 
-用法：ListProcessThreads(GetCurrentProcessId());
+鐢ㄦ硶锛歀istProcessThreads(GetCurrentProcessId());
 
 https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-thread-list
 */
@@ -106,7 +106,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 {
     PMYDATA pDataArray[MAX_THREADS];
     DWORD   dwThreadIdArray[MAX_THREADS];
-    HANDLE  hThreadArray[MAX_THREADS] = {0};
+    HANDLE  hThreadArray[MAX_THREADS] = { 0 };
 
     // Create MAX_THREADS worker threads.
     for (int i = 0; i < MAX_THREADS; i++) {
@@ -177,7 +177,7 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 
     // Print the parameter values using thread-safe functions.
     StringCchPrintf(msgBuf, BUF_SIZE, TEXT("Parameters = %d, %d\n"),
-                    pDataArray->val1, pDataArray->val2);
+        pDataArray->val1, pDataArray->val2);
     (void)StringCchLength(msgBuf, BUF_SIZE, &cchStringSize);
     WriteConsole(hStdout, msgBuf, (DWORD)cchStringSize, &dwChars, NULL);
 
@@ -210,13 +210,13 @@ void ReportError(LPCWSTR pszFunction, DWORD dwError = GetLastError())
 }
 
 
-int ImpersonateUser(int argc, wchar_t * argv[])
+int ImpersonateUser(int argc, wchar_t* argv[])
 /***************************** Module Header *******************************\
 * Module Name:  CppImpersonateUser.cpp
 * Project:      CppImpersonateUser
 * Copyright (c) Microsoft Corporation.
 *
-* 代码出处：User impersonation demo (CppImpersonateUser)
+* 浠ｇ爜鍑哄锛歎ser impersonation demo (CppImpersonateUser)
 *
 * Windows Impersonation is a powerful feature Windows uses frequently in its
 * security model. In general Windows also uses impersonation in its client/
@@ -258,7 +258,7 @@ int ImpersonateUser(int argc, wchar_t * argv[])
     wchar_t szUserName[INFO_BUFFER_SIZE] = {};
     wchar_t szDomain[INFO_BUFFER_SIZE] = {};
     wchar_t szPassword[INFO_BUFFER_SIZE] = {};
-    wchar_t * pc = NULL;
+    wchar_t* pc = NULL;
     HANDLE hToken = NULL;
     BOOL fSucceeded = FALSE;
 

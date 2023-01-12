@@ -1,11 +1,11 @@
 /*
-������Ҫ��Token��صĶ�����ע�⣺Token�̳����û���
+这里主要是Token相关的东西，注意：Token继承于用户。
 
-Token���ڽ��̣�����������ļ���
+Token属于进程，所以有这个文件。
 
-���ĳ��˽��̵�Token���û��⣬�������ػ����飬������ݡ�
+本文除了进程的Token和用户外，还包括回话，组，域等内容。
 
-��Security�������ܺã����Ƿ�Χ̫�㣬�����Tokenרҵ��
+叫Security听起来很好，但是范围太广，不如叫Token专业。
 */
 
 #pragma once
@@ -17,7 +17,7 @@ class Security
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//StartInteractiveClientProcess�����õ��ļ������塣
+//StartInteractiveClientProcess函数用到的几个定义。
 
 
 #define DESKTOP_ALL (DESKTOP_READOBJECTS | DESKTOP_CREATEWINDOW | \

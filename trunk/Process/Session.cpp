@@ -15,23 +15,23 @@ EXTERN_C
 __declspec(dllexport)
 int WINAPI EnumerateLogonSessions()
 /*
-ÎÄ¼şÃû£ºLsaEnumerateLogonSessions.Cpp
-¹¦ÄÜ£ºÃ¶¾ÙÏµÍ³µÄµÇÂ¼µÄ»á»°¼°ÆäĞÅÏ¢¡£
-ËµÃ÷£º¿´Ãû×ÖÊÇÃ¶¾Ù»á»°µÄ£¬ÆäÊµ»¹ÓĞºÜ¶àµÄÓÃ»§Ãû£¬»á»°ÊÇ»áÖØ¸´µÄ¡£
-      ¸Ğ¾õ»¹²»ÈçÃ¶¾Ù½ø³Ì£¬È»ºóÊÕ¼¯½ø³ÌµÄ»á»°ĞÅÏ¢·½±ãÄØ£¿
+æ–‡ä»¶åï¼šLsaEnumerateLogonSessions.Cpp
+åŠŸèƒ½ï¼šæšä¸¾ç³»ç»Ÿçš„ç™»å½•çš„ä¼šè¯åŠå…¶ä¿¡æ¯ã€‚
+è¯´æ˜ï¼šçœ‹åå­—æ˜¯æšä¸¾ä¼šè¯çš„ï¼Œå…¶å®è¿˜æœ‰å¾ˆå¤šçš„ç”¨æˆ·åï¼Œä¼šè¯æ˜¯ä¼šé‡å¤çš„ã€‚
+      æ„Ÿè§‰è¿˜ä¸å¦‚æšä¸¾è¿›ç¨‹ï¼Œç„¶åæ”¶é›†è¿›ç¨‹çš„ä¼šè¯ä¿¡æ¯æ–¹ä¾¿å‘¢ï¼Ÿ
 
-»á»°£¬ºÃ¶àÈË¶¼ÌıËµ¹ı¡£
-ÈçÍøÂçÉÏµÄ£¬ÍøÒ³µÄÁ´½Ó£¬TCP/HttpµÄÁ´½ÓµÈ¡£
-ÕâÀïËµµÄÊÇÏµÍ³µÄµÇÂ¼µÄ»á»°¡£
+ä¼šè¯ï¼Œå¥½å¤šäººéƒ½å¬è¯´è¿‡ã€‚
+å¦‚ç½‘ç»œä¸Šçš„ï¼Œç½‘é¡µçš„é“¾æ¥ï¼ŒTCP/Httpçš„é“¾æ¥ç­‰ã€‚
+è¿™é‡Œè¯´çš„æ˜¯ç³»ç»Ÿçš„ç™»å½•çš„ä¼šè¯ã€‚
 
-ÕâºÃÏñÓÃ´¦²»´ó£¬Ö»ÊÇÔÚÔ¶³ÌµÇÂ¼/¶àÓÃ»§µÄÇé¿öÏÂ»á¿¼ÂÇµ½¡£
-µ«ÊÇÓÃµ½ÁË£¬¾Í±ØĞë»á£¬½â¾öµô¡£
+è¿™å¥½åƒç”¨å¤„ä¸å¤§ï¼Œåªæ˜¯åœ¨è¿œç¨‹ç™»å½•/å¤šç”¨æˆ·çš„æƒ…å†µä¸‹ä¼šè€ƒè™‘åˆ°ã€‚
+ä½†æ˜¯ç”¨åˆ°äº†ï¼Œå°±å¿…é¡»ä¼šï¼Œè§£å†³æ‰ã€‚
 
-ÔÙËµ£º»á»°µÄIDÒ²²»Ò»¶¨ÊÇÁ¬ĞøµÄ¡£
-ÈçµÇÂ¼Ò»¸ö»á»°£¬È»ºóÔÙ×¢Ïú£¬ÔÙµÇÂ¼¿´¿´£º×¢ÏúµÄÄÇ¸ö»á»°µÄID¾Í²»ÔÙÁË£¬µ«ÊÇºóÃæµÇÂ¼µÄÊÇ»¹´æÔÚµÄ¡£
+å†è¯´ï¼šä¼šè¯çš„IDä¹Ÿä¸ä¸€å®šæ˜¯è¿ç»­çš„ã€‚
+å¦‚ç™»å½•ä¸€ä¸ªä¼šè¯ï¼Œç„¶åå†æ³¨é”€ï¼Œå†ç™»å½•çœ‹çœ‹ï¼šæ³¨é”€çš„é‚£ä¸ªä¼šè¯çš„IDå°±ä¸å†äº†ï¼Œä½†æ˜¯åé¢ç™»å½•çš„æ˜¯è¿˜å­˜åœ¨çš„ã€‚
 
 http://msdn.microsoft.com/en-us/library/windows/desktop/aa378290(v=vs.85).aspx
-Õâ¸öÒ³ÃæµÄLSAFreeReturnBufferÒ²Ğ´´íÁË£¬ÑÏ¸ñµÄËµÊÇ´óĞ¡Ğ´´íÎó¡£
+è¿™ä¸ªé¡µé¢çš„LSAFreeReturnBufferä¹Ÿå†™é”™äº†ï¼Œä¸¥æ ¼çš„è¯´æ˜¯å¤§å°å†™é”™è¯¯ã€‚
 
 made by correy
 made at 2014.06.15
@@ -49,8 +49,8 @@ made at 2014.06.15
     }
 
     /*
-    µÇÂ¼µÄ»á»°»¹Í¦¶àµÄ¡£
-    ¼¸¸öÓÃ»§Í¬Ê±µÇÂ¼»¹»áÖØ¸´¡£
+    ç™»å½•çš„ä¼šè¯è¿˜æŒºå¤šçš„ã€‚
+    å‡ ä¸ªç”¨æˆ·åŒæ—¶ç™»å½•è¿˜ä¼šé‡å¤ã€‚
     */
 
     ULONG i = 0;
@@ -97,16 +97,19 @@ made at 2014.06.15
         }
 
         if (ppLogonSessionData->LogonType == Interactive) {
-            fprintf(stderr, "LogonType:Interactive!\n");//ÓĞ¼¸¸öÆÕÍ¨µÄÕÊ»§µÇÂ¼£¬ÕâÀï¾Í»áÏÔÊ¾¼¸´Î¡£¾ÍÊÇËµ¿ÉÒÔÏÔÊ¾¶à¸ö¡£
-        } else if (ppLogonSessionData->LogonType == Network) {
+            fprintf(stderr, "LogonType:Interactive!\n");//æœ‰å‡ ä¸ªæ™®é€šçš„å¸æˆ·ç™»å½•ï¼Œè¿™é‡Œå°±ä¼šæ˜¾ç¤ºå‡ æ¬¡ã€‚å°±æ˜¯è¯´å¯ä»¥æ˜¾ç¤ºå¤šä¸ªã€‚
+        }
+        else if (ppLogonSessionData->LogonType == Network) {
             fprintf(stderr, "LogonType:Network!\n");
-        } else if (ppLogonSessionData->LogonType == Service) {
+        }
+        else if (ppLogonSessionData->LogonType == Service) {
             fprintf(stderr, "LogonType:Service!\n");
-        } else {
+        }
+        else {
             fprintf(stderr, "LogonType:%d!\n", ppLogonSessionData->LogonType);
         }
 
-        /*Õª×Ô£º\Microsoft SDKs\Windows\v7.1A\Include\NTSecAPI.h
+        /*æ‘˜è‡ªï¼š\Microsoft SDKs\Windows\v7.1A\Include\NTSecAPI.h
         //
         // Values for UserFlags.
         //
@@ -136,7 +139,7 @@ made at 2014.06.15
         #endif
         */
         if (ppLogonSessionData->UserFlags & LOGON_WINLOGON) {
-            fprintf(stderr, "UserFlags:LOGON_WINLOGON!\n");//¾­²âÊÔ£¬¸Ğ¾õÕâ¸ö¾ÍÊÇÆÕÍ¨ÓÃ»§µÄµÇÂ¼¡£Ô¶³ÌµÇÂ¼µÄÃ»ÓĞÊÔÑé¡£
+            fprintf(stderr, "UserFlags:LOGON_WINLOGON!\n");//ç»æµ‹è¯•ï¼Œæ„Ÿè§‰è¿™ä¸ªå°±æ˜¯æ™®é€šç”¨æˆ·çš„ç™»å½•ã€‚è¿œç¨‹ç™»å½•çš„æ²¡æœ‰è¯•éªŒã€‚
         }
         //else if (ppLogonSessionData->UserFlags & LOGON_NTLMV2_ENABLED)
         //{
@@ -153,7 +156,7 @@ made at 2014.06.15
         fprintf(stderr, "Session:%d!\n", ppLogonSessionData->Session);
 
         /*
-        »¹ÓĞ¸ü¶àĞÂĞÅÏ¢¾Í²»´òÓ¡ÁË£¬ÈçSID£¬Ê±¼äµÄ×ª»»µÈ¡£
+        è¿˜æœ‰æ›´å¤šæ–°ä¿¡æ¯å°±ä¸æ‰“å°äº†ï¼Œå¦‚SIDï¼Œæ—¶é—´çš„è½¬æ¢ç­‰ã€‚
         */
 
         fprintf(stderr, "\n");
@@ -185,22 +188,22 @@ made at 2014.06.15
 
 EXTERN_C
 __declspec(dllexport)
-void WINAPI CreateProcessWithLogon(int argc, WCHAR * argv[])
+void WINAPI CreateProcessWithLogon(int argc, WCHAR* argv[])
 /*
-runasÊÇÒ»¸ö³£ÓÃµÄÃüÁî£¬Äã»áÓÃÂğ£¿
-ÎÒ²»»á£¬µ«ÎÒÒªÌ½¾¿ËüµÄ½øÒ»²½µÄÔ­Àí¡£
-ÆäÊµºÜ¼òµ¥£¬²Î¼û£ºhttp://msdn.microsoft.com/en-us/library/windows/desktop/ms682431(v=vs.85).aspx
-×¢ÒâÊÂÏî£º¼û×¢ÊÍ¡£
+runasæ˜¯ä¸€ä¸ªå¸¸ç”¨çš„å‘½ä»¤ï¼Œä½ ä¼šç”¨å—ï¼Ÿ
+æˆ‘ä¸ä¼šï¼Œä½†æˆ‘è¦æ¢ç©¶å®ƒçš„è¿›ä¸€æ­¥çš„åŸç†ã€‚
+å…¶å®å¾ˆç®€å•ï¼Œå‚è§ï¼šhttp://msdn.microsoft.com/en-us/library/windows/desktop/ms682431(v=vs.85).aspx
+æ³¨æ„äº‹é¡¹ï¼šè§æ³¨é‡Šã€‚
 
-²»¹ıÒªÔÚ²»Í¬µÄ»á»°ÖĞÔËĞĞ£¬ÄÇ¾ÍÂé·³ÁË¡£
-ÆÕÍ¨µÄ³ÌĞòĞèÒªÌáÈ¨¡£
-¶ø½ø³ÌµÄÈ¨ÏŞÊÇ¼Ì³Ğ×ÔÓÃ»§µÄ£¬ËùÒÔ»¹Òª¸øÓÃ»§·ÖÅÉÈ¨ÏŞ¡£
-¾ßÌåµÄÉèÖÃ¿ÉÒÔ²Î¿¼±¾µØ°²È«²ßÂÔ£ºhttp://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/08bc7712-548c-4308-a49c-d551a4b5e245.mspx?mfr=true¡£
-×¢Òâ£ºÕâĞ©ÉèÖÃ»¹ÒªÖØÆôºóÉúĞ§¡£
-ËùÒÔ³£ÓÃµÄ°ì·¨ÊÇÓÃ·şÎñ£¬·şÎñÄ¬ÈÏÊÇ¾ßÓĞÕâĞ©È¨ÏŞµÄ¡£ÔÙ´ÎÖ£ÖØËµÃ÷£º²»ÓÃ·şÎñÒ²ÊÇ¿ÉÒÔµÄ¡£
-ÕıºÃÕâÓĞ½â¾öÁË·şÎñÔÚVista¼°ÒÔºóÏµÍ³µÄ±à³Ì½»»¥£¨Èç£ºµ¯³ö¶Ô»°¿ò£©µÄÎÊÌâ¡£
+ä¸è¿‡è¦åœ¨ä¸åŒçš„ä¼šè¯ä¸­è¿è¡Œï¼Œé‚£å°±éº»çƒ¦äº†ã€‚
+æ™®é€šçš„ç¨‹åºéœ€è¦ææƒã€‚
+è€Œè¿›ç¨‹çš„æƒé™æ˜¯ç»§æ‰¿è‡ªç”¨æˆ·çš„ï¼Œæ‰€ä»¥è¿˜è¦ç»™ç”¨æˆ·åˆ†æ´¾æƒé™ã€‚
+å…·ä½“çš„è®¾ç½®å¯ä»¥å‚è€ƒæœ¬åœ°å®‰å…¨ç­–ç•¥ï¼šhttp://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/08bc7712-548c-4308-a49c-d551a4b5e245.mspx?mfr=trueã€‚
+æ³¨æ„ï¼šè¿™äº›è®¾ç½®è¿˜è¦é‡å¯åç”Ÿæ•ˆã€‚
+æ‰€ä»¥å¸¸ç”¨çš„åŠæ³•æ˜¯ç”¨æœåŠ¡ï¼ŒæœåŠ¡é»˜è®¤æ˜¯å…·æœ‰è¿™äº›æƒé™çš„ã€‚å†æ¬¡éƒ‘é‡è¯´æ˜ï¼šä¸ç”¨æœåŠ¡ä¹Ÿæ˜¯å¯ä»¥çš„ã€‚
+æ­£å¥½è¿™æœ‰è§£å†³äº†æœåŠ¡åœ¨VistaåŠä»¥åç³»ç»Ÿçš„ç¼–ç¨‹äº¤äº’ï¼ˆå¦‚ï¼šå¼¹å‡ºå¯¹è¯æ¡†ï¼‰çš„é—®é¢˜ã€‚
 
-ÌáÊ¾£ºÃüÁîĞĞÊäÈë¿ÕµÄ²ÎÊı£¬¿ÉÒÔÊ¹ÓÃË«ÒıºÅ£¬Ò²¾ÍÊÇÕâÁ½¸öÒıºÅÖ®¼äÃ»ÓĞÄÚÈİ£¬°üÀ¨¿Õ¸ñ¡£
+æç¤ºï¼šå‘½ä»¤è¡Œè¾“å…¥ç©ºçš„å‚æ•°ï¼Œå¯ä»¥ä½¿ç”¨åŒå¼•å·ï¼Œä¹Ÿå°±æ˜¯è¿™ä¸¤ä¸ªå¼•å·ä¹‹é—´æ²¡æœ‰å†…å®¹ï¼ŒåŒ…æ‹¬ç©ºæ ¼ã€‚
 
 made by correy
 made at 2014.05.17
@@ -211,8 +214,8 @@ https://docs.microsoft.com/zh-cn/windows/win32/api/winbase/nf-winbase-createproc
     DWORD     dwSize;
     HANDLE    hToken;
     LPVOID    lpvEnv;
-    PROCESS_INFORMATION pi = {0};
-    STARTUPINFO         si = {0};
+    PROCESS_INFORMATION pi = { 0 };
+    STARTUPINFO         si = { 0 };
     WCHAR               szUserProfile[256] = L"";
 
     si.cb = sizeof(STARTUPINFO);
@@ -224,27 +227,27 @@ https://docs.microsoft.com/zh-cn/windows/win32/api/winbase/nf-winbase-createproc
     }
 
     // TO DO: change NULL to '.' to use local account database
-    ////±ØĞëÓĞÃÜÂë£¬²»È»Ê§°Ü¡£
+    ////å¿…é¡»æœ‰å¯†ç ï¼Œä¸ç„¶å¤±è´¥ã€‚
     if (!LogonUser(argv[1], NULL, argv[2], LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken))
         DisplayError(L"LogonUser");
 
-    //µÃµ½µÄÄÚÈİÆäÊµ¾ÍÊÇ£ºThe environment block is an array of null-terminated Unicode strings.
+    //å¾—åˆ°çš„å†…å®¹å…¶å®å°±æ˜¯ï¼šThe environment block is an array of null-terminated Unicode strings.
     //The list ends with two nulls (\0\0).
     if (!CreateEnvironmentBlock(&lpvEnv, hToken, TRUE))
         DisplayError(L"CreateEnvironmentBlock");
 
     dwSize = sizeof(szUserProfile) / sizeof(WCHAR);
 
-    //»ñÈ¡ÓÃ»§µÄÎÄ¼ş¼Ğ¡£
-    //ÓÃ»§±ØĞëµÇÂ¼ÔËĞĞ¹ıÒ»´Î£¬²»±Ø´ËÊ±Õâ¸öÓÃ»§ÔËĞĞ×Å¡£
+    //è·å–ç”¨æˆ·çš„æ–‡ä»¶å¤¹ã€‚
+    //ç”¨æˆ·å¿…é¡»ç™»å½•è¿è¡Œè¿‡ä¸€æ¬¡ï¼Œä¸å¿…æ­¤æ—¶è¿™ä¸ªç”¨æˆ·è¿è¡Œç€ã€‚
     if (!GetUserProfileDirectory(hToken, szUserProfile, &dwSize))
         DisplayError(L"GetUserProfileDirectory");
 
     // TO DO: change NULL to '.' to use local account database
     if (!CreateProcessWithLogonW(argv[1], NULL, argv[2],
-                                 LOGON_WITH_PROFILE, NULL, argv[3],
-                                 CREATE_UNICODE_ENVIRONMENT, lpvEnv, szUserProfile,
-                                 &si, &pi))
+        LOGON_WITH_PROFILE, NULL, argv[3],
+        CREATE_UNICODE_ENVIRONMENT, lpvEnv, szUserProfile,
+        &si, &pi))
         DisplayError(L"CreateProcessWithLogonW");
 
     if (!DestroyEnvironmentBlock(lpvEnv))
@@ -261,7 +264,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/api/winbase/nf-winbase-createproc
 
 EXTERN_C
 __declspec(dllexport)
-VOID WINAPI FreeLogonSID(PSID * ppsid)
+VOID WINAPI FreeLogonSID(PSID* ppsid)
 //Free the buffer for the logon SID.
 {
     HeapFree(GetProcessHeap(), 0, (LPVOID)*ppsid);
@@ -270,7 +273,7 @@ VOID WINAPI FreeLogonSID(PSID * ppsid)
 
 EXTERN_C
 __declspec(dllexport)
-BOOL WINAPI GetLogonSID(HANDLE hToken, PSID * ppsid)
+BOOL WINAPI GetLogonSID(HANDLE hToken, PSID* ppsid)
 /*
 Getting the Logon SID in C++
 (Get the SID for the client's logon session.)
@@ -389,7 +392,7 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI IsCurrentSessionRemoteable()
-/*¾­²âÊÔ£º¿ÉÇø·ÖÕı³£µÇÂ¼ºÍRDPµÇÂ¼¡£
+/*ç»æµ‹è¯•ï¼šå¯åŒºåˆ†æ­£å¸¸ç™»å½•å’ŒRDPç™»å½•ã€‚
 Your application can check the following registry key to determine whether the session is a remote session that uses RemoteFX vGPU.
 If a local session exists, this registry key provides the ID of the local session.
 
@@ -406,26 +409,27 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
 
     if (GetSystemMetrics(SM_REMOTESESSION)) {
         fIsRemoteable = TRUE;
-    } else {
+    }
+    else {
         HKEY hRegKey = NULL;
         LONG lResult;
 
         lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                               TERMINAL_SERVER_KEY,
-                               0, // ulOptions
-                               KEY_READ,
-                               &hRegKey);
+            TERMINAL_SERVER_KEY,
+            0, // ulOptions
+            KEY_READ,
+            &hRegKey);
         if (lResult == ERROR_SUCCESS) {
             DWORD dwGlassSessionId;
             DWORD cbGlassSessionId = sizeof(dwGlassSessionId);
             DWORD dwType;
 
             lResult = RegQueryValueEx(hRegKey,
-                                      GLASS_SESSION_ID,
-                                      NULL, // lpReserved
-                                      &dwType,
-                                      (BYTE *)&dwGlassSessionId,
-                                      &cbGlassSessionId);
+                GLASS_SESSION_ID,
+                NULL, // lpReserved
+                &dwType,
+                (BYTE*)&dwGlassSessionId,
+                &cbGlassSessionId);
             if (lResult == ERROR_SUCCESS) {
                 DWORD dwCurrentSessionId;
 
@@ -447,9 +451,9 @@ https://docs.microsoft.com/en-us/windows/win32/termserv/detecting-the-terminal-s
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-const char * GetSessionConnectState(WTS_CONNECTSTATE_CLASS State)
+const char* GetSessionConnectState(WTS_CONNECTSTATE_CLASS State)
 {
-    const char * ret = "Î´Öª";
+    const char* ret = "æœªçŸ¥";
 
     switch (State) {
     case WTSActive:
@@ -494,9 +498,9 @@ EXTERN_C
 __declspec(dllexport)
 bool WINAPI IsRemoteSession(DWORD SessionId)
 /*
-¹¦ÄÜ£ºÊ¶±ğÒ»¸ö»á»°ÊÇ²»ÊÇÔ¶³ÌµÄ£¬Èç£ºRDP¡£
+åŠŸèƒ½ï¼šè¯†åˆ«ä¸€ä¸ªä¼šè¯æ˜¯ä¸æ˜¯è¿œç¨‹çš„ï¼Œå¦‚ï¼šRDPã€‚
 
-SessionIdµÄÈ¡Öµ¿ÉÒÔÊÇWTS_CURRENT_SESSION£¬µ«ÊÇ²»½¨Òé£¬ÌØ±ğÊÇon a remote serve¡£
+SessionIdçš„å–å€¼å¯ä»¥æ˜¯WTS_CURRENT_SESSIONï¼Œä½†æ˜¯ä¸å»ºè®®ï¼Œç‰¹åˆ«æ˜¯on a remote serveã€‚
 */
 /*
 WTSIsRemoteSession
@@ -508,9 +512,9 @@ so the hServer parameter of the WTSQuerySessionInformation function must contain
 
 Windows Server 2008 and Windows Vista:  This value is not supported.
 
-Õª×Ô£ºhttps://docs.microsoft.com/en-us/windows/win32/api/wtsapi32/ne-wtsapi32-wts_info_class
+æ‘˜è‡ªï¼šhttps://docs.microsoft.com/en-us/windows/win32/api/wtsapi32/ne-wtsapi32-wts_info_class
 
-ÆäÊµÉÏÃæµÄ»°ÊÇËµµÄ²»¶ÔµÄ£¨µ±Ç°ÈÕÆÚ£º2021/10/25£©£¬ÖÁÉÙºÍ²âÊÔ²»·ûºÏ¡£
+å…¶å®ä¸Šé¢çš„è¯æ˜¯è¯´çš„ä¸å¯¹çš„ï¼ˆå½“å‰æ—¥æœŸï¼š2021/10/25ï¼‰ï¼Œè‡³å°‘å’Œæµ‹è¯•ä¸ç¬¦åˆã€‚
 */
 {
     bool ret = false;
@@ -518,10 +522,11 @@ Windows Server 2008 and Windows Vista:  This value is not supported.
     DWORD BytesReturned;
 
     ret = WTSQuerySessionInformationA(WTS_CURRENT_SERVER_HANDLE, SessionId, WTSIsRemoteSession, &Buffer, &BytesReturned);
-    if (ret) {//Ö»ÒªÖ§³Ö£¬ÕâÀïÊ¼ÖÕ·µ»Ø³É¹¦£¬²»ÂÛÊÇ²»ÊÇÔ¶³Ì»á»°»¹ÊÇ±¾µØ»á»°¡£
+    if (ret) {//åªè¦æ”¯æŒï¼Œè¿™é‡Œå§‹ç»ˆè¿”å›æˆåŠŸï¼Œä¸è®ºæ˜¯ä¸æ˜¯è¿œç¨‹ä¼šè¯è¿˜æ˜¯æœ¬åœ°ä¼šè¯ã€‚
         ret = Buffer[0];
         WTSFreeMemory(Buffer);
-    } else {
+    }
+    else {
         DWORD LastError = GetLastError();
     }
 
@@ -533,23 +538,23 @@ EXTERN_C
 __declspec(dllexport)
 void WINAPI EnumerateSessions()
 /*
-¹¦ÄÜ£ºÃ¶¾Ù£¨µÇÂ¼£©»á»°¡£
+åŠŸèƒ½ï¼šæšä¸¾ï¼ˆç™»å½•ï¼‰ä¼šè¯ã€‚
 
-Õı³£µÇÂ¼²âÊÔĞ§¹û£º
+æ­£å¸¸ç™»å½•æµ‹è¯•æ•ˆæœï¼š
 C:\Users\Administrator>C:\Users\Administrator\Desktop\test.exe
 SessionId:0, WinStationName:Services, State:Disconnected.
 SessionId:1, WinStationName:Console, State:Active.
 SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
-RDPµÇÂ¼²âÊÔĞ§¹û£º
+RDPç™»å½•æµ‹è¯•æ•ˆæœï¼š
 C:\Users\Administrator>C:\Users\Administrator\Desktop\test.exe
 SessionId:0, WinStationName:Services, State:Disconnected.
 SessionId:1, WinStationName:RDP-Tcp#1, State:Active.
 SessionId:3, WinStationName:Console, State:Connected.
 SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
-Ğ§¹ûºÍÇø±ğ×Ô¼º·ÖÎö¡£
+æ•ˆæœå’ŒåŒºåˆ«è‡ªå·±åˆ†æã€‚
 */
 {
-    WTS_SESSION_INFOA * SessionInfo;
+    WTS_SESSION_INFOA* SessionInfo;
     DWORD Count;
     BOOL ret = WTSEnumerateSessionsA(WTS_CURRENT_SERVER_HANDLE, 0, 1, &SessionInfo, &Count);
     if (false == ret) {
@@ -559,9 +564,9 @@ SessionId:65536, WinStationName:RDP-Tcp, State:Listen.
 
     for (DWORD i = 0; i < Count; i++) {
         printf("SessionId:%d, WinStationName:%s, State:%s.\n",
-               SessionInfo[i].SessionId,
-               SessionInfo[i].pWinStationName,
-               GetSessionConnectState(SessionInfo[i].State));
+            SessionInfo[i].SessionId,
+            SessionInfo[i].pWinStationName,
+            GetSessionConnectState(SessionInfo[i].State));
 
         IsRemoteSession(SessionInfo[i].SessionId);
     }
@@ -574,14 +579,14 @@ EXTERN_C
 __declspec(dllexport)
 void WINAPI EnumerateSessionsEx()
 /*
-¹¦ÄÜ£ºÃ¶¾Ù£¨µÇÂ¼£©»á»°ÔöÇ¿°æ¡£
+åŠŸèƒ½ï¼šæšä¸¾ï¼ˆç™»å½•ï¼‰ä¼šè¯å¢å¼ºç‰ˆã€‚
 */
 {
     DWORD Level = 1;//This parameter is reserved. Always set this parameter to one
-    WTS_SESSION_INFO_1A * SessionInfo;
+    WTS_SESSION_INFO_1A* SessionInfo;
     DWORD Count;
 #pragma prefast(push)
-#pragma prefast(disable: 6387, "¡°_Param_(1)¡±¿ÉÄÜÊÇ¡°0¡±")
+#pragma prefast(disable: 6387, "â€œ_Param_(1)â€å¯èƒ½æ˜¯â€œ0â€")
     BOOL ret = WTSEnumerateSessionsExA(WTS_CURRENT_SERVER_HANDLE, &Level, 0, &SessionInfo, &Count);
 #pragma prefast(pop)  
     if (false == ret) {
