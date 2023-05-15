@@ -5,6 +5,7 @@
 #include "ShellExecute.h"
 #include "TaskScheduler.h"
 #include "User.h"
+#include "Session.h"
 
 
 #ifdef _WIN64  
@@ -43,7 +44,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //SidTest(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
-    DumpStackByWalk();
+    RegisterSessionNotification();
 
     LocalFree(Arglist);
 }

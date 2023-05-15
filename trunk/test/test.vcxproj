@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Session.cpp" />
     <ClCompile Include="ShellExecute.cpp" />
     <ClCompile Include="TaskScheduler.cpp" />
     <ClCompile Include="test.cpp" />
@@ -155,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\inc\Process.h" />
+    <ClInclude Include="Session.h" />
     <ClInclude Include="ShellExecute.h" />
     <ClInclude Include="TaskScheduler.h" />
     <ClInclude Include="User.h" />
