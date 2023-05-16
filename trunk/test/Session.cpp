@@ -105,18 +105,14 @@ https://learn.microsoft.com/en-us/windows/win32/api/wtsapi32/ns-wtsapi32-wts_cli
         //WTSQuerySessionInformation will always return a value of 0.
         printf("ClientHardwareId:%d.\n", *(PULONG)ppBuffer);
         break;
-    case WTSClientAddress:
+    case WTSClientAddress://断开时，这里的数据无效。
     {
         PWTS_CLIENT_ADDRESS ClientAddress = (PWTS_CLIENT_ADDRESS)ppBuffer;
 
         switch (ClientAddress->AddressFamily) {
         case AF_UNSPEC:
         {
-            char ip[32] = {0};
-            if (NULL == InetNtopA(AF_INET, &ClientAddress->Address[2], ip, sizeof(ip))) {
-                InetNtopA(AF_INET6, &ClientAddress->Address, ip, sizeof(ip));
-            }
-            printf("ClientAddress:%s.\n", ip);
+            printf("ClientAddress:AF_UNSPEC.\n");
             break;
         }
         case AF_INET:
@@ -220,35 +216,31 @@ https://learn.microsoft.com/en-us/windows/win32/api/wtsapi32/ns-wtsapi32-wts_cli
         switch (SessionAddressV4->AddressFamily) {
         case AF_UNSPEC:
         {
-            char ip[32] = {0};
-            if (NULL == InetNtopA(AF_INET, &SessionAddressV4->Address[2], ip, sizeof(ip))) {
-                InetNtopA(AF_INET6, &SessionAddressV4->Address, ip, sizeof(ip));
-            }
-            printf("ClientAddress:%s.\n", ip);
+            printf("SessionAddressV4:AF_UNSPEC.\n");
             break;
         }
         case AF_INET:
         {
             char ipv4[32] = {0};
             InetNtopA(AF_INET, &SessionAddressV4->Address[2], ipv4, sizeof(ipv4));
-            printf("ClientAddress:%s.\n", ipv4);
+            printf("SessionAddressV4:%s.\n", ipv4);
             break;
         }
         case AF_INET6:
         {
             char ipv6[32] = {0};
             InetNtopA(AF_INET6, &SessionAddressV4->Address, ipv6, sizeof(ipv6));
-            printf("ClientAddress:%s.\n", ipv6);
+            printf("SessionAddressV4:%s.\n", ipv6);
             break;
         }
         case AF_IPX:
-            printf("AddressFamily:AF_IPX.\n");
+            printf("SessionAddressV4:AF_IPX.\n");
             break;
         case AF_NETBIOS:
-            printf("AddressFamily:AF_NETBIOS.\n");
+            printf("SessionAddressV4:AF_NETBIOS.\n");
             break;
         default:
-            printf("AddressFamily:%d.\n", SessionAddressV4->AddressFamily);
+            printf("SessionAddressV4:%d.\n", SessionAddressV4->AddressFamily);
             break;
         }
 
@@ -299,6 +291,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/termserv/wm-wtssession-change
     case WM_WTSSESSION_CHANGE:
     {
         DWORD SessionId = (DWORD)lParam;
+        bool IsQuerySessionInformations = false;
 
         switch (wParam) {
         case WTS_CONSOLE_CONNECT:
@@ -309,9 +302,11 @@ https://learn.microsoft.com/zh-cn/windows/win32/termserv/wm-wtssession-change
             break;
         case WTS_REMOTE_CONNECT:
             printf("会话%d：已连接到远程终端.\n", SessionId);
+            IsQuerySessionInformations = true;
             break;
         case WTS_REMOTE_DISCONNECT:
             printf("会话%d：已与远程终端断开连接.\n", SessionId);
+            IsQuerySessionInformations = true;
             break;
         case WTS_SESSION_LOGON:
             printf("会话%d：已登录.\n", SessionId);
@@ -327,6 +322,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/termserv/wm-wtssession-change
             break;
         case WTS_SESSION_REMOTE_CONTROL://若要确定状态，请调用 GetSystemMetrics 并检查 SM_REMOTECONTROL 指标。
             printf("会话%d：已更改其远程控制状态.\n", SessionId);
+            IsQuerySessionInformations = true;
             break;
         case WTS_SESSION_CREATE:
             printf("会话%d：保留供将来使用.\n", SessionId);
@@ -339,7 +335,9 @@ https://learn.microsoft.com/zh-cn/windows/win32/termserv/wm-wtssession-change
             break;
         }
 
-        QuerySessionInformations(SessionId);
+        if (IsQuerySessionInformations) {
+            QuerySessionInformations(SessionId);
+        }
 
         printf("\n\n\n");
 
