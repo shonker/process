@@ -172,7 +172,10 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
     TIL.Label.Sid = pIntegritySid;
 
     // Set the process integrity level
-    fRet = SetTokenInformation(hNewToken, TokenIntegrityLevel, &TIL, sizeof(TOKEN_MANDATORY_LABEL) + GetLengthSid(pIntegritySid));
+    fRet = SetTokenInformation(hNewToken, 
+                               TokenIntegrityLevel, 
+                               &TIL,
+                               sizeof(TOKEN_MANDATORY_LABEL) + GetLengthSid(pIntegritySid));
     if (!fRet) {
         goto CleanExit;
     }
@@ -861,7 +864,9 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
     TOKEN_LINKED_TOKEN tlt = {0};
 
     // Notepad is used as an example
-    fRet = OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY, &hToken);
+    fRet = OpenProcessToken(GetCurrentProcess(), 
+                            TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY,
+                            &hToken);
     if (!fRet) {
         return 0;;
     }
