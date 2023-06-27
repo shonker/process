@@ -76,7 +76,7 @@ void DebugPrintW(PCWSTR format, ...);
 
 EXTERN_C
 __declspec(dllexport)
-bool WINAPI GetCurrentToken(OUT PHANDLE hToken);
+BOOL WINAPI GetCurrentToken(OUT PHANDLE hToken);
 
 EXTERN_C
 __declspec(dllexport)
@@ -96,7 +96,7 @@ void WINAPI EnumerateSessions();
 
 EXTERN_C
 __declspec(dllexport)
-bool WINAPI IsRemoteSession(DWORD SessionId);
+BOOL WINAPI IsRemoteSession(DWORD SessionId);
 
 EXTERN_C
 __declspec(dllexport)

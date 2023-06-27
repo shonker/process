@@ -6,6 +6,7 @@
 #include "TaskScheduler.h"
 #include "User.h"
 #include "Session.h"
+#include "c.h"
 
 
 #ifdef _WIN64  
@@ -45,6 +46,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //GetAdaptersAddressesInfo(argc, argv);
 
     RegisterSessionNotification();
+    test_c();
 
     LocalFree(Arglist);
 }

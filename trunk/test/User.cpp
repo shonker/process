@@ -16,10 +16,16 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
     GetUserName(sz_UserNamew, (LPDWORD)&len);
 
     LPWSTR* wsz_sid = (LPWSTR*)HeapAlloc(GetProcessHeap(), 0, 0x200);
-    _ASSERTE(wsz_sid);
+    if (!wsz_sid) {
+
+        return 1;
+    }
 
     PSID* ppSid = (PSID*)HeapAlloc(GetProcessHeap(), 0, 0x200);
-    _ASSERTE(ppSid);
+    if (!ppSid) {
+        HeapFree(GetProcessHeap(), 0, wsz_sid);
+        return 1;
+    }
 
     GetSid(sz_UserNamew, ppSid);//Administrator,Defaultapppool应该有枚举的办法.NetUserEnum,但不全.特殊的没有.
     bool  b = ConvertSidToStringSid(*ppSid, (LPWSTR*)wsz_sid);

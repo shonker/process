@@ -166,7 +166,7 @@ HANDLE WINAPI GetParentsPid(_In_ HANDLE UniqueProcessId);
 
 EXTERN_C
 __declspec(dllexport)
-bool WINAPI IsWow64ProcessEx(_In_ HANDLE ProcessHandle);
+BOOL WINAPI IsWow64ProcessEx(_In_ HANDLE ProcessHandle);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
