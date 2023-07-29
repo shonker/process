@@ -80,3 +80,12 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
 
     return 0;
 }
+
+
+void TestIsCurrentUserLocalAdministrator()
+{
+    if (IsCurrentUserLocalAdministrator())
+        printf("You are an administrator\n");
+    else
+        printf("You are not an administrator\n");
+}

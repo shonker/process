@@ -46,9 +46,9 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //SidTest(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
-    //RegisterSessionNotification();
+    TestIsCurrentUserLocalAdministrator();
     //test_c();
-    TestStack();
+    //TestStack();
 
     LocalFree(Arglist);
 }
