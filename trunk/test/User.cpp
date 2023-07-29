@@ -110,3 +110,24 @@ void TestEnumerateAccountRights()
 
     int ret = EnumerateAccountRights(2, argv);
 }
+
+
+void TestGetCurrentSid()
+{
+    GetCurrentSid();
+}
+
+
+void TestConvertStringSidToSid()
+{
+    BOOL                  fRet;
+    PSID                  pIntegritySid = NULL;
+    WCHAR wszIntegritySid[20] = L"S-1-5-18";// Local System
+
+    fRet = ConvertStringSidToSid(wszIntegritySid, &pIntegritySid);
+
+    PISID tmp = (PISID)pIntegritySid;
+    int x = sizeof(SID);
+
+    LocalFree(pIntegritySid);
+}
