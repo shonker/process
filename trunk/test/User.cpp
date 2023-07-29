@@ -1,7 +1,7 @@
 #include "User.h"
 
 
-int SidTest(int argc, _TCHAR* argv[])
+int SidTest(int argc, _TCHAR * argv[])
 /*
 sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
 这里有两个从微软搬过来的函数,
@@ -11,24 +11,24 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
 因为用GetTokenInformation的函数获取的东西好像有点问题,所以此文就命名为:LookupAccountName.Cpp.
 */
 {
-    wchar_t sz_UserNamew[260] = { 0 };
+    wchar_t sz_UserNamew[260] = {0};
     int len = ARRAYSIZE(sz_UserNamew);
     GetUserName(sz_UserNamew, (LPDWORD)&len);
 
-    LPWSTR* wsz_sid = (LPWSTR*)HeapAlloc(GetProcessHeap(), 0, 0x200);
+    LPWSTR * wsz_sid = (LPWSTR *)HeapAlloc(GetProcessHeap(), 0, 0x200);
     if (!wsz_sid) {
 
         return 1;
     }
 
-    PSID* ppSid = (PSID*)HeapAlloc(GetProcessHeap(), 0, 0x200);
+    PSID * ppSid = (PSID *)HeapAlloc(GetProcessHeap(), 0, 0x200);
     if (!ppSid) {
         HeapFree(GetProcessHeap(), 0, wsz_sid);
         return 1;
     }
 
     GetSid(sz_UserNamew, ppSid);//Administrator,Defaultapppool应该有枚举的办法.NetUserEnum,但不全.特殊的没有.
-    bool  b = ConvertSidToStringSid(*ppSid, (LPWSTR*)wsz_sid);
+    bool  b = ConvertSidToStringSid(*ppSid, (LPWSTR *)wsz_sid);
     int x = GetLastError();
     //MessageBox(0, (LPCWSTR)(*(int *)wsz_sid), 0, 0);
 
@@ -40,7 +40,7 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
         return(FALSE);
 
     GetLogonSID(hToken, ppSid);//字面意思是登录的sid,用的是当前进程或者线程的句柄.
-    b = ConvertSidToStringSid(*ppSid, (LPWSTR*)wsz_sid);
+    b = ConvertSidToStringSid(*ppSid, (LPWSTR *)wsz_sid);
     x = GetLastError();
 
     //得到的这个值在注册表中找不到.HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
@@ -88,4 +88,25 @@ void TestIsCurrentUserLocalAdministrator()
         printf("You are an administrator\n");
     else
         printf("You are not an administrator\n");
+}
+
+
+void TestEnumerateAccountRights()
+{
+    wchar_t szUser[MAX_PATH] = {0};//估计最大值不是这个。
+    wchar_t szDomain[MAX_PATH] = {0};//估计最大值不是这个。这个好像和计算机名一样。
+    DWORD d = MAX_PATH;
+    bool b = GetCurrentUserAndDomain(szUser, &d, szDomain, &d);
+
+    USES_CONVERSION;
+
+#pragma prefast(push)
+#pragma prefast(disable: 6255, "`_alloca` 通过引发堆栈溢出异常来指示失败。应考虑改用 _malloca")
+    LPSTR Stack = W2A(szUser);
+#pragma prefast(pop)      
+
+    char * argv[2];
+    argv[1] = Stack;
+
+    int ret = EnumerateAccountRights(2, argv);
 }

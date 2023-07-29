@@ -10,3 +10,4 @@ class User
 
 int SidTest(int argc, _TCHAR * argv[]);
 void TestIsCurrentUserLocalAdministrator();
+void TestEnumerateAccountRights();
