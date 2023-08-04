@@ -391,7 +391,7 @@ cleanup:
 
 EXTERN_C
 __declspec(dllexport)
-void WINAPI ConvertingLogFile (int argc, WCHAR ** argv)
+void WINAPI ConvertingLogFile(int argc, WCHAR ** argv)
 /*
 Converting Data from a Binary-format Log File to a CSV-format Log File
 Article
@@ -457,11 +457,99 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/transferring-data-from-
         wprintf(L"PdhUpdateLog failed with 0x%x\n", pdhStatus);
     }
 
-cleanup:   
+cleanup:
     if (hOutputLog)
         PdhCloseLog(hOutputLog, 0);// Close the output log file.     
     if (hQuery)
         PdhCloseQuery(hQuery);// Close the query object and input log file.
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI CollectQueryDataEx(void)
+/*
+
+https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectquerydataex
+*/
+{
+    PDH_STATUS Status;
+    HANDLE Event = NULL;
+    PDH_HQUERY Query = NULL;
+    PDH_HCOUNTER Counter;
+    ULONG WaitResult;
+    ULONG CounterType;
+    PDH_FMT_COUNTERVALUE DisplayValue;
+    CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+    CONST ULONG SAMPLE_COUNT = 10;
+    CONST ULONG SAMPLE_INTERVAL = 2;
+
+    Status = PdhOpenQuery(NULL, 0, &Query);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhOpenQuery failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    Status = PdhAddCounter(Query, COUNTER_NAME, 0, &Counter);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhAddCounter failed with 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    // Calculating the formatted value of some counters requires access to the
+    // value of a previous sample. Make this call to get the first sample value
+    // populated, to be used later for calculating the next sample.
+    Status = PdhCollectQueryData(Query);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhCollectQueryData failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    // This will create a separate thread that will collect raw counter data 
+    // every 2 seconds and set the supplied Event.
+    Event = CreateEvent(NULL, FALSE, FALSE, L"MyEvent");
+    if (Event == NULL) {
+        wprintf(L"\nCreateEvent failed with status 0x%x.", GetLastError());
+        goto Cleanup;
+    }
+
+    Status = PdhCollectQueryDataEx(Query, SAMPLE_INTERVAL, Event);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhCollectQueryDataEx failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    // Collect and format 10 samples, 2 seconds apart.
+    for (ULONG i = 0; i < SAMPLE_COUNT; i++) {
+        WaitResult = WaitForSingleObject(Event, INFINITE);
+        if (WaitResult == WAIT_OBJECT_0) {
+            Status = PdhGetFormattedCounterValue(Counter, PDH_FMT_DOUBLE, &CounterType, &DisplayValue);
+            if (Status == ERROR_SUCCESS) {
+                wprintf(L"\nCounter Value: %.20g", DisplayValue.doubleValue);
+            } else {
+                wprintf(L"\nPdhGetFormattedCounterValue failed with status 0x%x.", Status);
+                goto Cleanup;
+            }
+        } else if (WaitResult == WAIT_FAILED) {
+            wprintf(L"\nWaitForSingleObject failed with status 0x%x.", GetLastError());
+            goto Cleanup;
+        }
+    }
+
+Cleanup:
+
+    if (Event) {
+        CloseHandle(Event);
+    }
+
+    // This will close both the Query handle and all associated Counter handles returned by PdhAddCounter.
+
+    if (Query) {
+        PdhCloseQuery(Query);
+    }
 }
 
 
