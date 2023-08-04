@@ -9,8 +9,10 @@ void PerformanceTest()
     //CollectPerformanceData(L"\\Processor Information(*)\\% Processor Time");//¿‡À∆£∫L"\\Processor(*)\\% Processor Time"
 
     //CollectPerformanceDatas(L"\\Process(*)\\% Processor Time");
-    CollectPerformanceDatas(L"\\Process(*)\\Working Set");
+    //CollectPerformanceDatas(L"\\Process(*)\\Working Set");
 
     //CollectPerformanceData(L"\\Memory\\% Committed Bytes In Use");
 
+    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Disk Time");
+    CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time");
 }
