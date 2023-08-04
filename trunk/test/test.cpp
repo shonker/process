@@ -46,7 +46,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //SidTest(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
-    EnumeratingProcessObjects();
+    BrowsingPerformanceCounters();
     //test_c();
     //TestStack();
 

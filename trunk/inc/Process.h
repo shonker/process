@@ -336,6 +336,9 @@ void WINAPI DumpStackByTrace();
 __declspec(dllimport)
 void WINAPI EnumeratingProcessObjects(void);
 
+__declspec(dllimport)
+void WINAPI BrowsingPerformanceCounters(void);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
