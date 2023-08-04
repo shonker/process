@@ -342,6 +342,9 @@ void WINAPI BrowsingPerformanceCounters(void);
 __declspec(dllimport)
 void WINAPI WritingPerformanceDataToLogFile(int argc, WCHAR ** argv);
 
+__declspec(dllimport)
+void WINAPI ReadingPerformanceDataFromLogFile(int argc, WCHAR ** argv);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

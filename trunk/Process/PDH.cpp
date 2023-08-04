@@ -236,8 +236,8 @@ Article
 01/08/2021
 3 contributors
 The following example writes real time performance data to a log file.
-The example calls the PdhOpenQuery and PdhAddCounter functions to create a query to collect Processor Time counter data. 
-The example then calls the PdhOpenLog function to create the log file to write the data to. 
+The example calls the PdhOpenQuery and PdhAddCounter functions to create a query to collect Processor Time counter data.
+The example then calls the PdhOpenLog function to create the log file to write the data to.
 The example calls the PdhUpdateLog function to collect a sample and update the log file once a second for 20 seconds.
 
 For an example that reads the generated log file, see Reading Performance Data from a Log File.
@@ -295,15 +295,94 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
             wprintf(L"PdhUpdateLog failed with 0x%x\n", pdhStatus);
             goto cleanup;
         }
-        
+
         Sleep(SAMPLE_INTERVAL_MS);// Wait one second between samples for a counter update.
     }
 
-cleanup:    
+cleanup:
     if (hLog)
         PdhCloseLog(hLog, 0);// Close the log file.    
     if (hQuery)
         PdhCloseQuery(hQuery);// Close the query object.
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//void DisplayCommandLineHelp(void)
+//{
+//    wprintf(L"The command line must contain a valid log file name.\n");
+//}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI ReadingPerformanceDataFromLogFile(int argc, WCHAR ** argv)
+/*
+Reading Performance Data from a Log File
+Article
+01/08/2021
+3 contributors
+The following example reads data written to a log file in the Writing Performance Data to a Log File example.
+It uses the PdhCollectQueryData function to retrieve the data from the log file and the PdhGetFormattedCounterValue function to format the data for display.
+
+https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-data-from-a-log-file
+*/
+{
+    HQUERY hQuery = NULL;
+    HCOUNTER hCounter = NULL;
+    PDH_STATUS status = ERROR_SUCCESS;
+    DWORD dwFormat = PDH_FMT_DOUBLE;
+    PDH_FMT_COUNTERVALUE ItemBuffer;
+    CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+
+    if (argc != 2) {
+        DisplayCommandLineHelp();
+        goto cleanup;
+    }
+
+    // Opens the log file to write performance data
+    status = PdhOpenQuery(argv[1], 0, &hQuery);
+    if (ERROR_SUCCESS != status) {
+        wprintf(L"PdhOpenQuery failed with 0x%x\n", status);
+        goto cleanup;
+    }
+
+    // Add the same counter used when writing the log file.
+    status = PdhAddCounter(hQuery, COUNTER_PATH, 0, &hCounter);
+    if (ERROR_SUCCESS != status) {
+        wprintf(L"PdhAddCounter failed with 0x%x\n", status);
+        goto cleanup;
+    }
+    
+    status = PdhCollectQueryData(hQuery);// Read a performance data record.
+    if (ERROR_SUCCESS != status) {
+        wprintf(L"PdhCollectQueryData failed with 0x%x\n", status);//0x800007d5 == PDH_NO_DATA
+        goto cleanup;
+    }
+
+    while (ERROR_SUCCESS == status) {        
+        status = PdhCollectQueryData(hQuery);// Read the next record
+        if (ERROR_SUCCESS == status) {
+            // Format the performance data record.
+            status = PdhGetFormattedCounterValue(hCounter, dwFormat, (LPDWORD)NULL, &ItemBuffer);
+            if (ERROR_SUCCESS != status) {
+                wprintf(L"PdhGetFormattedCounterValue failed with 0x%x.\n", status);
+                goto cleanup;
+            }
+
+            wprintf(L"Formatted counter value = %.20g\n", ItemBuffer.doubleValue);
+        } else {
+            if (PDH_NO_MORE_DATA != status) {
+                wprintf(L"PdhCollectQueryData failed with 0x%x\n", status);
+            }
+        }
+    }
+
+cleanup:    
+    if (hQuery)
+        PdhCloseQuery(hQuery);// Close the query.
 }
 
 

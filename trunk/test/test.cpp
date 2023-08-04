@@ -43,7 +43,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
         return 0;
     }
 
-    WritingPerformanceDataToLogFile(Args, Arglist);
+    ReadingPerformanceDataFromLogFile(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
     //BrowsingPerformanceCounters();
