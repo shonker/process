@@ -14,5 +14,8 @@ void PerformanceTest()
     //CollectPerformanceData(L"\\Memory\\% Committed Bytes In Use");
 
     //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Disk Time");
-    CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time");
+    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time");
+
+    //EnumeratingProcessObjects();
+    EnumObjectItems(L"Process");
 }
