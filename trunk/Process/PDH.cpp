@@ -100,6 +100,8 @@ void WINAPI EnumObjectItems(_In_ LPCWSTR ObjectName)
 参数
 取值，如：L"Process"
 
+功能：类似于PS的命令 (Get-Counter -ListSet * | where {$_.CounterSetName -eq 'Memory'}).Paths
+
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-objects
 */
 {
