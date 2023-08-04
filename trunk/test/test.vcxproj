@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="c.c" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Performance.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="ShellExecute.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\inc\Process.h" />
     <ClInclude Include="c.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Performance.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="ShellExecute.h" />
     <ClInclude Include="Stack.h" />

@@ -562,6 +562,93 @@ Cleanup:
 
 EXTERN_C
 __declspec(dllexport)
+void WINAPI CollectPerformanceData(_In_  LPCWSTR FullCounterPath)
+/*
+
+参数：
+FullCounterPath，形如：L"\\Processor(_Total)\\% Processor Time"
+
+
+https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectquerydataex
+*/
+{
+    PDH_STATUS Status;
+    HANDLE Event = NULL;
+    PDH_HQUERY Query = NULL;
+    PDH_HCOUNTER Counter;
+    ULONG WaitResult;
+    ULONG CounterType;
+    PDH_FMT_COUNTERVALUE DisplayValue;
+
+    Status = PdhOpenQuery(NULL, 0, &Query);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhOpenQuery failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    Status = PdhAddCounter(Query, FullCounterPath, 0, &Counter);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhAddCounter failed with 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    // Calculating the formatted value of some counters requires access to the value of a previous sample.
+    // Make this call to get the first sample value populated, to be used later for calculating the next sample.
+    Status = PdhCollectQueryData(Query);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhCollectQueryData failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    // This will create a separate thread that will collect raw counter data 
+    // every 2 seconds and set the supplied Event.
+    Event = CreateEvent(NULL, FALSE, FALSE, L"PerformanceEvent");
+    if (Event == NULL) {
+        wprintf(L"\nCreateEvent failed with status 0x%x.", GetLastError());
+        goto Cleanup;
+    }
+
+    Status = PdhCollectQueryDataEx(Query, 1, Event);
+    if (Status != ERROR_SUCCESS) {
+        wprintf(L"\nPdhCollectQueryDataEx failed with status 0x%x.", Status);
+        goto Cleanup;
+    }
+
+    for (;;) {
+        WaitResult = WaitForSingleObject(Event, INFINITE);
+        if (WaitResult == WAIT_OBJECT_0) {
+            Status = PdhGetFormattedCounterValue(Counter, PDH_FMT_DOUBLE, &CounterType, &DisplayValue);
+            if (Status == ERROR_SUCCESS) {
+                wprintf(L"\nCounter Value: %.3g", DisplayValue.doubleValue);
+            } else {
+                wprintf(L"\nPdhGetFormattedCounterValue failed with status 0x%x.", Status);
+                goto Cleanup;
+            }
+        } else if (WaitResult == WAIT_FAILED) {
+            wprintf(L"\nWaitForSingleObject failed with status 0x%x.", GetLastError());
+            goto Cleanup;
+        }
+    }
+
+Cleanup:
+
+    if (Event) {
+        CloseHandle(Event);
+    }
+
+    // This will close both the Query handle and all associated Counter handles returned by PdhAddCounter.
+
+    if (Query) {
+        PdhCloseQuery(Query);
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
 void WINAPI GetFormattedCounterArray()
 /*
 

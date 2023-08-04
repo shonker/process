@@ -8,6 +8,7 @@
 #include "Session.h"
 #include "c.h"
 #include "Stack.h"
+#include "Performance.h"
 
 
 #ifdef _WIN64  
@@ -45,10 +46,9 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     //ReadingPerformanceDataFromLogFile(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
-
-    GetFormattedCounterArray();
+    
     //test_c();
-    //TestStack();
+    PerformanceTest();
 
     LocalFree(Arglist);
 }
