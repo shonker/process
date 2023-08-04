@@ -219,3 +219,92 @@ Cleanup:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void DisplayCommandLineHelp(void)
+{
+    wprintf(L"The command line must include a valid log file name.\n");
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI WritingPerformanceDataToLogFile(int argc, WCHAR ** argv)
+/*
+Writing Performance Data to a Log File
+Article
+01/08/2021
+3 contributors
+The following example writes real time performance data to a log file.
+The example calls the PdhOpenQuery and PdhAddCounter functions to create a query to collect Processor Time counter data. 
+The example then calls the PdhOpenLog function to create the log file to write the data to. 
+The example calls the PdhUpdateLog function to collect a sample and update the log file once a second for 20 seconds.
+
+For an example that reads the generated log file, see Reading Performance Data from a Log File.
+
+https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-data-to-a-log-file
+*/
+{
+    HQUERY hQuery = NULL;
+    HLOG hLog = NULL;
+    PDH_STATUS pdhStatus;
+    DWORD dwLogType = PDH_LOG_TYPE_CSV;
+    HCOUNTER hCounter;
+    DWORD dwCount;
+    CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+    CONST ULONG SAMPLE_INTERVAL_MS = 1000;
+
+    if (argc != 2) {
+        DisplayCommandLineHelp();
+        goto cleanup;
+    }
+
+    // Open a query object.
+    pdhStatus = PdhOpenQuery(NULL, 0, &hQuery);
+    if (pdhStatus != ERROR_SUCCESS) {
+        wprintf(L"PdhOpenQuery failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Add one counter that will provide the data.
+    pdhStatus = PdhAddCounter(hQuery, COUNTER_PATH, 0, &hCounter);
+    if (pdhStatus != ERROR_SUCCESS) {
+        wprintf(L"PdhAddCounter failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Open the log file for write access.
+    pdhStatus = PdhOpenLog(argv[1],
+                           PDH_LOG_WRITE_ACCESS | PDH_LOG_CREATE_ALWAYS,
+                           &dwLogType,
+                           hQuery,
+                           0,
+                           NULL,
+                           &hLog);
+    if (pdhStatus != ERROR_SUCCESS) {
+        wprintf(L"PdhOpenLog failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Write 10 records to the log file.
+    for (dwCount = 0; dwCount < 10; dwCount++) {
+        wprintf(L"Writing record %d\n", dwCount);
+
+        pdhStatus = PdhUpdateLog(hLog, NULL);
+        if (ERROR_SUCCESS != pdhStatus) {
+            wprintf(L"PdhUpdateLog failed with 0x%x\n", pdhStatus);
+            goto cleanup;
+        }
+        
+        Sleep(SAMPLE_INTERVAL_MS);// Wait one second between samples for a counter update.
+    }
+
+cleanup:    
+    if (hLog)
+        PdhCloseLog(hLog, 0);// Close the log file.    
+    if (hQuery)
+        PdhCloseQuery(hQuery);// Close the query object.
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////

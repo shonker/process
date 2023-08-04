@@ -339,6 +339,9 @@ void WINAPI EnumeratingProcessObjects(void);
 __declspec(dllimport)
 void WINAPI BrowsingPerformanceCounters(void);
 
+__declspec(dllimport)
+void WINAPI WritingPerformanceDataToLogFile(int argc, WCHAR ** argv);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

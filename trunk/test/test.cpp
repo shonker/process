@@ -43,10 +43,10 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
         return 0;
     }
 
-    //SidTest(Args, Arglist);
+    WritingPerformanceDataToLogFile(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
 
-    BrowsingPerformanceCounters();
+    //BrowsingPerformanceCounters();
     //test_c();
     //TestStack();
 
