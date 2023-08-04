@@ -357,6 +357,9 @@ void WINAPI GetFormattedCounterArray();
 __declspec(dllimport)
 void WINAPI CollectPerformanceData(_In_  LPCWSTR FullCounterPath);
 
+__declspec(dllimport)
+void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
