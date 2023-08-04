@@ -340,6 +340,12 @@ __declspec(dllimport)
 void WINAPI EnumObjectItems(_In_ LPCWSTR ObjectName);
 
 __declspec(dllimport)
+void WINAPI EnumCountersObjects();
+
+__declspec(dllimport)
+void WINAPI EnumCountersMachines();
+
+__declspec(dllimport)
 void WINAPI BrowsingPerformanceCounters(void);
 
 __declspec(dllimport)

@@ -17,5 +17,8 @@ void PerformanceTest()
     //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time");
 
     //EnumeratingProcessObjects();
-    EnumObjectItems(L"Process");
+    //EnumObjectItems(L"Process");
+
+    //EnumCountersObjects();
+    EnumCountersMachines();
 }

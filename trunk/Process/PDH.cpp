@@ -175,6 +175,62 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
 }
 
 
+EXTERN_C
+__declspec(dllexport)
+void WINAPI EnumCountersObjects()
+/*
+
+https://learn.microsoft.com/en-us/windows/win32/api/pdh/nf-pdh-pdhenumobjectsa
+*/
+{
+    //PDH_STATUS status = ERROR_SUCCESS;
+    //LPCWSTR DataSource = NULL;
+    //LPCWSTR MachineName = NULL;
+    //PZZWSTR ObjectList = NULL;    
+    //DWORD BufferSize = 0;
+    //DWORD   DetailLevel = PERF_DETAIL_NOVICE;//PERF_DETAIL_WIZARD
+    //BOOL    Refresh = FALSE;//TRUE
+
+    ////总是异常
+    //status = PdhEnumObjects(DataSource, MachineName, ObjectList, &BufferSize, DetailLevel, Refresh);
+
+    //ObjectList = (PZZWSTR)HeapAlloc(GetProcessHeap(), 0, MAX_PATH * sizeof(WCHAR) * MAX_PATH);
+    //_ASSERTE(ObjectList);
+}
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI EnumCountersMachines()
+/*
+
+有数据的条件：
+The computer names were either specified when adding counters to the query or when calling the PdhConnectMachine function.
+
+https://learn.microsoft.com/en-us/windows/win32/api/pdh/nf-pdh-pdhenummachinesa
+*/
+{
+    PDH_STATUS status = ERROR_SUCCESS;
+    LPCWSTR DataSource = NULL;
+    PZZWSTR MachineList = NULL;
+    DWORD BufferSize = 0;
+
+    status = PdhEnumMachines(DataSource, MachineList, &BufferSize);
+    _ASSERTE(PDH_MORE_DATA == status);
+
+    MachineList = (PZZWSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, BufferSize + sizeof(WCHAR));
+    _ASSERTE(MachineList);
+
+    status = PdhEnumMachines(DataSource, MachineList, &BufferSize);
+    if (status == ERROR_SUCCESS) {
+
+
+    }
+
+    HeapFree(GetProcessHeap(), 0, MachineList);
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
