@@ -15,8 +15,12 @@ PDH的验证要结合性能监视器，不能是任务管理和资源监视器。
 注意：这个需要等待几分钟。看来脚本真的慢啊！
 https://wazuh.com/blog/monitoring-windows-resources-with-performance-counters/
 
-
-
+关于PID的信息的思考所搜索的结果：
+ Tip
+Starting in Windows 10 20H2, you can avoid this issue by using the new Process V2 counterset. 
+The Process V2 counterset includes the process ID in the instance name. 
+This avoids the inconsistent results that appear with the original Process counterset.
+https://learn.microsoft.com/en-us/windows/win32/perfctrs/collecting-performance-data
 */
 
 

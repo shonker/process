@@ -8,7 +8,7 @@ void PerformanceTest()
 
     //CollectPerformanceData(L"\\Processor Information(*)\\% Processor Time");//¿‡À∆£∫L"\\Processor(*)\\% Processor Time"
 
-    //CollectPerformanceDatas(L"\\Process(*)\\% Processor Time");
+    CollectPerformanceDatas(L"\\Process(*)\\% Processor Time");
     //CollectPerformanceDatas(L"\\Process(*)\\Working Set");
 
     //CollectPerformanceData(L"\\Memory\\% Committed Bytes In Use");
@@ -20,5 +20,5 @@ void PerformanceTest()
     //EnumObjectItems(L"Process");
 
     //EnumCountersObjects();
-    EnumCountersMachines();
+    //EnumCountersMachines();
 }
