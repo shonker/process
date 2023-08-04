@@ -181,6 +181,7 @@
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PDH.h" />
     <ClInclude Include="PEB.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="resource.h" />
@@ -212,6 +213,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PDH.cpp" />
     <ClCompile Include="PEB.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Session.cpp" />

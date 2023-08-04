@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 //#define _WIN32_WINNT 0x0501
-#define WIN32_LEAN_AND_MEAN             // 从 Windows 头文件中排除极少使用的内容
+#define WIN32_LEAN_AND_MEAN 1             // 从 Windows 头文件中排除极少使用的内容
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WIN32_DCOM
 //#define SECURITY_WIN32
@@ -59,7 +59,7 @@
 #include <ole2.h>
 //#include <urlmon.h>
 //#include <winsafer.h>
-
+#include <pdhmsg.h>
 //#include <ShlDisp.h>
 #include <Shlobj.h>
 //#include <ShlGuid.h>
@@ -182,6 +182,9 @@
 
 #include <Wininet.h>
 #pragma comment (lib,"Wininet.lib")
+
+#include <pdh.h>
+#pragma comment (lib,"pdh.lib")
 
 #include <string>
 #include <list>
