@@ -899,7 +899,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedco
     }
 
     // Specify a counter object with a wildcard for the instance.
-    if (status = PdhAddCounter(hQuery, FullCounterPath, 0, &hCounter)) {
+    if (status = PdhAddCounter(hQuery, FullCounterPath, 0, &hCounter)) {//这个消耗点时间。
         wprintf(L"PdhAddCounter failed with 0x%x.\n", status);
         goto cleanup;
     }
