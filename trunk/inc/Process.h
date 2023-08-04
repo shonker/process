@@ -345,6 +345,9 @@ void WINAPI WritingPerformanceDataToLogFile(int argc, WCHAR ** argv);
 __declspec(dllimport)
 void WINAPI ReadingPerformanceDataFromLogFile(int argc, WCHAR ** argv);
 
+__declspec(dllimport)
+void WINAPI ConvertingLogFile (int argc, WCHAR ** argv);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

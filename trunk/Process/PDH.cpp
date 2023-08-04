@@ -355,14 +355,14 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-dat
         wprintf(L"PdhAddCounter failed with 0x%x\n", status);
         goto cleanup;
     }
-    
+
     status = PdhCollectQueryData(hQuery);// Read a performance data record.
     if (ERROR_SUCCESS != status) {
         wprintf(L"PdhCollectQueryData failed with 0x%x\n", status);//0x800007d5 == PDH_NO_DATA
         goto cleanup;
     }
 
-    while (ERROR_SUCCESS == status) {        
+    while (ERROR_SUCCESS == status) {
         status = PdhCollectQueryData(hQuery);// Read the next record
         if (ERROR_SUCCESS == status) {
             // Format the performance data record.
@@ -380,9 +380,88 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-dat
         }
     }
 
-cleanup:    
+cleanup:
     if (hQuery)
         PdhCloseQuery(hQuery);// Close the query.
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI ConvertingLogFile (int argc, WCHAR ** argv)
+/*
+Converting Data from a Binary-format Log File to a CSV-format Log File
+Article
+08/26/2021
+4 contributors
+The following example transfers data from a counter log file created by the Performance tool to a comma separated format (.csv).
+The example transfers Processor Time counter data collected from the local computer.
+To specify another type of counter data, change the szCounterPath variable.
+If the collected counter data is from a specific computer,
+add the computer name to the path (for example, "\\\\<computername>\\Processor(0)\\% Processor Time").
+
+https://learn.microsoft.com/en-us/windows/win32/perfctrs/transferring-data-from-a-perfmon-format-log-file-to-a-csv-format-log-file
+*/
+{
+    HQUERY hQuery = NULL;
+    HLOG hOutputLog = NULL;
+    HCOUNTER hCounter = NULL;
+    PDH_STATUS pdhStatus = ERROR_SUCCESS;
+    DWORD dwOutputLogType = PDH_LOG_TYPE_CSV;
+    CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+
+    if (3 != argc) {
+        wprintf(L"Syntax: convertlog <input file name> <output file name>\n"
+                L"\nThe input log file must be in the Perfmon format. The output\n"
+                L"log file will written in the CSV file format, so specify a .csv extension.");
+        goto cleanup;
+    }
+
+    // Create the query object using the input log file.
+    pdhStatus = PdhOpenQuery(argv[1], 0, &hQuery);
+    if (ERROR_SUCCESS != pdhStatus) {
+        wprintf(L"PdhOpenQuery failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Add the counter to the query object; identifies the counter
+    // records from the log file that you are going to relog to the new log file.
+    pdhStatus = PdhAddCounter(hQuery, COUNTER_PATH, 0, &hCounter);
+    if (ERROR_SUCCESS != pdhStatus) {
+        wprintf(L"PdhAddCounter failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Create and open the output log file.
+    pdhStatus = PdhOpenLog(argv[2],
+                           PDH_LOG_WRITE_ACCESS | PDH_LOG_CREATE_ALWAYS,
+                           &dwOutputLogType,
+                           hQuery,
+                           0,
+                           NULL,
+                           &hOutputLog);
+    if (ERROR_SUCCESS != pdhStatus) {
+        wprintf(L"PdhOpenLog failed with 0x%x\n", pdhStatus);
+        goto cleanup;
+    }
+
+    // Transfer the log records from the input file to the output file.
+    while (ERROR_SUCCESS == pdhStatus) {
+        pdhStatus = PdhUpdateLog(hOutputLog, NULL);
+    }
+
+    if (PDH_NO_MORE_DATA != pdhStatus) {
+        wprintf(L"PdhUpdateLog failed with 0x%x\n", pdhStatus);
+    }
+
+cleanup:   
+    if (hOutputLog)
+        PdhCloseLog(hOutputLog, 0);// Close the output log file.     
+    if (hQuery)
+        PdhCloseQuery(hQuery);// Close the query object and input log file.
 }
 
 
