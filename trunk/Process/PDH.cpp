@@ -2,6 +2,9 @@
 #include "PDH.h"
 
 
+#pragma warning(disable:6385) //正在从 "pItems" 读取无效数据。
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -483,7 +486,8 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
     ULONG WaitResult;
     ULONG CounterType;
     PDH_FMT_COUNTERVALUE DisplayValue;
-    CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+    //CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
+    CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(_Total)\\% Processor Time";
     CONST ULONG SAMPLE_COUNT = 10;
     CONST ULONG SAMPLE_INTERVAL = 2;
 
@@ -550,6 +554,91 @@ Cleanup:
     if (Query) {
         PdhCloseQuery(Query);
     }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+void WINAPI GetFormattedCounterArray()
+/*
+
+https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedcounterarraya
+*/
+{
+    PDH_HQUERY hQuery = NULL;
+    PDH_STATUS status = ERROR_SUCCESS;
+    PDH_HCOUNTER hCounter = NULL;
+    DWORD dwBufferSize = 0;         // Size of the pItems buffer
+    DWORD dwItemCount = 0;          // Number of items in the pItems buffer
+    PDH_FMT_COUNTERVALUE_ITEM * pItems = NULL;  // Array of PDH_FMT_COUNTERVALUE_ITEM structures
+    CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(*)\\% Processor Time";
+    CONST ULONG SAMPLE_INTERVAL_MS = 1000;
+
+    if (status = PdhOpenQuery(NULL, 0, &hQuery)) {
+        wprintf(L"PdhOpenQuery failed with 0x%x.\n", status);
+        goto cleanup;
+    }
+
+    // Specify a counter object with a wildcard for the instance.
+    if (status = PdhAddCounter(hQuery, COUNTER_PATH, 0, &hCounter)) {
+        wprintf(L"PdhAddCounter failed with 0x%x.\n", status);
+        goto cleanup;
+    }
+
+    // Some counters need two sample in order to format a value, so
+    // make this call to get the first value before entering the loop.
+    if (status = PdhCollectQueryData(hQuery)) {
+        wprintf(L"PdhCollectQueryData failed with 0x%x.\n", status);
+        goto cleanup;
+    }
+
+    for (int i = 0; i < 10; i++) {
+        Sleep(SAMPLE_INTERVAL_MS);
+
+        if (status = PdhCollectQueryData(hQuery)) {
+            wprintf(L"PdhCollectQueryData failed with 0x%x.\n", status);
+            goto cleanup;
+        }
+
+        // Get the required size of the pItems buffer.
+        status = PdhGetFormattedCounterArray(hCounter, PDH_FMT_DOUBLE, &dwBufferSize, &dwItemCount, pItems);
+        if (PDH_MORE_DATA == status) {
+            pItems = (PDH_FMT_COUNTERVALUE_ITEM *)malloc(dwBufferSize);
+            if (pItems) {
+                status = PdhGetFormattedCounterArray(hCounter, PDH_FMT_DOUBLE, &dwBufferSize, &dwItemCount, pItems);
+                if (ERROR_SUCCESS == status) {
+                    // Loop through the array and print the instance name and counter value.
+                    for (DWORD i = 0; i < dwItemCount; i++) {
+                        wprintf(L"counter: %s, value %.20g\n", pItems[i].szName, pItems[i].FmtValue.doubleValue);
+                    }
+                } else {
+                    wprintf(L"Second PdhGetFormattedCounterArray call failed with 0x%x.\n", status);
+                    goto cleanup;
+                }
+
+                free(pItems);
+                pItems = NULL;
+                dwBufferSize = dwItemCount = 0;
+            } else {
+                wprintf(L"malloc for PdhGetFormattedCounterArray failed.\n");
+                goto cleanup;
+            }
+        } else {
+            wprintf(L"PdhGetFormattedCounterArray failed with 0x%x.\n", status);
+            goto cleanup;
+        }
+    }
+
+cleanup:
+
+    if (pItems)
+        free(pItems);
+
+    if (hQuery)
+        PdhCloseQuery(hQuery); // Closes all counter handles and the query handle
 }
 
 

@@ -351,6 +351,9 @@ void WINAPI ConvertingLogFile (int argc, WCHAR ** argv);
 __declspec(dllimport)
 void WINAPI CollectQueryDataEx(void);
 
+__declspec(dllimport)
+void WINAPI GetFormattedCounterArray();
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
