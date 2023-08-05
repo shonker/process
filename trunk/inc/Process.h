@@ -364,10 +364,10 @@ __declspec(dllimport)
 void WINAPI GetFormattedCounterArray();
 
 __declspec(dllimport)
-void WINAPI CollectPerformanceData(_In_  LPCWSTR FullCounterPath);
+void WINAPI CollectPerformanceData(_In_ LPCWSTR FullCounterPath, _In_ DWORD Format);
 
 __declspec(dllimport)
-void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath);
+void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath, _In_ DWORD Format);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

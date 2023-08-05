@@ -696,12 +696,9 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 EXTERN_C
 __declspec(dllexport)
-void WINAPI CollectPerformanceData(_In_  LPCWSTR FullCounterPath)
+void WINAPI CollectPerformanceData(_In_ LPCWSTR FullCounterPath, _In_ DWORD Format)
 /*
 
 参数：
@@ -756,9 +753,27 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
     for (;;) {
         WaitResult = WaitForSingleObject(Event, INFINITE);
         if (WaitResult == WAIT_OBJECT_0) {
-            Status = PdhGetFormattedCounterValue(Counter, PDH_FMT_DOUBLE, &CounterType, &DisplayValue);
+            Status = PdhGetFormattedCounterValue(Counter, Format, &CounterType, &DisplayValue);
             if (Status == ERROR_SUCCESS) {
-                wprintf(L"\nCounter Value: %.3g", DisplayValue.doubleValue);
+                switch (Format) {
+                case PDH_FMT_LONG:
+                    wprintf(L"\nCounter Value: %d", DisplayValue.longValue);
+                    break;
+                case PDH_FMT_ANSI:
+                    wprintf(L"\nCounter Value: %hs", DisplayValue.AnsiStringValue);
+                    break;
+                case PDH_FMT_UNICODE:
+                    wprintf(L"\nCounter Value: %ls", DisplayValue.WideStringValue);
+                    break;
+                case PDH_FMT_DOUBLE:
+                    wprintf(L"\nCounter Value: %.3g", DisplayValue.doubleValue);
+                    break;
+                case PDH_FMT_LARGE:
+                    wprintf(L"\nCounter Value: %lld", DisplayValue.largeValue);
+                    break;
+                default:
+                    break;
+                }
             } else {
                 wprintf(L"\nPdhGetFormattedCounterValue failed with status 0x%x.", Status);
                 goto Cleanup;
@@ -868,12 +883,9 @@ cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 EXTERN_C
 __declspec(dllexport)
-void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath)
+void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath, _In_ DWORD Format)
 /*
 
 参数：
@@ -920,15 +932,33 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedco
         }
 
         // Get the required size of the pItems buffer.
-        status = PdhGetFormattedCounterArray(hCounter, PDH_FMT_DOUBLE, &dwBufferSize, &dwItemCount, pItems);
+        status = PdhGetFormattedCounterArray(hCounter, Format, &dwBufferSize, &dwItemCount, pItems);
         if (PDH_MORE_DATA == status) {
             pItems = (PDH_FMT_COUNTERVALUE_ITEM *)malloc(dwBufferSize);
             if (pItems) {
-                status = PdhGetFormattedCounterArray(hCounter, PDH_FMT_DOUBLE, &dwBufferSize, &dwItemCount, pItems);
+                status = PdhGetFormattedCounterArray(hCounter, Format, &dwBufferSize, &dwItemCount, pItems);
                 if (ERROR_SUCCESS == status) {
                     // Loop through the array and print the instance name and counter value.
                     for (DWORD i = 0; i < dwItemCount; i++) {
-                        wprintf(L"counter: %-32s, value %.3g\n", pItems[i].szName, pItems[i].FmtValue.doubleValue);
+                        switch (Format) {
+                        case PDH_FMT_LONG:
+                            wprintf(L"counter: %-32s, value %d\n", pItems[i].szName, pItems[i].FmtValue.longValue);
+                            break;
+                        case PDH_FMT_ANSI:
+                            wprintf(L"counter: %-32s, value %hs\n", pItems[i].szName, pItems[i].FmtValue.AnsiStringValue);
+                            break;
+                        case PDH_FMT_UNICODE:
+                            wprintf(L"counter: %-32s, value %ls\n", pItems[i].szName, pItems[i].FmtValue.WideStringValue);
+                            break;
+                        case PDH_FMT_DOUBLE:
+                            wprintf(L"counter: %-32s, value %.3g\n", pItems[i].szName, pItems[i].FmtValue.doubleValue);
+                            break;
+                        case PDH_FMT_LARGE:
+                            wprintf(L"counter: %-32s, value %lld\n", pItems[i].szName, pItems[i].FmtValue.largeValue);
+                            break;
+                        default:
+                            break;
+                        }
                     }
                 } else {
                     wprintf(L"Second PdhGetFormattedCounterArray call failed with 0x%x.\n", status);

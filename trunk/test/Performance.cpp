@@ -3,20 +3,20 @@
 
 void PerformanceTest()
 {
-    //CollectPerformanceData(L"\\Processor(*)\\% Processor Time");
-    //CollectPerformanceData(L"\\Processor(*)\\% User Time");
+    //CollectPerformanceData(L"\\Processor(*)\\% Processor Time", PDH_FMT_DOUBLE);
+    //CollectPerformanceData(L"\\Processor(*)\\% User Time", PDH_FMT_DOUBLE);
 
-    //CollectPerformanceData(L"\\Processor Information(*)\\% Processor Time");//类似：L"\\Processor(*)\\% Processor Time"
+    //CollectPerformanceData(L"\\Processor Information(*)\\% Processor Time", PDH_FMT_DOUBLE);//类似：L"\\Processor(*)\\% Processor Time"
 
-    //CollectPerformanceDatas(L"\\Process(*)\\% Processor Time");
-    //CollectPerformanceDatas(L"\\Process(notepad)\\% Processor Time");
-    CollectPerformanceDatas(L"\\Process(svchost#1)\\% Processor Time");//是索引不是PID，从1开始。
-    //CollectPerformanceDatas(L"\\Process(*)\\Working Set");
+    //CollectPerformanceData(L"\\Memory\\% Committed Bytes In Use", PDH_FMT_DOUBLE);
 
-    //CollectPerformanceData(L"\\Memory\\% Committed Bytes In Use");
+    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Disk Time", PDH_FMT_DOUBLE);
+    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time", PDH_FMT_DOUBLE);
 
-    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Disk Time");
-    //CollectPerformanceData(L"\\PhysicalDisk(*)\\% Idle Time");
+    //CollectPerformanceDatas(L"\\Process(*)\\% Processor Time", PDH_FMT_DOUBLE);
+    //CollectPerformanceDatas(L"\\Process(notepad)\\% Processor Time", PDH_FMT_DOUBLE);
+    //CollectPerformanceDatas(L"\\Process(svchost#1)\\% Processor Time", PDH_FMT_DOUBLE);//是索引不是PID，从1开始。
+    CollectPerformanceDatas(L"\\Process(*)\\Working Set", PDH_FMT_LARGE);
 
     //EnumeratingProcessObjects();
     //EnumObjectItems(L"Process");

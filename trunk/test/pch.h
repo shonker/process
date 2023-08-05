@@ -140,6 +140,9 @@
 #include <Sensapi.h>
 #pragma comment (lib,"Sensapi.lib")
 
+#include <pdh.h>
+#pragma comment (lib,"pdh.lib")
+
 #include <string>
 #include <list>
 #include <regex>
