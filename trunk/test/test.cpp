@@ -9,6 +9,7 @@
 #include "c.h"
 #include "Stack.h"
 #include "Performance.h"
+#include "ProcessesTest.h"
 
 
 #ifdef _WIN64  
@@ -48,7 +49,8 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //GetAdaptersAddressesInfo(argc, argv);
     
     //test_c();
-    TestGlobalMemoryStatusEx();
+    //PerformanceTest();
+    TestProcess();
 
     LocalFree(Arglist);
 }

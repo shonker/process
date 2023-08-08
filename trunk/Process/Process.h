@@ -7,6 +7,17 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+#define ARRAY_SIZE 1024
+
+
+typedef BOOL(WINAPI * EnumeratingProcessesCallBack) (_In_ DWORD Pid, _In_opt_ PVOID Context);
+typedef BOOL(WINAPI * EnumerateProcessCallBack) (_In_ PVOID lppe, /*实际类型是LPPROCESSENTRY32W*/
+                                                 _In_opt_ PVOID Context);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 //\Windows Kits\10\Include\10.0.19041.0\km\wdm.h
 typedef LONG KPRIORITY;
 

@@ -26,6 +26,11 @@ typedef _Return_type_success_(return >= 0) LONG NTSTATUS, * PNTSTATUS;
 #endif
 
 
+typedef BOOL(WINAPI * EnumeratingProcessesCallBack) (_In_ DWORD Pid, _In_opt_ PVOID Context);
+typedef BOOL(WINAPI * EnumerateProcessCallBack) (_In_ PVOID lppe, /*实际类型是LPPROCESSENTRY32W*/
+                                                 _In_opt_ PVOID Context);
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -53,7 +58,10 @@ __declspec(dllimport) VOID WINAPI ReservingCommittingMemory(VOID);
 
 __declspec(dllimport) int WINAPI CollectingMemoryUsageInformationForProcess();
 
-__declspec(dllimport) int WINAPI EnumeratingAllProcesses();
+__declspec(dllimport)
+BOOL WINAPI EnumeratingAllProcesses(_In_ EnumeratingProcessesCallBack CallBack, _In_opt_ PVOID Context);
+
+__declspec(dllimport) int WINAPI EnumeratingAllProcessesSample();
 
 __declspec(dllimport) int WINAPI ShellExecInExplorerProcess(PCWSTR pszFile);
 
@@ -92,6 +100,9 @@ __declspec(dllimport) VOID __stdcall UpdateSvcDacl(_In_ LPCWSTR szSvcName);
 __declspec(dllimport) BOOL WINAPI GetProcessList();
 
 __declspec(dllimport) DWORD WINAPI GetProcessName(_In_ DWORD ProcessID, PWCHAR ProcessName);
+
+__declspec(dllimport)
+DWORD WINAPI EnumerateProcess(_In_ EnumerateProcessCallBack CallBack, _In_opt_ PVOID Context);
 
 __declspec(dllimport) BOOL WINAPI ListProcessThreads(DWORD dwOwnerPID);
 
