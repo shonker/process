@@ -154,7 +154,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
                 // The list can contain one or more null-terminated strings.
                 // The list is terminated using two null-terminator characters.
                 for (pTemp = pwsInstanceListBuffer; *pTemp != 0; pTemp += wcslen(pTemp) + 1) {
-                    wprintf(L"%s\n", pTemp);
+                    wprintf(L"\\%ls\\%s\n", ObjectName, pTemp);//如果设置了ProcessNameFormat 或 ThreadNameFormat这里的显示会：_ID。
                 }
             } else {
                 wprintf(L"Second PdhEnumObjectItems failed with 0x%x.\n", status);
@@ -939,6 +939,13 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedco
                 status = PdhGetFormattedCounterArray(hCounter, Format, &dwBufferSize, &dwItemCount, pItems);
                 if (ERROR_SUCCESS == status) {
                     // Loop through the array and print the instance name and counter value.
+                    /*
+                    谨记：
+                    如果设置了
+                     HKLM\System\CurrentControlSet\Services\Perfproc\Performance
+                     ProcessNameFormat 或 ThreadNameFormat 为 2
+                    这里的szName显示有所改变，多了_ID。
+                    */
                     for (DWORD i = 0; i < dwItemCount; i++) {
                         switch (Format) {
                         case PDH_FMT_LONG:
