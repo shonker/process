@@ -118,6 +118,11 @@ __declspec(dllimport) int WINAPI CreatingThreads();
 
 __declspec(dllimport) BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProcessId);
 
+__declspec(dllimport) 
+BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID ShellCode,
+                                   _In_ SIZE_T ShellCodeSize, 
+                                   _In_ DWORD dwProcessId);
+
 __declspec(dllimport) BOOL WINAPI SetPrivilege(
     HANDLE hToken,          // access token handle
     LPCTSTR lpszPrivilege,  // name of privilege to enable/disable

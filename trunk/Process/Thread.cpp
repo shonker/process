@@ -410,3 +410,55 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
 
     return B;
 }
+
+
+EXTERN_C
+__declspec(dllexport)
+BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID ShellCode,
+                                   _In_ SIZE_T ShellCodeSize, 
+                                   _In_ DWORD dwProcessId)
+{
+    BOOL B = AdjustCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
+    if (!B) {
+        return B;
+    }
+
+    HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
+    if (hProcess == NULL) {
+
+        return FALSE;
+    }
+
+    B = FALSE;
+    LPTHREAD_START_ROUTINE RemoteShellCode = nullptr;
+
+    __try {
+        RemoteShellCode = (LPTHREAD_START_ROUTINE)
+            VirtualAllocEx(hProcess, NULL, ShellCodeSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+        if (!RemoteShellCode) {
+
+            __leave;
+        }
+
+        SIZE_T NumberOfBytesWritten = 0;
+        B = WriteProcessMemory(hProcess, RemoteShellCode, ShellCode, ShellCodeSize, &NumberOfBytesWritten);
+        if (!B) {
+
+            __leave;
+        }
+
+        DWORD ThreadId = 0;
+        HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, RemoteShellCode, NULL, 0, &ThreadId);
+        if (!hThread) {
+
+            __leave;
+        }
+
+        B = TRUE;
+    } __finally {
+
+        CloseHandle(hProcess);
+    }
+
+    return B;
+}

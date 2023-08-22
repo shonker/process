@@ -33,7 +33,7 @@
 
 int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 {
-    //__debugbreak();//DebugBreak();
+    __debugbreak();//DebugBreak();
 
     setlocale(LC_CTYPE, ".936");//解决汉字显示的问题。
 
