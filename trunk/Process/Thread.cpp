@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Thread.h"
+#include "Token.h"
 
 
 #pragma warning(disable:6001)
@@ -347,3 +348,65 @@ Cleanup:
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+EXTERN_C
+__declspec(dllexport)
+BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProcessId)
+{
+    BOOL B = AdjustCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
+    if (!B) {
+        return B;
+    }
+
+    HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
+    if (hProcess == NULL) {
+
+        return FALSE;
+    }
+
+    B = FALSE;
+    LPWSTR RemoteLibFileName = nullptr;
+
+    __try {
+        SIZE_T dwSize = ((SIZE_T)lstrlen(lpLibFileName) + 1) * sizeof(WCHAR);
+        RemoteLibFileName = (LPWSTR)VirtualAllocEx(hProcess, NULL, dwSize, MEM_COMMIT, PAGE_READWRITE);
+        if (!RemoteLibFileName) {
+
+            __leave;
+        }
+
+        SIZE_T NumberOfBytesWritten = 0;
+        B = WriteProcessMemory(hProcess, RemoteLibFileName, lpLibFileName, dwSize, &NumberOfBytesWritten);
+        if (!B) {
+
+            __leave;
+        }
+
+        HMODULE hModule = LoadLibrary(L"Kernel32.dll");
+        if (!hModule) {
+
+            __leave;
+        }
+
+        LPTHREAD_START_ROUTINE LoadLibraryWFn = (LPTHREAD_START_ROUTINE)GetProcAddress(hModule, "LoadLibraryW");
+        if (!LoadLibraryWFn) {
+
+            __leave;
+        }
+
+        DWORD ThreadId = 0;
+        HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, LoadLibraryWFn, RemoteLibFileName, 0, &ThreadId);
+        if (!hThread) {
+
+            __leave;
+        }
+
+        B = TRUE;
+    } __finally {
+
+        CloseHandle(hProcess);
+    }
+
+    return B;
+}

@@ -161,6 +161,7 @@
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="TaskScheduler.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="thread.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="ShellExecute.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="TaskScheduler.h" />
+    <ClInclude Include="thread.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

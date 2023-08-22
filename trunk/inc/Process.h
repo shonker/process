@@ -116,6 +116,8 @@ __declspec(dllimport) void WINAPI CreatingProcesses(int argc, WCHAR * argv[]);
 
 __declspec(dllimport) int WINAPI CreatingThreads();
 
+__declspec(dllimport) BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProcessId);
+
 __declspec(dllimport) BOOL WINAPI SetPrivilege(
     HANDLE hToken,          // access token handle
     LPCTSTR lpszPrivilege,  // name of privilege to enable/disable
