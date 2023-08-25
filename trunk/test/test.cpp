@@ -11,6 +11,7 @@
 #include "Performance.h"
 #include "ProcessesTest.h"
 #include "thread.h"
+#include "Memory.h"
 
 
 #ifdef _WIN64  
@@ -51,7 +52,8 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     
     //test_c();
     //PerformanceTest();
-    TestThread();
+    //TestThread();
+    TestMemory();
 
     LocalFree(Arglist);
 }

@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="c.c" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Performance.cpp" />
     <ClCompile Include="ProcessesTest.cpp" />
@@ -167,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="..\inc\Process.h" />
     <ClInclude Include="c.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Performance.h" />
     <ClInclude Include="ProcessesTest.h" />
