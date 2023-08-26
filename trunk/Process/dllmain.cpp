@@ -18,14 +18,6 @@ void init()
         if (NULL == NtQueryInformationProcess) {
             printf("没有找到NtQueryInformationProcess函数\n");
         }
-        
-        
-
-
-
-
-
-
     }
 }
 
