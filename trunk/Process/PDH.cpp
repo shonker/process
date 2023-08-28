@@ -2,7 +2,9 @@
 #include "PDH.h"
 
 
+#pragma warning(disable:4706) //条件表达式内的赋值
 #pragma warning(disable:6385) //正在从 "pItems" 读取无效数据。
+#pragma warning(disable:4456)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

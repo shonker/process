@@ -7,6 +7,7 @@
 #pragma warning(disable:26451)
 #pragma warning(disable:28182)
 #pragma warning(disable:6386)
+#pragma warning(disable:4100) //未引用的形参
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -860,7 +861,6 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
 {
     BOOL fRet;
     HANDLE hToken = NULL;
-    HANDLE hNewToken = NULL;
     TOKEN_LINKED_TOKEN tlt = {0};
 
     // Notepad is used as an example
@@ -929,8 +929,6 @@ void CreateLowProcess(HANDLE hLowPrivToken, WCHAR * wszProcessName)
 {
     PROCESS_INFORMATION ProcInfo = {0};
     STARTUPINFO StartupInfo = {0};
-    DWORD dwError = 0;
-    DWORD dwLength = 0;
     BOOL fRet = 0;
 
     fRet = CreateProcessAsUser(hLowPrivToken, NULL, wszProcessName, NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcInfo);

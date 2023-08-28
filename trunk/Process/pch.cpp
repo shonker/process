@@ -11,6 +11,7 @@
 #pragma warning(disable:6067)
 #pragma warning(disable:28183)
 #pragma warning(disable:26451)
+#pragma warning(disable:4706) //条件表达式内的赋值
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
