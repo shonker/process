@@ -563,7 +563,7 @@ Purpose:    Function prototypes for using growable memory-mapped files.
 
     // Write bytes to the file (clusters are allocated as necessary).
     for (int x = 0; x < 100; x++) {
-        gmmf[8 * 1024 * 1024 + x] = x;
+        gmmf[8 * 1024 * 1024 + x] = (BYTE)x;
     }
 
     // These lines just prove to us what's going on
