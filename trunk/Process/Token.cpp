@@ -26,8 +26,8 @@ Enabling and Disabling Privileges in C++
 https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-privileges-in-c--
 */
 {
-    TOKEN_PRIVILEGES tp;
-    LUID luid;
+    TOKEN_PRIVILEGES tp{};
+    LUID luid{};
 
     if (!LookupPrivilegeValue(
         NULL,            // lookup privilege on local system
@@ -144,7 +144,7 @@ https://msdn.microsoft.com/en-us/library/bb625960.aspx
 https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=msdn.10)?redirectedfrom=MSDN
 */
 {
-    BOOL                  fRet;
+    BOOL                  fRet{};
     HANDLE                hToken = NULL;
     HANDLE                hNewToken = NULL;
     PSID                  pIntegritySid = NULL;
@@ -215,20 +215,20 @@ CleanExit:
 BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
 {
     ACCESS_ALLOWED_ACE * pace = NULL;
-    ACL_SIZE_INFORMATION aclSizeInfo;
-    BOOL                 bDaclExist;
-    BOOL                 bDaclPresent;
+    ACL_SIZE_INFORMATION aclSizeInfo{};
+    BOOL                 bDaclExist{};
+    BOOL                 bDaclPresent{};
     BOOL                 bSuccess = FALSE;
-    DWORD                dwNewAclSize;
+    DWORD                dwNewAclSize{};
     DWORD                dwSidSize = 0;
-    DWORD                dwSdSizeNeeded;
-    PACL                 pacl;
+    DWORD                dwSdSizeNeeded{};
+    PACL                 pacl{};
     PACL                 pNewAcl = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
     PSECURITY_DESCRIPTOR psdNew = NULL;
-    PVOID                pTempAce;
+    PVOID                pTempAce{};
     SECURITY_INFORMATION si = DACL_SECURITY_INFORMATION;
-    unsigned int         i;
+    unsigned int         i{};
 
     __try {
         // Obtain the DACL for the window station.
@@ -354,20 +354,20 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
 
 BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
 {
-    ACL_SIZE_INFORMATION aclSizeInfo;
-    BOOL                 bDaclExist;
-    BOOL                 bDaclPresent;
+    ACL_SIZE_INFORMATION aclSizeInfo{};
+    BOOL                 bDaclExist{};
+    BOOL                 bDaclPresent{};
     BOOL                 bSuccess = FALSE;
-    DWORD                dwNewAclSize;
+    DWORD                dwNewAclSize{};
     DWORD                dwSidSize = 0;
-    DWORD                dwSdSizeNeeded;
-    PACL                 pacl;
+    DWORD                dwSdSizeNeeded{};
+    PACL                 pacl{};
     PACL                 pNewAcl = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
     PSECURITY_DESCRIPTOR psdNew = NULL;
-    PVOID                pTempAce;
+    PVOID                pTempAce{};
     SECURITY_INFORMATION si = DACL_SECURITY_INFORMATION;
-    unsigned int         i;
+    unsigned int         i{};
 
     __try {
         // Obtain the security descriptor for the desktop object.
@@ -492,12 +492,12 @@ This example calls the GetLogonSID and FreeLogonSID functions described in Getti
 https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirectedfrom=MSDN
 */
 {
-    HANDLE      hToken;
+    HANDLE      hToken{};
     HDESK       hdesk = NULL;
     HWINSTA     hwinsta = NULL, hwinstaSave = NULL;
-    PROCESS_INFORMATION pi;
+    PROCESS_INFORMATION pi{};
     PSID pSid = NULL;
-    STARTUPINFO si;
+    STARTUPINFO si{};
     BOOL bResult = FALSE;
 
     // Log the client on to the local computer.
@@ -632,12 +632,12 @@ http://msdn.microsoft.com/en-us/library/windows/desktop/aa379554(v=vs.85).aspx
 https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-an-access-token-in-c--?redirectedfrom=MSDN
 */
 {
-    DWORD i, dwSize = 0, dwResult = 0;
-    HANDLE hToken;
-    PTOKEN_GROUPS pGroupInfo;
-    SID_NAME_USE SidType;
-    char lpName[MAX_NAME];
-    char lpDomain[MAX_NAME];
+    DWORD i{}, dwSize = 0, dwResult = 0;
+    HANDLE hToken{};
+    PTOKEN_GROUPS pGroupInfo{};
+    SID_NAME_USE SidType{};
+    char lpName[MAX_NAME]{};
+    char lpDomain[MAX_NAME]{};
     PSID pSID = NULL;
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
 
@@ -859,7 +859,7 @@ HANDLE GetLinkedToken(HANDLE hToken);
 
 int CreateLowProcessTest(int argc, _TCHAR * argv[])
 {
-    BOOL fRet;
+    BOOL fRet{};
     HANDLE hToken = NULL;
     TOKEN_LINKED_TOKEN tlt = {0};
 
@@ -902,8 +902,8 @@ HANDLE GetLinkedToken(HANDLE hToken)
         }
         case TokenElevationTypeFull:
         {
-            TOKEN_LINKED_TOKEN linkedToken;
-            DWORD dwLength;
+            TOKEN_LINKED_TOKEN linkedToken{};
+            DWORD dwLength{};
 
             linkedToken.LinkedToken = 0;
 

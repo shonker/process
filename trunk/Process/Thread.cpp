@@ -28,7 +28,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-thread-li
 */
 {
     HANDLE hThreadSnap = INVALID_HANDLE_VALUE;
-    THREADENTRY32 te32;
+    THREADENTRY32 te32{};
 
     // Take a snapshot of all running threads  
     hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
@@ -106,8 +106,8 @@ However, the handle will be unavailable for use in subsequent function calls.
 https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 */
 {
-    PMYDATA pDataArray[MAX_THREADS];
-    DWORD   dwThreadIdArray[MAX_THREADS];
+    PMYDATA pDataArray[MAX_THREADS]{};
+    DWORD   dwThreadIdArray[MAX_THREADS]{};
     HANDLE  hThreadArray[MAX_THREADS] = { 0 };
 
     // Create MAX_THREADS worker threads.
@@ -161,11 +161,11 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 
 DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 {
-    HANDLE hStdout;
-    PMYDATA pDataArray;
-    TCHAR msgBuf[BUF_SIZE];
-    size_t cchStringSize;
-    DWORD dwChars;
+    HANDLE hStdout{};
+    PMYDATA pDataArray{};
+    TCHAR msgBuf[BUF_SIZE]{};
+    size_t cchStringSize{};
+    DWORD dwChars{};
 
     // Make sure there is a console to receive output results. 
     hStdout = GetStdHandle(STD_OUTPUT_HANDLE);

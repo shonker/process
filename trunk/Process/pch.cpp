@@ -26,8 +26,8 @@ DisplayWinError(
 摘自：Windows-classic-samples\Samples\Win7Samples\security\authorization\audit\Audit.c
 */
 {
-    LPSTR MessageBuffer;
-    DWORD dwBufferLength;
+    LPSTR MessageBuffer{};
+    DWORD dwBufferLength{};
 
     // TODO get this fprintf out of here!
     fprintf(stderr, "%s error!\n", szAPI);
@@ -90,9 +90,9 @@ void DisplayError(const wchar_t * pszAPI)
 
 void printError(CONST TCHAR * msg)
 {
-    DWORD eNum;
-    TCHAR sysMsg[256];
-    TCHAR * p;
+    DWORD eNum{};
+    TCHAR sysMsg[256]{};
+    TCHAR * p{};
 
     eNum = GetLastError();
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -116,8 +116,8 @@ void ErrorHandler(LPCTSTR lpszFunction)
 {
     // Retrieve the system error message for the last-error code.
 
-    LPVOID lpMsgBuf;
-    LPVOID lpDisplayBuf;
+    LPVOID lpMsgBuf{};
+    LPVOID lpDisplayBuf{};
     DWORD dw = GetLastError();
 
     FormatMessage(
@@ -154,8 +154,8 @@ void DisplayNtStatus(LPSTR szAPI, NTSTATUS Status)
 
 void DisplayWinError(LPSTR szAPI, DWORD WinError)
 {
-    LPSTR MessageBuffer;
-    DWORD dwBufferLength;
+    LPSTR MessageBuffer{};
+    DWORD dwBufferLength{};
 
     // TODO: Get this fprintf out of here!
     fprintf(stderr, "%s error!\n", szAPI);
@@ -291,7 +291,7 @@ void Nt2Dos(IN  OUT TCHAR * szFileName)
     // Get a series of null-terminated strings, one for each valid drive in the system, plus with an additional null character.
     // Each string is a drive name. e.g. C:\\0D:\\0\0
     if (GetLogicalDriveStrings(MAX_PATH - 1, szTemp)) {
-        TCHAR szName[MAX_PATH];
+        TCHAR szName[MAX_PATH]{};
         TCHAR szDrive[3] = _T(" :");
         BOOL bFound = FALSE;
         TCHAR * p = szTemp;

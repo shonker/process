@@ -250,13 +250,13 @@ The example also shows how to collect and format raw counter data for display.
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-counters
 */
 {
-    PDH_STATUS Status;
+    PDH_STATUS Status{};
     HQUERY Query = NULL;
-    HCOUNTER Counter;
-    PDH_FMT_COUNTERVALUE DisplayValue;
-    DWORD CounterType;
-    SYSTEMTIME SampleTime;
-    PDH_BROWSE_DLG_CONFIG BrowseDlgData;
+    HCOUNTER Counter{};
+    PDH_FMT_COUNTERVALUE DisplayValue{};
+    DWORD CounterType{};
+    SYSTEMTIME SampleTime{};
+    PDH_BROWSE_DLG_CONFIG BrowseDlgData{};
     WCHAR CounterPathBuffer[PDH_MAX_COUNTER_PATH]{};
     CONST ULONG SAMPLE_INTERVAL_MS = 1000;
     CONST PWSTR BROWSE_DIALOG_CAPTION = (CONST PWSTR)L"Select a counter to monitor.";
@@ -390,10 +390,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
 {
     HQUERY hQuery = NULL;
     HLOG hLog = NULL;
-    PDH_STATUS pdhStatus;
+    PDH_STATUS pdhStatus{};
     DWORD dwLogType = PDH_LOG_TYPE_CSV;
-    HCOUNTER hCounter;
-    DWORD dwCount;
+    HCOUNTER hCounter{};
+    DWORD dwCount{};
     CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
     CONST ULONG SAMPLE_INTERVAL_MS = 1000;
 
@@ -478,7 +478,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-dat
     HCOUNTER hCounter = NULL;
     PDH_STATUS status = ERROR_SUCCESS;
     DWORD dwFormat = PDH_FMT_DOUBLE;
-    PDH_FMT_COUNTERVALUE ItemBuffer;
+    PDH_FMT_COUNTERVALUE ItemBuffer{};
     CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
 
     if (argc != 2) {
@@ -620,13 +620,13 @@ void WINAPI CollectQueryDataEx(void)
 https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectquerydataex
 */
 {
-    PDH_STATUS Status;
+    PDH_STATUS Status{};
     HANDLE Event = NULL;
     PDH_HQUERY Query = NULL;
-    PDH_HCOUNTER Counter;
-    ULONG WaitResult;
-    ULONG CounterType;
-    PDH_FMT_COUNTERVALUE DisplayValue;
+    PDH_HCOUNTER Counter{};
+    ULONG WaitResult{};
+    ULONG CounterType{};
+    PDH_FMT_COUNTERVALUE DisplayValue{};
     //CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
     CONST PWSTR COUNTER_NAME = (CONST PWSTR)L"\\Processor(_Total)\\% Processor Time";
     CONST ULONG SAMPLE_COUNT = 10;
@@ -710,13 +710,13 @@ FullCounterPath£¨–Œ»Á£∫L"\\Processor(_Total)\\% Processor Time"
 https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectquerydataex
 */
 {
-    PDH_STATUS Status;
+    PDH_STATUS Status{};
     HANDLE Event = NULL;
     PDH_HQUERY Query = NULL;
-    PDH_HCOUNTER Counter;
-    ULONG WaitResult;
-    ULONG CounterType;
-    PDH_FMT_COUNTERVALUE DisplayValue;
+    PDH_HCOUNTER Counter{};
+    ULONG WaitResult{};
+    ULONG CounterType{};
+    PDH_FMT_COUNTERVALUE DisplayValue{};
 
     Status = PdhOpenQuery(NULL, 0, &Query);
     if (Status != ERROR_SUCCESS) {

@@ -22,8 +22,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
     }
 
     // Calculate the buffer size.
-    PHANDLE aHeaps;
-    SIZE_T BytesToAllocate;
+    PHANDLE aHeaps{};
+    SIZE_T BytesToAllocate{};
     HRESULT Result = SIZETMult(NumberOfHeaps, sizeof(*aHeaps), &BytesToAllocate);
     if (Result != S_OK) {
         _tprintf(TEXT("SIZETMult failed with HR %d.\n"), Result);
@@ -217,7 +217,7 @@ For each heap, it uses the Heap32First and Heap32Next functions to walk the heap
 https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-heap-list
 */
 {
-    HEAPLIST32 hl;
+    HEAPLIST32 hl{};
     HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, GetCurrentProcessId());
     hl.dwSize = sizeof(HEAPLIST32);
     if (hHeapSnap == INVALID_HANDLE_VALUE) {

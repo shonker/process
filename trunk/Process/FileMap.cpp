@@ -32,21 +32,21 @@ int WINAPI CreatingViewWithinFile(void)
    https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-view-within-a-file
 */
 {
-    HANDLE hMapFile;      // handle for the file's memory-mapped region
-    HANDLE hFile;         // the file handle
-    BOOL bFlag;           // a result holder
-    DWORD dBytesWritten;  // number of bytes written
-    DWORD dwFileSize;     // temporary storage for file sizes
-    DWORD dwFileMapSize;  // size of the file mapping
-    DWORD dwMapViewSize;  // the size of the view
-    DWORD dwFileMapStart; // where to start the file map view
-    DWORD dwSysGran;      // system allocation granularity
-    SYSTEM_INFO SysInfo;  // system information; used to get granularity
-    LPVOID lpMapAddress;  // pointer to the base address of the memory-mapped region
-    char * pData;         // pointer to the data
-    int i;                // loop counter
-    int iData;            // on success contains the first int of data
-    int iViewDelta;       // the offset into the view where the data shows up
+    HANDLE hMapFile{};      // handle for the file's memory-mapped region
+    HANDLE hFile{};         // the file handle
+    BOOL bFlag{};           // a result holder
+    DWORD dBytesWritten{};  // number of bytes written
+    DWORD dwFileSize{};     // temporary storage for file sizes
+    DWORD dwFileMapSize{};  // size of the file mapping
+    DWORD dwMapViewSize{};  // the size of the view
+    DWORD dwFileMapStart{}; // where to start the file map view
+    DWORD dwSysGran{};      // system allocation granularity
+    SYSTEM_INFO SysInfo{};  // system information; used to get granularity
+    LPVOID lpMapAddress{};  // pointer to the base address of the memory-mapped region
+    char * pData{};         // pointer to the data
+    int i{};                // loop counter
+    int iData{};            // on success contains the first int of data
+    int iViewDelta{};       // the offset into the view where the data shows up
 
     // Create the test file.
     // Open it "Create Always" to overwrite any existing file. The data is re-created below
@@ -164,8 +164,8 @@ Creating Named Shared Memory
 https://docs.microsoft.com/en-us/windows/win32/memory/creating-named-shared-memory
 */
 {
-    HANDLE hMapFile;
-    LPCTSTR pBuf;
+    HANDLE hMapFile{};
+    LPCTSTR pBuf{};
 
     hMapFile = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // use paging file
@@ -236,10 +236,10 @@ void DisplayError(const wchar_t * pszAPI, DWORD dwError)
 
 void Privilege(const wchar_t * pszPrivilege, BOOL bEnable)
 {
-    HANDLE           hToken;
-    TOKEN_PRIVILEGES tp;
-    BOOL             status;
-    DWORD            error;
+    HANDLE           hToken{};
+    TOKEN_PRIVILEGES tp{};
+    BOOL             status{};
+    DWORD            error{};
 
     // open process token
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
@@ -292,11 +292,11 @@ This flag is ignored on OS versions before Windows 10, version 1703.
 https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-using-large-pages
 */
 {
-    HANDLE hMapFile;
-    LPCTSTR pBuf;
-    DWORD size;
-    GETLARGEPAGEMINIMUM pGetLargePageMinimum;
-    HINSTANCE  hDll;
+    HANDLE hMapFile{};
+    LPCTSTR pBuf{};
+    DWORD size{};
+    GETLARGEPAGEMINIMUM pGetLargePageMinimum{};
+    HINSTANCE  hDll{};
 
     // call succeeds only on Windows Server 2003 SP1 or later
     hDll = LoadLibrary(TEXT("kernel32.dll"));
@@ -446,7 +446,7 @@ To test this code, create a main function that opens a file using CreateFile and
 https://docs.microsoft.com/en-us/windows/win32/memory/obtaining-a-file-name-from-a-file-handle
 */
 {
-    HANDLE hFile;
+    HANDLE hFile{};
 
     if (argc != 2) {
         _tprintf(TEXT("This sample takes a file name as a parameter.\n"));
@@ -532,8 +532,8 @@ VOID CGMMF::ForceClose()
 BOOL CGMMF::SetToZero(HANDLE hfile, UINT_PTR cbOffsetStart, UINT_PTR cbOffsetEnd)
 {
     // NOTE: This function does not work if this file is memory-mapped.
-    DWORD dw;
-    FILE_ZERO_DATA_INFORMATION fzdi;
+    DWORD dw{};
+    FILE_ZERO_DATA_INFORMATION fzdi{};
     fzdi.FileOffset.QuadPart = cbOffsetStart;
     fzdi.BeyondFinalZero.QuadPart = cbOffsetEnd + 1;
     return(::DeviceIoControl(hfile, FSCTL_SET_ZERO_DATA, (LPVOID)&fzdi, sizeof(fzdi), NULL, 0, &dw, NULL));

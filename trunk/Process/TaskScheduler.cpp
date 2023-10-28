@@ -96,9 +96,9 @@ void WINAPI EnumTaskScheduler(void)
     //  Visit each task in the folder.
     for (LONG i = 0; i < numTasks; i++) {
         IRegisteredTask * pRegisteredTask = NULL;
-        _bstr_t taskName;
-        TASK_STATE taskState;
-        _bstr_t taskStateStr;
+        _bstr_t taskName{};
+        TASK_STATE taskState{};
+        _bstr_t taskStateStr{};
 
         hr = pTaskCollection->get_Item(_variant_t(i + 1), &pRegisteredTask);
         if (FAILED(hr)) {
@@ -766,11 +766,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
 
     //  Securely get the user name and password. The task will
     //  be created to run with the credentials from the supplied user name and password.
-    CREDUI_INFO cui;
+    CREDUI_INFO cui{};
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = TEXT("");
     TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = TEXT("");
-    BOOL fSave;
-    DWORD dwErr;
+    BOOL fSave{};
+    DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
     cui.hwndParent = NULL;
@@ -1404,11 +1404,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
 
     //  Securely get the user name and password.
     //  The task will be created to run with the credentials from the supplied user name and password.
-    CREDUI_INFO cui;
+    CREDUI_INFO cui{};
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = L"";
     TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = L"";
-    BOOL fSave;
-    DWORD dwErr;
+    BOOL fSave{};
+    DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
     cui.hwndParent = NULL;
@@ -2431,11 +2431,11 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     //  Securely get the user name and password. The task will
     //  be created to run with the credentials from the supplied 
     //  user name and password.
-    CREDUI_INFO cui;
+    CREDUI_INFO cui{};
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = L"";
     TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = L"";
-    BOOL fSave;
-    DWORD dwErr;
+    BOOL fSave{};
+    DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
     cui.hwndParent = NULL;
@@ -2622,7 +2622,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
 
     printf("\nNumber of Tasks : %d", numTasks);
 
-    TASK_STATE taskState;
+    TASK_STATE taskState{};
 
     for (LONG i = 0; i < numTasks; i++) {
         IRegisteredTask * pRegisteredTask = NULL;
@@ -2677,7 +2677,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object. 
     hr = CoInitialize(NULL);
@@ -2692,9 +2692,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     }
 
     // Call ITaskScheduler::NewWorkItem to create new task.
-    LPCWSTR pwszTaskName;
-    ITask * pITask;
-    IPersistFile * pIPersistFile;
+    LPCWSTR pwszTaskName{};
+    ITask * pITask{};
+    IPersistFile * pIPersistFile{};
     pwszTaskName = L"Test Task";
 
     hr = pITS->NewWorkItem(pwszTaskName,         // Name of task
@@ -2749,7 +2749,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and 
     // then call CoCreateInstance to get the Task Scheduler object. 
@@ -2775,7 +2775,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
 
     // Call IEnumWorkItems::Next to retrieve tasks. Note that 
     // this example tries to retrieve five tasks for each call.
-    LPWSTR * lpwszNames;
+    LPWSTR * lpwszNames{};
     DWORD dwFetchedTasks = 0;
     while (SUCCEEDED(pIEnum->Next(TASKS_TO_RETRIEVE, &lpwszNames, &dwFetchedTasks)) && (dwFetchedTasks != 0)) {
         // Process each task. Note that this example prints the name of each task to the screen.
@@ -2809,7 +2809,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
@@ -2824,8 +2824,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
-    LPCWSTR lpcwszTaskName;
+    ITask * pITask{};
+    LPCWSTR lpcwszTaskName{};
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();
@@ -2868,7 +2868,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.      
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -2881,8 +2881,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
-    LPCWSTR lpcwszTaskName;
+    ITask * pITask{};
+    LPCWSTR lpcwszTaskName{};
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();//Release ITaskScheduler interface
@@ -2929,7 +2929,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -2942,8 +2942,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
-    LPCWSTR lpcwszTaskName;
+    ITask * pITask{};
+    LPCWSTR lpcwszTaskName{};
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();//Release ITaskScheduler interface.
@@ -2998,7 +2998,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3011,8 +3011,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
-    LPCWSTR lpcwszTaskName;
+    ITask * pITask{};
+    LPCWSTR lpcwszTaskName{};
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();//Release ITaskScheduler interface.
@@ -3061,7 +3061,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3074,8 +3074,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
-    LPCWSTR lpcwszTaskName;
+    ITask * pITask{};
+    LPCWSTR lpcwszTaskName{};
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();//Release ITaskScheduler interface.
@@ -3123,7 +3123,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3136,7 +3136,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"TestTask";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3182,7 +3182,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3195,7 +3195,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3244,7 +3244,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3257,7 +3257,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();// Release ITaskScheduler interface.
@@ -3304,7 +3304,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3317,7 +3317,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();// Release ITaskScheduler interface.
@@ -3364,7 +3364,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3377,7 +3377,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();// Release the ITaskScheduler interface.
@@ -3390,9 +3390,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call ITask::GetRunTimes and display the next five run times for this task.
 
-    SYSTEMTIME stNow;
-    LPSYSTEMTIME pstListOfTimes;
-    LPSYSTEMTIME pstListBegin;
+    SYSTEMTIME stNow{};
+    LPSYSTEMTIME pstListOfTimes{};
+    LPSYSTEMTIME pstListBegin{};
     WORD wCountOfRuns = 5;
 
     GetSystemTime(&stNow);
@@ -3443,7 +3443,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3456,7 +3456,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3531,7 +3531,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (SUCCEEDED(hr)) {
@@ -3548,7 +3548,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
 
     // Call ITaskScheduler::Activate to get the Task object.
 
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3561,11 +3561,11 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     //  Securely get the user name and password. 
-    CREDUI_INFO cui;
+    CREDUI_INFO cui{};
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = L"";
     TCHAR pszPwd[CREDUI_MAX_PASSWORD_LENGTH] = L"";
-    BOOL fSave;
-    DWORD dwErr;
+    BOOL fSave{};
+    DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
     cui.hwndParent = NULL;
@@ -3647,7 +3647,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -3661,7 +3661,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3725,7 +3725,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3738,7 +3738,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3786,7 +3786,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3799,7 +3799,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3845,7 +3845,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3858,7 +3858,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3906,7 +3906,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3919,7 +3919,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -3967,7 +3967,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -3980,7 +3980,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4029,7 +4029,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -4043,7 +4043,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4103,7 +4103,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -4117,7 +4117,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4178,7 +4178,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -4192,7 +4192,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4253,7 +4253,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -4267,7 +4267,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4328,7 +4328,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
@@ -4342,7 +4342,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4406,7 +4406,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -4419,7 +4419,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();// Release the ITaskScheduler interface.
@@ -4433,8 +4433,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     // Call ITask::QueryInterface to retrieve the IProvideTaskPage interface, and call IProvideTaskPage::GetPage to retrieve the task page.
     TASKPAGE tpType = TASKPAGE_TASK;
     BOOL fPersistChanges = TRUE;
-    HPROPSHEETPAGE phPage;
-    IProvideTaskPage * pIProvTaskPage;
+    HPROPSHEETPAGE phPage{};
+    IProvideTaskPage * pIProvTaskPage{};
     hr = pITask->QueryInterface(IID_IProvideTaskPage, (void **)&pIProvTaskPage);
     pITask->Release();// Release the ITask interface.
     if (FAILED(hr)) {
@@ -4487,7 +4487,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
@@ -4502,7 +4502,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4594,7 +4594,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
@@ -4609,7 +4609,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();
@@ -4717,7 +4717,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
     HRESULT hr = S_OK;
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr)) {
         hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
@@ -4730,7 +4730,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName;
     lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
@@ -4790,7 +4790,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 */
 {
     HRESULT hr = S_OK;
-    ITaskScheduler * pITS;
+    ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     hr = CoInitialize(NULL);
@@ -4805,7 +4805,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Call ITaskScheduler::Activate to get the Task object.
-    ITask * pITask;
+    ITask * pITask{};
     LPCWSTR lpcwszTaskName = L"Test Task";
     hr = pITS->Activate(lpcwszTaskName, IID_ITask, (IUnknown **)&pITask);
     pITS->Release();
