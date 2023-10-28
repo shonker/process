@@ -30,7 +30,7 @@ https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-p
     LUID luid{};
 
     if (!LookupPrivilegeValue(
-        NULL,            // lookup privilege on local system
+        nullptr,            // lookup privilege on local system
         lpszPrivilege,   // privilege to lookup 
         &luid))        // receives LUID of privilege
     {
@@ -46,7 +46,7 @@ https://docs.microsoft.com/en-us/windows/win32/secauthz/enabling-and-disabling-p
         tp.Privileges[0].Attributes = 0;
 
     // Enable the privilege or disable all privileges.
-    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)NULL, (PDWORD)NULL)) {
+    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES)nullptr, (PDWORD)nullptr)) {
         printf("AdjustTokenPrivileges error: %u\n", GetLastError());
         return FALSE;
     }
@@ -84,10 +84,10 @@ EnablePrivilege(SE_DEBUG_NAME, FALSE);
         TOKEN_PRIVILEGES tp;
 
         tp.PrivilegeCount = 1;
-        LookupPrivilegeValue(NULL, szPrivilege, &tp.Privileges[0].Luid);
+        LookupPrivilegeValue(nullptr, szPrivilege, &tp.Privileges[0].Luid);
 
         tp.Privileges[0].Attributes = fEnable ? SE_PRIVILEGE_ENABLED : 0;
-        AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL);
+        AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), nullptr, nullptr);
         fOk = (GetLastError() == ERROR_SUCCESS);
 
         CloseHandle(hToken);// Don't forget to close the token handle
@@ -114,16 +114,16 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
 {
     // The LABEL_SECURITY_INFORMATION SDDL SACL to be set for low integrity 
     DWORD dwErr = ERROR_SUCCESS;
-    PSECURITY_DESCRIPTOR pSD = NULL;
-    PACL pSacl = NULL; // not allocated
+    PSECURITY_DESCRIPTOR pSD = nullptr;
+    PACL pSacl = nullptr; // not allocated
     BOOL fSaclPresent = FALSE;
     BOOL fSaclDefaulted = FALSE;
     LPCWSTR pwszFileName = L"Sample.txt";
 
-    if (ConvertStringSecurityDescriptorToSecurityDescriptorW(LOW_INTEGRITY_SDDL_SACL_W, SDDL_REVISION_1, &pSD, NULL)) {
+    if (ConvertStringSecurityDescriptorToSecurityDescriptorW(LOW_INTEGRITY_SDDL_SACL_W, SDDL_REVISION_1, &pSD, nullptr)) {
         if (GetSecurityDescriptorSacl(pSD, &fSaclPresent, &pSacl, &fSaclDefaulted)) {
-            // Note that psidOwner, psidGroup, and pDacl are all NULL and set the new LABEL_SECURITY_INFORMATION
-            dwErr = SetNamedSecurityInfoW((LPWSTR)pwszFileName, SE_FILE_OBJECT, LABEL_SECURITY_INFORMATION, NULL, NULL, NULL, pSacl);
+            // Note that psidOwner, psidGroup, and pDacl are all nullptr and set the new LABEL_SECURITY_INFORMATION
+            dwErr = SetNamedSecurityInfoW((LPWSTR)pwszFileName, SE_FILE_OBJECT, LABEL_SECURITY_INFORMATION, nullptr, nullptr, nullptr, pSacl);
         }
         LocalFree(pSD);
     }
@@ -145,9 +145,9 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
 */
 {
     BOOL                  fRet{};
-    HANDLE                hToken = NULL;
-    HANDLE                hNewToken = NULL;
-    PSID                  pIntegritySid = NULL;
+    HANDLE                hToken = nullptr;
+    HANDLE                hNewToken = nullptr;
+    PSID                  pIntegritySid = nullptr;
     TOKEN_MANDATORY_LABEL TIL = {0};
     PROCESS_INFORMATION   ProcInfo = {0};
     STARTUPINFO           StartupInfo = {0};
@@ -159,7 +159,7 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
         goto CleanExit;
     }
 
-    fRet = DuplicateTokenEx(hToken, 0, NULL, SecurityImpersonation, TokenPrimary, &hNewToken);
+    fRet = DuplicateTokenEx(hToken, 0, nullptr, SecurityImpersonation, TokenPrimary, &hNewToken);
     if (!fRet) {
         goto CleanExit;
     }
@@ -182,28 +182,28 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
     }
 
     // Create the new process at Low integrity
-    fRet = CreateProcessAsUser(hNewToken, NULL, wszProcessName, NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcInfo);
+    fRet = CreateProcessAsUser(hNewToken, nullptr, wszProcessName, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &StartupInfo, &ProcInfo);
     /*
     win10,这行出错。0xc0000022.
     */
 
 CleanExit:
 
-    if (ProcInfo.hProcess != NULL) {
+    if (ProcInfo.hProcess != nullptr) {
         CloseHandle(ProcInfo.hProcess);
     }
 
-    if (ProcInfo.hThread != NULL) {
+    if (ProcInfo.hThread != nullptr) {
         CloseHandle(ProcInfo.hThread);
     }
 
     LocalFree(pIntegritySid);
 
-    if (hNewToken != NULL) {
+    if (hNewToken != nullptr) {
         CloseHandle(hNewToken);
     }
 
-    if (hToken != NULL) {
+    if (hToken != nullptr) {
         CloseHandle(hToken);
     }
 }
@@ -214,7 +214,7 @@ CleanExit:
 
 BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
 {
-    ACCESS_ALLOWED_ACE * pace = NULL;
+    ACCESS_ALLOWED_ACE * pace = nullptr;
     ACL_SIZE_INFORMATION aclSizeInfo{};
     BOOL                 bDaclExist{};
     BOOL                 bDaclPresent{};
@@ -223,9 +223,9 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
     DWORD                dwSidSize = 0;
     DWORD                dwSdSizeNeeded{};
     PACL                 pacl{};
-    PACL                 pNewAcl = NULL;
-    PSECURITY_DESCRIPTOR psd = NULL;
-    PSECURITY_DESCRIPTOR psdNew = NULL;
+    PACL                 pNewAcl = nullptr;
+    PSECURITY_DESCRIPTOR psd = nullptr;
+    PSECURITY_DESCRIPTOR psdNew = nullptr;
     PVOID                pTempAce{};
     SECURITY_INFORMATION si = DACL_SECURITY_INFORMATION;
     unsigned int         i{};
@@ -235,11 +235,11 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
         if (!GetUserObjectSecurity(hwinsta, &si, psd, dwSidSize, &dwSdSizeNeeded))
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
                 psd = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSdSizeNeeded);
-                if (psd == NULL)
+                if (psd == nullptr)
                     __leave;
 
                 psdNew = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSdSizeNeeded);
-                if (psdNew == NULL)
+                if (psdNew == nullptr)
                     __leave;
 
                 dwSidSize = dwSdSizeNeeded;
@@ -260,8 +260,8 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
             ZeroMemory(&aclSizeInfo, sizeof(ACL_SIZE_INFORMATION));
             aclSizeInfo.AclBytesInUse = sizeof(ACL);
 
-            // Call only if the DACL is not NULL.
-            if (pacl != NULL) {
+            // Call only if the DACL is not nullptr.
+            if (pacl != nullptr) {
                 // get the file ACL size info
                 if (!GetAclInformation(pacl, (LPVOID)&aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
                     __leave;
@@ -274,7 +274,7 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
 
             // Allocate memory for the new ACL.
             pNewAcl = (PACL)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwNewAclSize);
-            if (pNewAcl == NULL)
+            if (pNewAcl == nullptr)
                 __leave;
 
             // Initialize the new DACL.
@@ -302,7 +302,7 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
                 GetProcessHeap(),
                 HEAP_ZERO_MEMORY,
                 sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(psid) - sizeof(DWORD));
-            if (pace == NULL)
+            if (pace == nullptr)
                 __leave;
 
             pace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
@@ -334,16 +334,16 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
     } __finally {
         // Free the allocated buffers.
 
-        if (pace != NULL)
+        if (pace != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)pace);
 
-        if (pNewAcl != NULL)
+        if (pNewAcl != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)pNewAcl);
 
-        if (psd != NULL)
+        if (psd != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)psd);
 
-        if (psdNew != NULL)
+        if (psdNew != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)psdNew);
     }
 
@@ -362,9 +362,9 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
     DWORD                dwSidSize = 0;
     DWORD                dwSdSizeNeeded{};
     PACL                 pacl{};
-    PACL                 pNewAcl = NULL;
-    PSECURITY_DESCRIPTOR psd = NULL;
-    PSECURITY_DESCRIPTOR psdNew = NULL;
+    PACL                 pNewAcl = nullptr;
+    PSECURITY_DESCRIPTOR psd = nullptr;
+    PSECURITY_DESCRIPTOR psdNew = nullptr;
     PVOID                pTempAce{};
     SECURITY_INFORMATION si = DACL_SECURITY_INFORMATION;
     unsigned int         i{};
@@ -374,11 +374,11 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
         if (!GetUserObjectSecurity(hdesk, &si, psd, dwSidSize, &dwSdSizeNeeded)) {
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
                 psd = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSdSizeNeeded);
-                if (psd == NULL)
+                if (psd == nullptr)
                     __leave;
 
                 psdNew = (PSECURITY_DESCRIPTOR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwSdSizeNeeded);
-                if (psdNew == NULL)
+                if (psdNew == nullptr)
                     __leave;
 
                 dwSidSize = dwSdSizeNeeded;
@@ -400,8 +400,8 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
         ZeroMemory(&aclSizeInfo, sizeof(ACL_SIZE_INFORMATION));
         aclSizeInfo.AclBytesInUse = sizeof(ACL);
 
-        // Call only if NULL DACL.
-        if (pacl != NULL) {
+        // Call only if nullptr DACL.
+        if (pacl != nullptr) {
             // Determine the size of the ACL information.
             if (!GetAclInformation(pacl, (LPVOID)&aclSizeInfo, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation))
                 __leave;
@@ -412,7 +412,7 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
 
         // Allocate buffer for the new ACL.
         pNewAcl = (PACL)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwNewAclSize);
-        if (pNewAcl == NULL)
+        if (pNewAcl == nullptr)
             __leave;
 
         // Initialize the new ACL.
@@ -452,13 +452,13 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
     } __finally {
         // Free buffers.
 
-        if (pNewAcl != NULL)
+        if (pNewAcl != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)pNewAcl);
 
-        if (psd != NULL)
+        if (psd != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)psd);
 
-        if (psdNew != NULL)
+        if (psdNew != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)psdNew);
     }
 
@@ -493,10 +493,10 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
 */
 {
     HANDLE      hToken{};
-    HDESK       hdesk = NULL;
-    HWINSTA     hwinsta = NULL, hwinstaSave = NULL;
+    HDESK       hdesk = nullptr;
+    HWINSTA     hwinsta = nullptr, hwinstaSave = nullptr;
     PROCESS_INFORMATION pi{};
-    PSID pSid = NULL;
+    PSID pSid = nullptr;
     STARTUPINFO si{};
     BOOL bResult = FALSE;
 
@@ -506,7 +506,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
     }
 
     // Save a handle to the caller's current window station.
-    if ((hwinstaSave = GetProcessWindowStation()) == NULL)
+    if ((hwinstaSave = GetProcessWindowStation()) == nullptr)
         goto Cleanup;
 
     // Get a handle to the interactive window station.
@@ -514,7 +514,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
         _T("winsta0"),                   // the interactive window station 
         FALSE,                       // handle is not inheritable
         READ_CONTROL | WRITE_DAC);   // rights to read/write the DACL
-    if (hwinsta == NULL)
+    if (hwinsta == nullptr)
         goto Cleanup;
 
     // To get the correct default desktop, set the caller's 
@@ -534,7 +534,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
     if (!SetProcessWindowStation(hwinstaSave))
         goto Cleanup;
 
-    if (hdesk == NULL)
+    if (hdesk == nullptr)
         goto Cleanup;
 
     // Get the SID for the client's logon session.
@@ -562,14 +562,14 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
     // Launch the process in the client's logon session.
     bResult = CreateProcessAsUser(
         hToken,            // client's access token
-        NULL,              // file to execute
+        nullptr,              // file to execute
         lpCommandLine,     // command line
-        NULL,              // pointer to process SECURITY_ATTRIBUTES
-        NULL,              // pointer to thread SECURITY_ATTRIBUTES
+        nullptr,              // pointer to process SECURITY_ATTRIBUTES
+        nullptr,              // pointer to thread SECURITY_ATTRIBUTES
         FALSE,             // handles are not inheritable
         NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE,   // creation flags
-        NULL,              // pointer to new environment block 
-        NULL,              // name of current directory 
+        nullptr,              // pointer to new environment block 
+        nullptr,              // name of current directory 
         &si,               // pointer to STARTUPINFO structure
         &pi                // receives information about new process
     );
@@ -587,7 +587,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
 
 Cleanup:
 
-    if (hwinstaSave != NULL)
+    if (hwinstaSave != nullptr)
         SetProcessWindowStation(hwinstaSave);
 
     // Free the buffer for the logon SID.
@@ -638,7 +638,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-a
     SID_NAME_USE SidType{};
     char lpName[MAX_NAME]{};
     char lpDomain[MAX_NAME]{};
-    PSID pSID = NULL;
+    PSID pSID = nullptr;
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
 
     // Open a handle to the access token for the calling process.
@@ -648,7 +648,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-a
     }
 
     // Call GetTokenInformation to get the buffer size.
-    if (!GetTokenInformation(hToken, TokenGroups, NULL, dwSize, &dwSize)) {
+    if (!GetTokenInformation(hToken, TokenGroups, nullptr, dwSize, &dwSize)) {
         dwResult = GetLastError();
         if (dwResult != ERROR_INSUFFICIENT_BUFFER) {
             printf("GetTokenInformation Error %u\n", dwResult);
@@ -675,7 +675,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-a
     for (i = 0; i < pGroupInfo->GroupCount; i++) {
         if (EqualSid(pSID, pGroupInfo->Groups[i].Sid)) {   // Lookup the account name and print it.
             dwSize = MAX_NAME;
-            if (!LookupAccountSid(NULL,
+            if (!LookupAccountSid(nullptr,
                                   pGroupInfo->Groups[i].Sid,
                                   (LPWSTR)lpName,
                                   &dwSize,
@@ -860,7 +860,7 @@ HANDLE GetLinkedToken(HANDLE hToken);
 int CreateLowProcessTest(int argc, _TCHAR * argv[])
 {
     BOOL fRet{};
-    HANDLE hToken = NULL;
+    HANDLE hToken = nullptr;
     TOKEN_LINKED_TOKEN tlt = {0};
 
     // Notepad is used as an example
@@ -873,7 +873,7 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
 
     WCHAR wszProcessName[MAX_PATH] = L"C:\\Windows\\System32\\Notepad.exe";
     HANDLE hLowPrivilage = GetLinkedToken(hToken);
-    if (NULL != hLowPrivilage) {
+    if (nullptr != hLowPrivilage) {
         CreateLowProcess(hLowPrivilage, wszProcessName);
     }
 
@@ -883,21 +883,21 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
 
 HANDLE GetLinkedToken(HANDLE hToken)
 {
-    HANDLE hProcessToken = NULL;
-    HANDLE hLinkedToken = NULL;
+    HANDLE hProcessToken = nullptr;
+    HANDLE hLinkedToken = nullptr;
     DWORD et = (0);
     DWORD dwReturnLength;
 
     if (0 == GetTokenInformation(hToken, TokenElevationType, &et, sizeof(et), &dwReturnLength)) { // return of zero indicates an error
-        return NULL;
+        return nullptr;
     } else { // success
         switch (et) {
         case TokenElevationTypeDefault:
-            hLinkedToken = NULL;
+            hLinkedToken = nullptr;
             break;
         case TokenElevationTypeLimited:
         {
-            hLinkedToken = NULL;
+            hLinkedToken = nullptr;
             break;
         }
         case TokenElevationTypeFull:
@@ -909,7 +909,7 @@ HANDLE GetLinkedToken(HANDLE hToken)
 
             int iRet = GetTokenInformation(hToken, TokenLinkedToken, &linkedToken, sizeof(linkedToken), &dwLength);
             if (0 == iRet) {
-                hLinkedToken = NULL;
+                hLinkedToken = nullptr;
             } else {
                 hLinkedToken = linkedToken.LinkedToken;
             }
@@ -931,18 +931,18 @@ void CreateLowProcess(HANDLE hLowPrivToken, WCHAR * wszProcessName)
     STARTUPINFO StartupInfo = {0};
     BOOL fRet = 0;
 
-    fRet = CreateProcessAsUser(hLowPrivToken, NULL, wszProcessName, NULL, NULL, FALSE, 0, NULL, NULL, &StartupInfo, &ProcInfo);
+    fRet = CreateProcessAsUser(hLowPrivToken, nullptr, wszProcessName, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &StartupInfo, &ProcInfo);
     if (0 == fRet) {
         return;
     }
 
     WaitForSingleObject(ProcInfo.hProcess, INFINITE);
 
-    if (ProcInfo.hProcess != NULL) {
+    if (ProcInfo.hProcess != nullptr) {
         CloseHandle(ProcInfo.hProcess);
     }
 
-    if (ProcInfo.hThread != NULL) {
+    if (ProcInfo.hThread != nullptr) {
         CloseHandle(ProcInfo.hThread);
     }
 

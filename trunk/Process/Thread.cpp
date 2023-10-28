@@ -114,7 +114,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
     for (int i = 0; i < MAX_THREADS; i++) {
         // Allocate memory for thread data.
         pDataArray[i] = (PMYDATA)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(MYDATA));
-        if (pDataArray[i] == NULL) {
+        if (pDataArray[i] == nullptr) {
             // If the array allocation fails, the system is out of memory
             // so there is no point in trying to print an error message.
             // Just terminate execution.
@@ -127,7 +127,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 
         // Create the thread to begin execution on its own.
         hThreadArray[i] = CreateThread(
-            NULL,                   // default security attributes
+            nullptr,                   // default security attributes
             0,                      // use default stack size  
             MyThreadFunction,       // thread function name
             pDataArray[i],          // argument to thread function 
@@ -137,7 +137,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
         // Check the return value for success.
         // If CreateThread fails, terminate execution. 
         // This will automatically clean up threads and memory. 
-        if (hThreadArray[i] == NULL) {
+        if (hThreadArray[i] == nullptr) {
             ErrorHandler(TEXT("CreateThread"));
             ExitProcess(3);
         }
@@ -149,9 +149,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
     // Close all thread handles and free memory allocations.
     for (int i = 0; i < MAX_THREADS; i++) {
         CloseHandle(hThreadArray[i]);
-        if (pDataArray[i] != NULL) {
+        if (pDataArray[i] != nullptr) {
             HeapFree(GetProcessHeap(), 0, pDataArray[i]);
-            pDataArray[i] = NULL;    // Ensure address is not reused.
+            pDataArray[i] = nullptr;    // Ensure address is not reused.
         }
     }
 
@@ -174,14 +174,14 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
 
     // Cast the parameter to the correct data type.
     // The pointer is known to be valid because 
-    // it was checked for NULL before the thread was created.
+    // it was checked for nullptr before the thread was created.
     pDataArray = (PMYDATA)lpParam;
 
     // Print the parameter values using thread-safe functions.
     StringCchPrintf(msgBuf, BUF_SIZE, TEXT("Parameters = %d, %d\n"),
         pDataArray->val1, pDataArray->val2);
     (void)StringCchLength(msgBuf, BUF_SIZE, &cchStringSize);
-    WriteConsole(hStdout, msgBuf, (DWORD)cchStringSize, &dwChars, NULL);
+    WriteConsole(hStdout, msgBuf, (DWORD)cchStringSize, &dwChars, nullptr);
 
     return 0;
 }
@@ -260,8 +260,8 @@ int ImpersonateUser(int argc, wchar_t* argv[])
     wchar_t szUserName[INFO_BUFFER_SIZE] = {};
     wchar_t szDomain[INFO_BUFFER_SIZE] = {};
     wchar_t szPassword[INFO_BUFFER_SIZE] = {};
-    wchar_t* pc = NULL;
-    HANDLE hToken = NULL;
+    wchar_t* pc = nullptr;
+    HANDLE hToken = nullptr;
     BOOL fSucceeded = FALSE;
 
     // Print the name of the user associated with the current thread.
@@ -278,17 +278,17 @@ int ImpersonateUser(int argc, wchar_t* argv[])
     wprintf(L"Enter the name of the impersonated user: ");
     fgetws(szUserName, ARRAYSIZE(szUserName), stdin);
     pc = wcschr(szUserName, L'\n');
-    if (pc != NULL) *pc = L'\0';  // Remove the trailing L'\n'
+    if (pc != nullptr) *pc = L'\0';  // Remove the trailing L'\n'
 
     wprintf(L"Enter the domain name: ");
     fgetws(szDomain, ARRAYSIZE(szDomain), stdin);
     pc = wcschr(szDomain, L'\n');
-    if (pc != NULL) *pc = L'\0';  // Remove the trailing L'\n'
+    if (pc != nullptr) *pc = L'\0';  // Remove the trailing L'\n'
 
     wprintf(L"Enter the password: ");
     fgetws(szPassword, ARRAYSIZE(szPassword), stdin);
     pc = wcschr(szPassword, L'\n');
-    if (pc != NULL) *pc = L'\0';  // Remove the trailing L'\n'
+    if (pc != nullptr) *pc = L'\0';  // Remove the trailing L'\n'
 
     // Attempt to log on the user.
     if (!LogonUser(szUserName, szDomain, szPassword, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, &hToken)) {
@@ -341,7 +341,7 @@ Cleanup:
 
     if (hToken) {
         CloseHandle(hToken);
-        hToken = NULL;
+        hToken = nullptr;
     }
 
     return 0;
@@ -361,7 +361,7 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
     }
 
     HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
-    if (hProcess == NULL) {
+    if (hProcess == nullptr) {
 
         return FALSE;
     }
@@ -371,7 +371,7 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
 
     __try {
         SIZE_T dwSize = ((SIZE_T)lstrlen(lpLibFileName) + 1) * sizeof(WCHAR);
-        RemoteLibFileName = (LPWSTR)VirtualAllocEx(hProcess, NULL, dwSize, MEM_COMMIT, PAGE_READWRITE);
+        RemoteLibFileName = (LPWSTR)VirtualAllocEx(hProcess, nullptr, dwSize, MEM_COMMIT, PAGE_READWRITE);
         if (!RemoteLibFileName) {
 
             __leave;
@@ -397,7 +397,7 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
         }
 
         DWORD ThreadId = 0;
-        HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, LoadLibraryWFn, RemoteLibFileName, 0, &ThreadId);
+        HANDLE hThread = CreateRemoteThread(hProcess, nullptr, 0, LoadLibraryWFn, RemoteLibFileName, 0, &ThreadId);
         if (!hThread) {
 
             __leave;
@@ -425,7 +425,7 @@ BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID Shell
     }
 
     HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
-    if (hProcess == NULL) {
+    if (hProcess == nullptr) {
 
         return FALSE;
     }
@@ -435,7 +435,7 @@ BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID Shell
 
     __try {
         RemoteShellCode = (LPTHREAD_START_ROUTINE)
-            VirtualAllocEx(hProcess, NULL, ShellCodeSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+            VirtualAllocEx(hProcess, nullptr, ShellCodeSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
         if (!RemoteShellCode) {
 
             __leave;
@@ -449,7 +449,7 @@ BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID Shell
         }
 
         DWORD ThreadId = 0;
-        HANDLE hThread = CreateRemoteThread(hProcess, NULL, 0, RemoteShellCode, NULL, 0, &ThreadId);
+        HANDLE hThread = CreateRemoteThread(hProcess, nullptr, 0, RemoteShellCode, nullptr, 0, &ThreadId);
         if (!hThread) {
 
             __leave;

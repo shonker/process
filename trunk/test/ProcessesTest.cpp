@@ -49,7 +49,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/services/protecting-anti-malware
 
     StartupInfoEx.StartupInfo.cb = sizeof(StartupInfoEx);
 
-    InitializeProcThreadAttributeList(NULL, 1, 0, &AttributeListSize);
+    InitializeProcThreadAttributeList(nullptr, 1, 0, &AttributeListSize);
     StartupInfoEx.lpAttributeList = (LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(GetProcessHeap(), 0, AttributeListSize);
     _ASSERTE(StartupInfoEx.lpAttributeList);
     if (InitializeProcThreadAttributeList(StartupInfoEx.lpAttributeList, 1, 0, &AttributeListSize) == FALSE) {
@@ -62,20 +62,20 @@ https://learn.microsoft.com/zh-cn/windows/win32/services/protecting-anti-malware
                                   PROC_THREAD_ATTRIBUTE_PROTECTION_LEVEL,
                                   &ProtectionLevel,
                                   sizeof(ProtectionLevel),
-                                  NULL,
-                                  NULL) == FALSE) {
+                                  nullptr,
+                                  nullptr) == FALSE) {
         Result = GetLastError();
         goto exitFunc;
     }
 
     if (CreateProcessW(L"c:\\windows\\system32\\cmd.exe",
-                       NULL,
-                       NULL,
-                       NULL,
+                       nullptr,
+                       nullptr,
+                       nullptr,
                        FALSE,
                        EXTENDED_STARTUPINFO_PRESENT | CREATE_PROTECTED_PROCESS,
-                       NULL,
-                       NULL,
+                       nullptr,
+                       nullptr,
                        (LPSTARTUPINFOW)&StartupInfoEx,
                        &ProcessInformation) == FALSE) {
         Result = GetLastError();
@@ -95,9 +95,9 @@ exitFunc:
 
 void TestProcess()
 {
-    //EnumeratingAllProcesses(EnumeratingProcessesCallBackTest, NULL);
+    //EnumeratingAllProcesses(EnumeratingProcessesCallBackTest, nullptr);
 
-    EnumerateProcess(EnumerateProcessCallBackTest, NULL);
+    EnumerateProcess(EnumerateProcessCallBackTest, nullptr);
 
 
 }

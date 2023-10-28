@@ -42,7 +42,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
 
     int Args;
     LPWSTR * Arglist = CommandLineToArgvW(GetCommandLineW(), &Args);
-    if (NULL == Arglist) {
+    if (nullptr == Arglist) {
         printf("LastError:%d\n", GetLastError());
         return 0;
     }

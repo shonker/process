@@ -6,16 +6,16 @@
 void init()
 {
     HMODULE ModuleHandle = GetModuleHandle(TEXT("ntdll.dll"));
-    if (NULL != ModuleHandle) {
+    if (nullptr != ModuleHandle) {
         ZwQueryInformationProcess = (QueryInformationProcess)
             GetProcAddress(ModuleHandle, "ZwQueryInformationProcess");
-        if (NULL == ZwQueryInformationProcess) {
+        if (nullptr == ZwQueryInformationProcess) {
             printf("没有找到ZwQueryInformationProcess函数\n");
         }
 
         NtQueryInformationProcess = (QueryInformationProcess)
             GetProcAddress(ModuleHandle, "NtQueryInformationProcess");
-        if (NULL == NtQueryInformationProcess) {
+        if (nullptr == NtQueryInformationProcess) {
             printf("没有找到NtQueryInformationProcess函数\n");
         }
     }

@@ -25,22 +25,22 @@ void WINAPI EnumTaskScheduler(void)
 \Windows-classic-samples\Samples\Win7Samples\sysmgmt\tasksched\registeredtaskenum\TaskEnumeration_Example.cpp
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         return;
     }
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
         CoUninitialize();
@@ -57,7 +57,7 @@ void WINAPI EnumTaskScheduler(void)
     }
 
     //  Get the pointer to the root task folder.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     pService->Release();
     if (FAILED(hr)) {
@@ -67,8 +67,8 @@ void WINAPI EnumTaskScheduler(void)
     }
 
     //  Get the registered tasks in the folder.
-    IRegisteredTaskCollection * pTaskCollection = NULL;
-    hr = pRootFolder->GetTasks(NULL, &pTaskCollection);
+    IRegisteredTaskCollection * pTaskCollection = nullptr;
+    hr = pRootFolder->GetTasks(0, &pTaskCollection);
     pRootFolder->Release();
     if (FAILED(hr)) {
         printf("Cannot get the registered tasks.: %x", hr);
@@ -95,7 +95,7 @@ void WINAPI EnumTaskScheduler(void)
 
     //  Visit each task in the folder.
     for (LONG i = 0; i < numTasks; i++) {
-        IRegisteredTask * pRegisteredTask = NULL;
+        IRegisteredTask * pRegisteredTask = nullptr;
         _bstr_t taskName{};
         TASK_STATE taskState{};
         _bstr_t taskStateStr{};
@@ -205,14 +205,14 @@ The following C++ example shows how to schedule a task to execute Notepad one mi
 https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -226,8 +226,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -245,7 +245,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
 
     //  Get the pointer to the root task folder.  
     //  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root folder pointer: %x", hr);
@@ -257,7 +257,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task definition object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
@@ -268,7 +268,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -289,7 +289,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Create the principal for the task - these credentials are overwritten with the credentials passed to RegisterTaskDefinition
-    IPrincipal * pPrincipal = NULL;
+    IPrincipal * pPrincipal = nullptr;
     hr = pTask->get_Principal(&pPrincipal);
     if (FAILED(hr)) {
         printf("\nCannot get principal pointer: %x", hr);
@@ -311,7 +311,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings * pSettings = nullptr;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -333,7 +333,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     // Set the idle settings for the task.
-    IIdleSettings * pIdleSettings = NULL;
+    IIdleSettings * pIdleSettings = nullptr;
     hr = pSettings->get_IdleSettings(&pIdleSettings);
     if (FAILED(hr)) {
         printf("\nCannot get idle setting information: %x", hr);
@@ -354,7 +354,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Get the trigger collection to insert the time trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -365,7 +365,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Add the time trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_TIME, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -376,7 +376,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
         return 1;
     }
 
-    ITimeTrigger * pTimeTrigger = NULL;
+    ITimeTrigger * pTimeTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_ITimeTrigger, (void **)&pTimeTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -409,7 +409,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Add an action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -422,7 +422,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -433,7 +433,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
     //  QI for the executable task pointer.
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
     pAction->Release();
@@ -457,7 +457,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--c-
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
                                              pTask,
                                              TASK_CREATE_OR_UPDATE,
@@ -542,14 +542,14 @@ The following C++ example shows how to schedule a task to execute Notepad on a d
 https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -563,8 +563,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -581,7 +581,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Get the pointer to the root task folder.  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -593,7 +593,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);// If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
@@ -604,7 +604,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -625,7 +625,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Get the trigger collection to insert the daily trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -636,7 +636,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Add the daily trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_DAILY, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -647,7 +647,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
         return 1;
     }
 
-    IDailyTrigger * pDailyTrigger = NULL;
+    IDailyTrigger * pDailyTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_IDailyTrigger, (void **)&pDailyTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -686,7 +686,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     // Add a repetition to the trigger so that it repeats five times.
-    IRepetitionPattern * pRepetitionPattern = NULL;
+    IRepetitionPattern * pRepetitionPattern = nullptr;
     hr = pDailyTrigger->get_Repetition(&pRepetitionPattern);
     pDailyTrigger->Release();
     if (FAILED(hr)) {
@@ -718,7 +718,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Add an action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -731,7 +731,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -742,7 +742,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
     pAction->Release();
     if (FAILED(hr)) {
@@ -773,19 +773,19 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
-    cui.hwndParent = NULL;
+    cui.hwndParent = nullptr;
     //  Ensure that MessageText and CaptionText identify
     //  what credentials to use and which application requires them.
     cui.pszMessageText = TEXT("Account information for task registration:");
     cui.pszCaptionText = TEXT("Enter Account Information for Task Registration");
-    cui.hbmBanner = NULL;
+    cui.hbmBanner = nullptr;
     fSave = FALSE;
 
     //  Create the UI asking for the credentials.
     dwErr = CredUIPromptForCredentials(
         &cui,                             //  CREDUI_INFO structure
         TEXT(""),                         //  Target for credentials
-        NULL,                             //  Reserved
+        nullptr,                             //  Reserved
         0,                                //  Reason
         pszName,                          //  User name
         CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
@@ -802,7 +802,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/daily-trigger-example--c
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
                                              pTask,
                                              TASK_CREATE_OR_UPDATE,
@@ -881,14 +881,14 @@ The following C++ example shows how to schedule a task to execute Notepad 30 sec
 https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -902,8 +902,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -920,7 +920,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Get the pointer to the root task folder.  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -932,7 +932,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     hr = pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
 
     pService->Release();  // COM clean up.  Pointer is no longer used.
@@ -944,7 +944,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -965,7 +965,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Create the principal for the task
-    IPrincipal * pPrincipal = NULL;
+    IPrincipal * pPrincipal = nullptr;
     hr = pTask->get_Principal(&pPrincipal);
     if (FAILED(hr)) {
         printf("\nCannot get principal pointer: %x", hr);
@@ -996,7 +996,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings * pSettings = nullptr;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -1018,7 +1018,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Get the trigger collection to insert the registration trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -1029,7 +1029,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Add the registration trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_REGISTRATION, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -1040,7 +1040,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
         return 1;
     }
 
-    IRegistrationTrigger * pRegistrationTrigger = NULL;
+    IRegistrationTrigger * pRegistrationTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_IRegistrationTrigger, (void **)&pRegistrationTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -1067,7 +1067,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Add an Action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -1080,7 +1080,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -1091,7 +1091,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
 
     //  QI for the executable task pointer.
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
@@ -1116,7 +1116,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/registration-trigger-exa
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
                                              pTask,
                                              TASK_CREATE_OR_UPDATE,
@@ -1201,14 +1201,14 @@ The following C++ example shows how to schedule a task to execute Notepad on a w
 https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -1222,8 +1222,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -1241,7 +1241,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
 
     //  Get the pointer to the root task folder.  
     //  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -1253,7 +1253,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);//  If the same task exists, remove it.
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr)) {
@@ -1264,7 +1264,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -1285,7 +1285,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Get the trigger collection to insert the weekly trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -1295,7 +1295,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
         return;
     }
 
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_WEEKLY, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -1306,7 +1306,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
         return;
     }
 
-    IWeeklyTrigger * pWeeklyTrigger = NULL;
+    IWeeklyTrigger * pWeeklyTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_IWeeklyTrigger, (void **)&pWeeklyTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -1355,7 +1355,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Add an Action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -1368,7 +1368,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -1379,7 +1379,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
         return;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
     //  QI for the executable task pointer.
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
     pAction->Release();
@@ -1411,19 +1411,19 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
-    cui.hwndParent = NULL;
+    cui.hwndParent = nullptr;
     //  Ensure that MessageText and CaptionText identify
     //  what credentials to use and which application requires them.
     cui.pszMessageText = TEXT("Account information for task registration:");
     cui.pszCaptionText = TEXT("Enter Account Information for Task Registration");
-    cui.hbmBanner = NULL;
+    cui.hbmBanner = nullptr;
     fSave = FALSE;
 
     //  Create the UI asking for the credentials.
     dwErr = CredUIPromptForCredentials(
         &cui,                             //  CREDUI_INFO structure
         TEXT(""),                         //  Target for credentials
-        NULL,                             //  Reserved
+        nullptr,                             //  Reserved
         0,                                //  Reason
         pszName,                          //  User name
         CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
@@ -1440,7 +1440,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/weekly-trigger-example--
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
                                              pTask,
                                              TASK_CREATE_OR_UPDATE,
@@ -1527,14 +1527,14 @@ The following C++ example shows how to schedule a task to execute Notepad when a
 https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -1548,8 +1548,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -1567,7 +1567,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
 
     //  Get the pointer to the root task folder.  This folder will hold the
     //  new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -1580,7 +1580,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
 
     pService->Release();  // COM clean up.  Pointer is no longer used.
@@ -1592,7 +1592,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -1613,7 +1613,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings * pSettings = nullptr;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -1635,7 +1635,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Get the trigger collection to insert the logon trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -1646,7 +1646,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Add the logon trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_LOGON, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -1657,7 +1657,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
         return 1;
     }
 
-    ILogonTrigger * pLogonTrigger = NULL;
+    ILogonTrigger * pLogonTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_ILogonTrigger, (void **)&pLogonTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -1696,7 +1696,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Add an Action to the task. This task will execute notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -1709,7 +1709,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Create the action, specifying that it is an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -1720,7 +1720,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
     //  QI for the executable task pointer.
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
     pAction->Release();
@@ -1744,7 +1744,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/logon-trigger-example--c
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
 
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
                                              pTask,
@@ -1832,14 +1832,14 @@ The following C++ code example shows how to schedule a task to execute Notepad.e
 https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -1853,8 +1853,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     wstrExecutablePath += L"\\SYSTEM32\\NOTEPAD.EXE";
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to create an instance of ITaskService: %x", hr);
         CoUninitialize();
@@ -1872,7 +1872,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
 
     //  Get the pointer to the root task folder.  
     //  This folder will hold the new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -1885,7 +1885,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
 
     pService->Release();  // COM clean up.  Pointer is no longer used.
@@ -1897,7 +1897,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -1918,7 +1918,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings * pSettings = nullptr;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -1940,7 +1940,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Get the trigger collection to insert the boot trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -1951,7 +1951,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Add the boot trigger to the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
     hr = pTriggerCollection->Create(TASK_TRIGGER_BOOT, &pTrigger);
     pTriggerCollection->Release();
     if (FAILED(hr)) {
@@ -1962,7 +1962,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
         return 1;
     }
 
-    IBootTrigger * pBootTrigger = NULL;
+    IBootTrigger * pBootTrigger = nullptr;
     hr = pTrigger->QueryInterface(IID_IBootTrigger, (void **)&pBootTrigger);
     pTrigger->Release();
     if (FAILED(hr)) {
@@ -2000,7 +2000,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Add an Action to the task. This task will execute Notepad.exe.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -2013,7 +2013,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Create the action, specifying it as an executable action.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_EXEC, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -2024,7 +2024,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
         return 1;
     }
 
-    IExecAction * pExecAction = NULL;
+    IExecAction * pExecAction = nullptr;
     //  QI for the executable task pointer.
     hr = pAction->QueryInterface(IID_IExecAction, (void **)&pExecAction);
     pAction->Release();
@@ -2048,7 +2048,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/boot-trigger-example--c-
     }
 
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     VARIANT varPassword;
     varPassword.vt = VT_EMPTY;
     hr = pRootFolder->RegisterTaskDefinition(_bstr_t(wszTaskName),
@@ -2152,7 +2152,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 {
     //  ------------------------------------------------------
     //  Initialize COM.
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
@@ -2160,15 +2160,15 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  Set general COM security levels.
     hr = CoInitializeSecurity(
-        NULL,
+        nullptr,
         -1,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
         RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
+        nullptr,
         0,
-        NULL);
+        nullptr);
 
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
@@ -2183,9 +2183,9 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
+    ITaskService * pService = nullptr;
     hr = CoCreateInstance(CLSID_TaskScheduler,
-                          NULL,
+                          nullptr,
                           CLSCTX_INPROC_SERVER,
                           IID_ITaskService,
                           (void **)&pService);
@@ -2208,7 +2208,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     //  ------------------------------------------------------
     //  Get the pointer to the root task folder.  This folder will hold the
     //  new task that is registered.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     if (FAILED(hr)) {
         printf("Cannot get Root Folder pointer: %x", hr);
@@ -2221,7 +2221,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     pRootFolder->DeleteTask(_bstr_t(wszTaskName), 0);
 
     //  Create the task builder object to create the task.
-    ITaskDefinition * pTask = NULL;
+    ITaskDefinition * pTask = nullptr;
     hr = pService->NewTask(0, &pTask);
 
     pService->Release();  // COM clean up.  Pointer is no longer used.
@@ -2234,7 +2234,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Get the registration info for setting the identification.
-    IRegistrationInfo * pRegInfo = NULL;
+    IRegistrationInfo * pRegInfo = nullptr;
     hr = pTask->get_RegistrationInfo(&pRegInfo);
     if (FAILED(hr)) {
         printf("\nCannot get identification pointer: %x", hr);
@@ -2256,7 +2256,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Create the settings for the task
-    ITaskSettings * pSettings = NULL;
+    ITaskSettings * pSettings = nullptr;
     hr = pTask->get_Settings(&pSettings);
     if (FAILED(hr)) {
         printf("\nCannot get settings pointer: %x", hr);
@@ -2279,7 +2279,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Get the trigger collection to insert the event trigger.
-    ITriggerCollection * pTriggerCollection = NULL;
+    ITriggerCollection * pTriggerCollection = nullptr;
     hr = pTask->get_Triggers(&pTriggerCollection);
     if (FAILED(hr)) {
         printf("\nCannot get trigger collection: %x", hr);
@@ -2290,7 +2290,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     }
 
     //  Create the event trigger for the task.
-    ITrigger * pTrigger = NULL;
+    ITrigger * pTrigger = nullptr;
 
     hr = pTriggerCollection->Create(TASK_TRIGGER_EVENT, &pTrigger);
     pTriggerCollection->Release();
@@ -2302,7 +2302,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
         return 1;
     }
 
-    IEventTrigger * pEventTrigger = NULL;
+    IEventTrigger * pEventTrigger = nullptr;
     hr = pTrigger->QueryInterface(
         IID_IEventTrigger, (void **)&pEventTrigger);
     pTrigger->Release();
@@ -2350,7 +2350,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Add an action to the task. This task will send an email message.     
-    IActionCollection * pActionCollection = NULL;
+    IActionCollection * pActionCollection = nullptr;
 
     //  Get the task action collection pointer.
     hr = pTask->get_Actions(&pActionCollection);
@@ -2363,7 +2363,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     }
 
     //  Create the action, specifying that it will send an email message.
-    IAction * pAction = NULL;
+    IAction * pAction = nullptr;
     hr = pActionCollection->Create(TASK_ACTION_SEND_EMAIL, &pAction);
     pActionCollection->Release();
     if (FAILED(hr)) {
@@ -2374,7 +2374,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
         return 1;
     }
 
-    IEmailAction * pEmailAction = NULL;
+    IEmailAction * pEmailAction = nullptr;
     //  QI for the email task pointer.
     hr = pAction->QueryInterface(IID_IEmailAction, (void **)&pEmailAction);
     pAction->Release();
@@ -2438,19 +2438,19 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
     DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
-    cui.hwndParent = NULL;
+    cui.hwndParent = nullptr;
     //  Ensure that MessageText and CaptionText identify
     //  what credentials to use and which application requires them.
     cui.pszMessageText = TEXT("Account information for task registration:");
     cui.pszCaptionText = TEXT("Enter Account Information for Task Registration");
-    cui.hbmBanner = NULL;
+    cui.hbmBanner = nullptr;
     fSave = FALSE;
 
     //  Create the UI asking for the credentials.
     dwErr = CredUIPromptForCredentials(
         &cui,                             //  CREDUI_INFO structure
         TEXT(""),                         //  Target for credentials
-        NULL,                             //  Reserved
+        nullptr,                             //  Reserved
         0,                                //  Reason
         pszName,                          //  User name
         CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
@@ -2471,7 +2471,7 @@ https://docs.microsoft.com/en-us/previous-versions/aa446886(v=vs.85)
 
     //  ------------------------------------------------------
     //  Save the task in the root folder.
-    IRegisteredTask * pRegisteredTask = NULL;
+    IRegisteredTask * pRegisteredTask = nullptr;
     hr = pRootFolder->RegisterTaskDefinition(
         _bstr_t(wszTaskName),
         pTask,
@@ -2559,14 +2559,14 @@ The following C++ example shows how to display the name and state of all the tas
 https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-and-state--c---
 */
 {
-    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);//  Initialize COM.
+    HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);//  Initialize COM.
     if (FAILED(hr)) {
         printf("\nCoInitializeEx failed: %x", hr);
         return 1;
     }
 
     //  Set general COM security levels.
-    hr = CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 0, NULL);
+    hr = CoInitializeSecurity(nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, 0, nullptr);
     if (FAILED(hr)) {
         printf("\nCoInitializeSecurity failed: %x", hr);
         CoUninitialize();
@@ -2574,8 +2574,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
     }
 
     //  Create an instance of the Task Service. 
-    ITaskService * pService = NULL;
-    hr = CoCreateInstance(CLSID_TaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
+    ITaskService * pService = nullptr;
+    hr = CoCreateInstance(CLSID_TaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskService, (void **)&pService);
     if (FAILED(hr)) {
         printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
         CoUninitialize();
@@ -2592,7 +2592,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
     }
 
     //  Get the pointer to the root task folder.
-    ITaskFolder * pRootFolder = NULL;
+    ITaskFolder * pRootFolder = nullptr;
     hr = pService->GetFolder(_bstr_t(L"\\"), &pRootFolder);
     pService->Release();
     if (FAILED(hr)) {
@@ -2602,8 +2602,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
     }
 
     //  Get the registered tasks in the folder.
-    IRegisteredTaskCollection * pTaskCollection = NULL;
-    hr = pRootFolder->GetTasks(NULL, &pTaskCollection);
+    IRegisteredTaskCollection * pTaskCollection = nullptr;
+    hr = pRootFolder->GetTasks(0, &pTaskCollection);
     pRootFolder->Release();
     if (FAILED(hr)) {
         printf("Cannot get the registered tasks.: %x", hr);
@@ -2625,10 +2625,10 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/displaying-task-names-an
     TASK_STATE taskState{};
 
     for (LONG i = 0; i < numTasks; i++) {
-        IRegisteredTask * pRegisteredTask = NULL;
+        IRegisteredTask * pRegisteredTask = nullptr;
         hr = pTaskCollection->get_Item(_variant_t(i + 1), &pRegisteredTask);
         if (SUCCEEDED(hr)) {
-            BSTR taskName = NULL;
+            BSTR taskName = nullptr;
             hr = pRegisteredTask->get_Name(&taskName);
             if (SUCCEEDED(hr)) {
                 printf("\nTask Name: %S", taskName);
@@ -2680,9 +2680,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object. 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2719,7 +2719,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
         return 1;
     }
 
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     pIPersistFile->Release();
     if (FAILED(hr)) {
         CoUninitialize();
@@ -2753,9 +2753,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-enumera
 
     // Call CoInitialize to initialize the COM library and 
     // then call CoCreateInstance to get the Task Scheduler object. 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return hr;
@@ -2812,9 +2812,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-startin
     ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2869,9 +2869,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.      
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2894,7 +2894,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-editing
     }
 
     // Call ITask::EditWorkItem. Note that this method is inherited from IScheduledWorkItem.
-    HWND hParent = NULL;
+    HWND hParent = nullptr;
     DWORD dwReserved = 0;
     hr = pITask->EditWorkItem(hParent, dwReserved);
     pITask->Release();// Release ITask interface
@@ -2930,9 +2930,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -2999,9 +2999,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3062,9 +3062,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3124,9 +3124,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3183,9 +3183,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3245,9 +3245,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3305,9 +3305,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3365,9 +3365,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3396,7 +3396,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     WORD wCountOfRuns = 5;
 
     GetSystemTime(&stNow);
-    hr = pITask->GetRunTimes(&stNow, NULL, &wCountOfRuns, &pstListBegin);
+    hr = pITask->GetRunTimes(&stNow, nullptr, &wCountOfRuns, &pstListBegin);
     pstListOfTimes = pstListBegin;
     pITask->Release();// Release the ITask interface.
     if (FAILED(hr)) {
@@ -3444,9 +3444,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3533,9 +3533,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             wprintf(L"Failed calling CoCreateInstance. ");
             CoUninitialize();
@@ -3568,19 +3568,19 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     DWORD dwErr{};
 
     cui.cbSize = sizeof(CREDUI_INFO);
-    cui.hwndParent = NULL;
+    cui.hwndParent = nullptr;
     //  Ensure that MessageText and CaptionText identify
     //  what credentials to use and which application requires them.
     cui.pszMessageText = TEXT("Account information for task registration:");
     cui.pszCaptionText = TEXT("Enter Account Information for Task Registration");
-    cui.hbmBanner = NULL;
+    cui.hbmBanner = nullptr;
     fSave = FALSE;
 
     //  Create the UI asking for the credentials.
     dwErr = CredUIPromptForCredentials(
         &cui,                             //  CREDUI_INFO structure
         TEXT(""),                         //  Target for credentials
-        NULL,                             //  Reserved
+        nullptr,                             //  Reserved
         0,                                //  Reason
         pszName,                          //  User name
         CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
@@ -3614,7 +3614,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -3649,9 +3649,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3688,7 +3688,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -3726,9 +3726,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3787,9 +3787,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3846,9 +3846,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3907,9 +3907,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -3968,9 +3968,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
 
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4031,9 +4031,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4070,7 +4070,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4105,9 +4105,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4144,7 +4144,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4180,9 +4180,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4219,7 +4219,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4255,9 +4255,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4294,7 +4294,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4330,9 +4330,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
 
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4369,7 +4369,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-setting
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
     pITask->Release();// Release the ITask interface.
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4407,9 +4407,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4490,9 +4490,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4554,7 +4554,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     // Call IPersistFile::Save to save trigger to disk.
     IPersistFile * pIPersistFile;
     hr = pITask->QueryInterface(IID_IPersistFile, (void **)&pIPersistFile);
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4597,9 +4597,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
     ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4677,7 +4677,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creatin
         return 1;
     }
 
-    hr = pIPersistFile->Save(NULL, TRUE);
+    hr = pIPersistFile->Save(nullptr, TRUE);
     if (FAILED(hr)) {
         wprintf(L"Failed calling IPersistFile::Save: ");
         wprintf(L"error = 0x%x\n", hr);
@@ -4718,9 +4718,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-termina
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
     ITaskScheduler * pITS{};
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4793,9 +4793,9 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     ITaskScheduler * pITS{};
 
     // Call CoInitialize to initialize the COM library and then call CoCreateInstance to get the Task Scheduler object.
-    hr = CoInitialize(NULL);
+    hr = CoInitialize(nullptr);
     if (SUCCEEDED(hr)) {
-        hr = CoCreateInstance(CLSID_CTaskScheduler, NULL, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
+        hr = CoCreateInstance(CLSID_CTaskScheduler, nullptr, CLSCTX_INPROC_SERVER, IID_ITaskScheduler, (void **)&pITS);
         if (FAILED(hr)) {
             CoUninitialize();
             return 1;
@@ -4832,7 +4832,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     wprintf(L"They are:\n");
 
     WORD CurrentTrigger = 0;
-    LPWSTR ppwszTrigger = NULL;
+    LPWSTR ppwszTrigger = nullptr;
     for (CurrentTrigger = 0; CurrentTrigger < plTriggerCount; CurrentTrigger++) {
         pITask->GetTriggerString(CurrentTrigger, &ppwszTrigger);
         if (FAILED(hr)) {

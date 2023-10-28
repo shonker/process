@@ -50,9 +50,9 @@ int WINAPI CreatingViewWithinFile(void)
 
     // Create the test file.
     // Open it "Create Always" to overwrite any existing file. The data is re-created below
-    hFile = CreateFile(lpcTheFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    hFile = CreateFile(lpcTheFile, GENERIC_READ | GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (hFile == INVALID_HANDLE_VALUE) {
-        _tprintf(TEXT("hFile is NULL\n"));
+        _tprintf(TEXT("hFile is nullptr\n"));
         _tprintf(TEXT("Target file is %s\n"), lpcTheFile);
         return 4;
     }
@@ -89,23 +89,23 @@ int WINAPI CreatingViewWithinFile(void)
     // data should be one quarter of the desired offset into the file
 
     for (i = 0; i < (int)dwSysGran; i++) {
-        WriteFile(hFile, &i, sizeof(i), &dBytesWritten, NULL);
+        WriteFile(hFile, &i, sizeof(i), &dBytesWritten, nullptr);
     }
 
     // Verify that the correct file size was written.
-    dwFileSize = GetFileSize(hFile, NULL);
+    dwFileSize = GetFileSize(hFile, nullptr);
     _tprintf(TEXT("hFile size: %10u\n"), dwFileSize);
 
     // Create a file mapping object for the file
     // Note that it is a good idea to ensure the file size is not zero
     hMapFile = CreateFileMapping(hFile,          // current file handle
-                                 NULL,           // default security
+                                 nullptr,           // default security
                                  PAGE_READWRITE, // read/write permission
                                  0,              // size of mapping object, high
                                  dwFileMapSize,  // size of mapping object, low
-                                 NULL);          // name of mapping object
-    if (hMapFile == NULL) {
-        _tprintf(TEXT("hMapFile is NULL: last error: %u\n"), GetLastError());
+                                 nullptr);          // name of mapping object
+    if (hMapFile == nullptr) {
+        _tprintf(TEXT("hMapFile is nullptr: last error: %u\n"), GetLastError());
         return (2);
     }
 
@@ -115,8 +115,8 @@ int WINAPI CreatingViewWithinFile(void)
                                  0,                   // high-order 32 bits of file offset
                                  dwFileMapStart,      // low-order 32 bits of file offset
                                  dwMapViewSize);      // number of bytes to map
-    if (lpMapAddress == NULL) {
-        _tprintf(TEXT("lpMapAddress is NULL: last error: %u\n"), GetLastError());
+    if (lpMapAddress == nullptr) {
+        _tprintf(TEXT("lpMapAddress is nullptr: last error: %u\n"), GetLastError());
         return 3;
     }
 
@@ -169,12 +169,12 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-named-shared-memo
 
     hMapFile = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // use paging file
-        NULL,                    // default security
+        nullptr,                    // default security
         PAGE_READWRITE,          // read/write access
         0,                       // maximum object size (high-order DWORD)
         BUF_SIZE,                // maximum object size (low-order DWORD)
         szName);                 // name of mapping object
-    if (hMapFile == NULL) {
+    if (hMapFile == nullptr) {
         _tprintf(TEXT("Could not create file mapping object (%u).\n"), GetLastError());
         return 1;
     }
@@ -183,7 +183,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-named-shared-memo
                                  0,
                                  0,
                                  BUF_SIZE);
-    if (pBuf == NULL) {
+    if (pBuf == nullptr) {
         _tprintf(TEXT("Could not map view of file (%u).\n"), GetLastError());
         CloseHandle(hMapFile);
         return 1;
@@ -218,9 +218,9 @@ void DisplayError(const wchar_t * pszAPI, DWORD dwError)
     LPVOID lpvMessageBuffer;
 
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                  NULL, dwError,
+                  nullptr, dwError,
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                  (LPTSTR)&lpvMessageBuffer, 0, NULL);
+                  (LPTSTR)&lpvMessageBuffer, 0, nullptr);
 
     //... now display this string
     _tprintf(TEXT("ERROR: API        = %s\n"), pszAPI);
@@ -246,7 +246,7 @@ void Privilege(const wchar_t * pszPrivilege, BOOL bEnable)
         DisplayError(TEXT("OpenProcessToken"), GetLastError());
 
     // get the luid
-    if (!LookupPrivilegeValue(NULL, pszPrivilege, &tp.Privileges[0].Luid))
+    if (!LookupPrivilegeValue(nullptr, pszPrivilege, &tp.Privileges[0].Luid))
         DisplayError(TEXT("LookupPrivilegeValue"), GetLastError());
 
     tp.PrivilegeCount = 1;
@@ -258,7 +258,7 @@ void Privilege(const wchar_t * pszPrivilege, BOOL bEnable)
         tp.Privileges[0].Attributes = 0;
 
     // enable or disable privilege
-    status = AdjustTokenPrivileges(hToken, FALSE, &tp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+    status = AdjustTokenPrivileges(hToken, FALSE, &tp, 0, (PTOKEN_PRIVILEGES)nullptr, 0);
 
     // It is possible for AdjustTokenPrivileges to return TRUE and still not succeed.
     // So always check for the last error value.
@@ -300,11 +300,11 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-us
 
     // call succeeds only on Windows Server 2003 SP1 or later
     hDll = LoadLibrary(TEXT("kernel32.dll"));
-    if (hDll == NULL)
+    if (hDll == nullptr)
         DisplayError(TEXT("LoadLibrary"), GetLastError());
 
     pGetLargePageMinimum = (GETLARGEPAGEMINIMUM)GetProcAddress(hDll, "GetLargePageMinimum");
-    if (pGetLargePageMinimum == NULL)
+    if (pGetLargePageMinimum == nullptr)
         DisplayError(TEXT("GetProcAddress"), GetLastError());
 
     size = (*pGetLargePageMinimum)();
@@ -317,12 +317,12 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-us
 
     hMapFile = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // use paging file
-        NULL,                    // default security
+        nullptr,                    // default security
         PAGE_READWRITE | SEC_COMMIT | SEC_LARGE_PAGES,
         0,                       // max. object size
         size,                    // buffer size
         szName2);                 // name of mapping object
-    if (hMapFile == NULL)
+    if (hMapFile == nullptr)
         DisplayError(TEXT("CreateFileMapping"), GetLastError());
     else
         _tprintf(TEXT("File mapping object successfully created.\n"));
@@ -334,7 +334,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-us
                                  0,
                                  0,
                                  BUF_SIZE);
-    if (pBuf == NULL)
+    if (pBuf == nullptr)
         DisplayError(TEXT("MapViewOfFile"), GetLastError());
     else
         _tprintf(TEXT("View of file successfully mapped.\n"));
@@ -368,7 +368,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-us
 //    }
 //
 //    // Create a file mapping object.
-//    hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 1, NULL);
+//    hFileMap = CreateFileMapping(hFile, nullptr, PAGE_READONLY, 0, 1, nullptr);
 //    if (hFileMap) {
 //        // Create a file mapping to get the file name.
 //        void * pMem = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 1);
@@ -410,7 +410,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-a-file-mapping-us
 //                            }
 //                        }
 //
-//                        // Go to the next NULL character.
+//                        // Go to the next nullptr character.
 //                        while (*p++);
 //                    } while (!bFound && *p); // end of string
 //                }
@@ -453,7 +453,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/obtaining-a-file-name-from
         return 0;
     }
 
-    hFile = CreateFile(argv[1], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+    hFile = CreateFile(argv[1], GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
     if (hFile == INVALID_HANDLE_VALUE) {
         _tprintf(TEXT("CreateFile failed with %u\n"), GetLastError());
         return 0;
@@ -498,15 +498,15 @@ public:
 
 CGMMF::CGMMF(HANDLE hfile, UINT_PTR cbFileSizeMax)
 {
-    m_hfilemap = m_pvFile = NULL;// Initialize to NULL in case something goes wrong
+    m_hfilemap = m_pvFile = nullptr;// Initialize to nullptr in case something goes wrong
 
     // Make the file sparse
     DWORD dw;
-    BOOL fOk = ::DeviceIoControl(hfile, FSCTL_SET_SPARSE, NULL, 0, NULL, 0, &dw, NULL);
+    BOOL fOk = ::DeviceIoControl(hfile, FSCTL_SET_SPARSE, nullptr, 0, nullptr, 0, &dw, nullptr);
     if (fOk) {
         // Create a file-mapping object
-        m_hfilemap = ::CreateFileMapping(hfile, NULL, PAGE_READWRITE, 0, (DWORD)cbFileSizeMax, NULL);
-        if (m_hfilemap != NULL) {// Map the file into the process's address space            
+        m_hfilemap = ::CreateFileMapping(hfile, nullptr, PAGE_READWRITE, 0, (DWORD)cbFileSizeMax, nullptr);
+        if (m_hfilemap != nullptr) {// Map the file into the process's address space            
             m_pvFile = ::MapViewOfFile(m_hfilemap, FILE_MAP_WRITE | FILE_MAP_READ, 0, 0, 0);
         } else {
             ForceClose();// Failed to map the file, cleanup
@@ -518,13 +518,13 @@ CGMMF::CGMMF(HANDLE hfile, UINT_PTR cbFileSizeMax)
 VOID CGMMF::ForceClose() 
 {
     // Cleanup everything that was done sucessfully
-    if (m_pvFile != NULL) {
+    if (m_pvFile != nullptr) {
         ::UnmapViewOfFile(m_pvFile);
-        m_pvFile = NULL;
+        m_pvFile = nullptr;
     }
-    if (m_hfilemap != NULL) {
+    if (m_hfilemap != nullptr) {
         ::CloseHandle(m_hfilemap);
-        m_hfilemap = NULL;
+        m_hfilemap = nullptr;
     }
 }
 
@@ -536,7 +536,7 @@ BOOL CGMMF::SetToZero(HANDLE hfile, UINT_PTR cbOffsetStart, UINT_PTR cbOffsetEnd
     FILE_ZERO_DATA_INFORMATION fzdi{};
     fzdi.FileOffset.QuadPart = cbOffsetStart;
     fzdi.BeyondFinalZero.QuadPart = cbOffsetEnd + 1;
-    return(::DeviceIoControl(hfile, FSCTL_SET_ZERO_DATA, (LPVOID)&fzdi, sizeof(fzdi), NULL, 0, &dw, NULL));
+    return(::DeviceIoControl(hfile, FSCTL_SET_ZERO_DATA, (LPVOID)&fzdi, sizeof(fzdi), nullptr, 0, &dw, nullptr));
 }
 
 
@@ -551,7 +551,7 @@ Purpose:    Function prototypes for using growable memory-mapped files.
 
     // Create the file
     HANDLE hfile = CreateFileA(szPathname, GENERIC_READ | GENERIC_WRITE,
-                               0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+                               0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
     // Create a GMMF using the file (set the maximum size here too)
     CGMMF gmmf(hfile, 10 * 1024 * 1024);
@@ -567,18 +567,18 @@ Purpose:    Function prototypes for using growable memory-mapped files.
     }
 
     // These lines just prove to us what's going on
-    DWORD dw = GetFileSize(hfile, NULL);
+    DWORD dw = GetFileSize(hfile, nullptr);
     // This returns the logical size of the file.
 
     // Get the actual number of bytes allocated in the file
-    dw = GetCompressedFileSizeA(szPathname, NULL);
+    dw = GetCompressedFileSizeA(szPathname, nullptr);
     // This returns 0 because the data has not been written to the file yet.
 
     // Force the data to be written to the file
     FlushViewOfFile(gmmf, 10 * 1024 * 1024);
 
     // Get the actual number of bytes allocated in the file
-    dw = GetCompressedFileSizeA(szPathname, NULL);
+    dw = GetCompressedFileSizeA(szPathname, nullptr);
     // This returns the size of a cluster now
 
     // Normally the destructor causes the file-mapping to close.

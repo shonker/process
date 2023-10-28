@@ -16,7 +16,7 @@ https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-setpr
 
     DWORD DesiredAccess = PROCESS_QUERY_INFORMATION | PROCESS_SET_QUOTA | PROCESS_QUERY_LIMITED_INFORMATION;
     HANDLE hProcess = OpenProcess(DesiredAccess, FALSE, pe32->th32ProcessID);
-    if (NULL == hProcess) {
+    if (nullptr == hProcess) {
         printf("LastError:%d\n", GetLastError());
         return TRUE;
     }
@@ -35,7 +35,7 @@ https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-setpr
 
 void EmptyAllProcessWorkingSet()
 {
-    EnumerateProcess(EmptyProcessWorkingSet, NULL);
+    EnumerateProcess(EmptyProcessWorkingSet, nullptr);
 }
 
 

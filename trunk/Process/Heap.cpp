@@ -15,7 +15,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
 */
 {
     // Retrieve the number of active heaps for the current process so we can calculate the buffer size needed for the heap handles.
-    DWORD NumberOfHeaps = GetProcessHeaps(0, NULL);
+    DWORD NumberOfHeaps = GetProcessHeaps(0, nullptr);
     if (NumberOfHeaps == 0) {
         _tprintf(TEXT("Failed to retrieve the number of heaps with LastError %u.\n"), GetLastError());
         return 1;
@@ -32,14 +32,14 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
 
     // Get a handle to the default process heap.
     HANDLE hDefaultProcessHeap = GetProcessHeap();
-    if (hDefaultProcessHeap == NULL) {
+    if (hDefaultProcessHeap == nullptr) {
         _tprintf(TEXT("Failed to retrieve the default process heap with LastError %u.\n"), GetLastError());
         return 1;
     }
 
     // Allocate the buffer from the default process heap.
     aHeaps = (PHANDLE)HeapAlloc(hDefaultProcessHeap, 0, BytesToAllocate);
-    if (aHeaps == NULL) {
+    if (aHeaps == nullptr) {
         _tprintf(TEXT("HeapAlloc failed to allocate %Id bytes.\n"), BytesToAllocate);
         return 1;
     }
@@ -128,7 +128,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
 */
 {
     HANDLE hHeap = HeapCreate(0, 0, 0);// Create a new heap with default parameters.
-    if (hHeap == NULL) {
+    if (hHeap == nullptr) {
         _tprintf(TEXT("Failed to create a new heap with LastError %u.\n"), GetLastError());
         return 1;
     }
@@ -142,7 +142,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
     _tprintf(TEXT("Walking heap %#p...\n\n"), hHeap);
 
     PROCESS_HEAP_ENTRY Entry;
-    Entry.lpData = NULL;
+    Entry.lpData = nullptr;
     while (HeapWalk(hHeap, &Entry) != FALSE) {
         if ((Entry.wFlags & PROCESS_HEAP_ENTRY_BUSY) != 0) {
             _tprintf(TEXT("Allocated block"));
@@ -260,10 +260,10 @@ https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapsetinf
     // Enable heap terminate-on-corruption. 
     // A correct application can continue to run even if this call fails, 
     // so it is safe to ignore the return value and call the function as follows:
-    // (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+    // (void)HeapSetInformation(nullptr, HeapEnableTerminationOnCorruption, nullptr, 0);
     // If the application requires heap terminate-on-corruption to be enabled, 
     // check the return value and exit on failure as shown in this example.
-    BOOL bResult = HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+    BOOL bResult = HeapSetInformation(nullptr, HeapEnableTerminationOnCorruption, nullptr, 0);
     if (bResult != FALSE) {
         //DbgPrintA("信息：Heap terminate-on-corruption has been enabled");
     }
@@ -272,7 +272,7 @@ https://docs.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapsetinf
     }
 
     HANDLE hHeap = GetProcessHeap();
-    if (hHeap == NULL) {
+    if (hHeap == nullptr) {
         //DbgPrintA("错误：LastError %d", GetLastError());
         return;
     }

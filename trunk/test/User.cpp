@@ -53,12 +53,12 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    hToken = NULL;
+    hToken = nullptr;
     if (GetCurrentToken(&hToken) == false) {
         return 0;
     }
 
-    PSID pSid = NULL;
+    PSID pSid = nullptr;
     if (!GetLogonSID(hToken, &pSid)) {
         return 0;
     }
@@ -68,7 +68,7 @@ sid一个神秘的东西,本想是获取或者枚举用户和它的关系.
         //继续走下面的释放函数。
     }
 
-    if (LocalFree(StringSid) != NULL) {
+    if (LocalFree(StringSid) != nullptr) {
         int x = GetLastError();
     }
 
@@ -121,7 +121,7 @@ void TestGetCurrentSid()
 void TestConvertStringSidToSid()
 {
     BOOL                  fRet;
-    PSID                  pIntegritySid = NULL;
+    PSID                  pIntegritySid = nullptr;
     WCHAR wszIntegritySid[20] = L"S-1-5-18";// Local System
 
     fRet = ConvertStringSidToSid(wszIntegritySid, &pIntegritySid);

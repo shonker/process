@@ -24,19 +24,19 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
 */
 {
     PDH_STATUS status = ERROR_SUCCESS;
-    LPWSTR pwsCounterListBuffer = NULL;
+    LPWSTR pwsCounterListBuffer = nullptr;
     DWORD dwCounterListSize = 0;
-    LPWSTR pwsInstanceListBuffer = NULL;
+    LPWSTR pwsInstanceListBuffer = nullptr;
     DWORD dwInstanceListSize = 0;
-    LPWSTR pTemp = NULL;
+    LPWSTR pTemp = nullptr;
     CONST PWSTR COUNTER_OBJECT = (CONST PWSTR)L"Process";
 
     // Determine the required buffer size for the data. 
     status = PdhEnumObjectItems(
-        NULL,                   // real-time source
-        NULL,                   // local machine
+        nullptr,                   // real-time source
+        nullptr,                   // local machine
         COUNTER_OBJECT,         // object to enumerate
-        pwsCounterListBuffer,   // pass NULL and 0
+        pwsCounterListBuffer,   // pass nullptr and 0
         &dwCounterListSize,     // to get required buffer size
         pwsInstanceListBuffer,
         &dwInstanceListSize,
@@ -46,10 +46,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
         // Allocate the buffers and try the call again.
         pwsCounterListBuffer = (LPWSTR)malloc(dwCounterListSize * sizeof(WCHAR));
         pwsInstanceListBuffer = (LPWSTR)malloc(dwInstanceListSize * sizeof(WCHAR));
-        if (NULL != pwsCounterListBuffer && NULL != pwsInstanceListBuffer) {
+        if (nullptr != pwsCounterListBuffer && nullptr != pwsInstanceListBuffer) {
             status = PdhEnumObjectItems(
-                NULL,                   // real-time source
-                NULL,                   // local machine
+                nullptr,                   // real-time source
+                nullptr,                   // local machine
                 COUNTER_OBJECT,         // object to enumerate
                 pwsCounterListBuffer,
                 &dwCounterListSize,
@@ -61,8 +61,8 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
                 wprintf(L"Counters that the Process objects defines:\n\n");
 
                 // Walk the counters list.
-                // The list can contain one or more null-terminated strings.
-                // The list is terminated using two null-terminator characters.
+                // The list can contain one or more nullptr-terminated strings.
+                // The list is terminated using two nullptr-terminator characters.
                 for (pTemp = pwsCounterListBuffer; *pTemp != 0; pTemp += wcslen(pTemp) + 1) {
                     wprintf(L"%s\n", pTemp);
                 }
@@ -70,8 +70,8 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
                 wprintf(L"\nInstances of the Process object:\n\n");
 
                 // Walk the instance list.
-                // The list can contain one or more null-terminated strings.
-                // The list is terminated using two null-terminator characters.
+                // The list can contain one or more nullptr-terminated strings.
+                // The list is terminated using two nullptr-terminator characters.
                 for (pTemp = pwsInstanceListBuffer; *pTemp != 0; pTemp += wcslen(pTemp) + 1) {
                     wprintf(L"%s\n", pTemp);
                 }
@@ -86,10 +86,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
         wprintf(L"\nPdhEnumObjectItems failed with 0x%x.\n", status);
     }
 
-    if (pwsCounterListBuffer != NULL)
+    if (pwsCounterListBuffer != nullptr)
         free(pwsCounterListBuffer);
 
-    if (pwsInstanceListBuffer != NULL)
+    if (pwsInstanceListBuffer != nullptr)
         free(pwsInstanceListBuffer);
 }
 
@@ -108,18 +108,18 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
 */
 {
     PDH_STATUS status = ERROR_SUCCESS;
-    LPWSTR pwsCounterListBuffer = NULL;
+    LPWSTR pwsCounterListBuffer = nullptr;
     DWORD dwCounterListSize = 0;
-    LPWSTR pwsInstanceListBuffer = NULL;
+    LPWSTR pwsInstanceListBuffer = nullptr;
     DWORD dwInstanceListSize = 0;
-    LPWSTR pTemp = NULL;
+    LPWSTR pTemp = nullptr;
 
     // Determine the required buffer size for the data. 
     status = PdhEnumObjectItems(
-        NULL,                   // real-time source
-        NULL,                   // local machine
+        nullptr,                   // real-time source
+        nullptr,                   // local machine
         ObjectName,         // object to enumerate
-        pwsCounterListBuffer,   // pass NULL and 0
+        pwsCounterListBuffer,   // pass nullptr and 0
         &dwCounterListSize,     // to get required buffer size
         pwsInstanceListBuffer,
         &dwInstanceListSize,
@@ -129,10 +129,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
         // Allocate the buffers and try the call again.
         pwsCounterListBuffer = (LPWSTR)malloc(dwCounterListSize * sizeof(WCHAR));
         pwsInstanceListBuffer = (LPWSTR)malloc(dwInstanceListSize * sizeof(WCHAR));
-        if (NULL != pwsCounterListBuffer && NULL != pwsInstanceListBuffer) {
+        if (nullptr != pwsCounterListBuffer && nullptr != pwsInstanceListBuffer) {
             status = PdhEnumObjectItems(
-                NULL,                   // real-time source
-                NULL,                   // local machine
+                nullptr,                   // real-time source
+                nullptr,                   // local machine
                 ObjectName,         // object to enumerate
                 pwsCounterListBuffer,
                 &dwCounterListSize,
@@ -144,8 +144,8 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
                 wprintf(L"Counters that the %ls objects defines:\n\n", ObjectName);
 
                 // Walk the counters list.
-                // The list can contain one or more null-terminated strings.
-                // The list is terminated using two null-terminator characters.
+                // The list can contain one or more nullptr-terminated strings.
+                // The list is terminated using two nullptr-terminator characters.
                 for (pTemp = pwsCounterListBuffer; *pTemp != 0; pTemp += wcslen(pTemp) + 1) {
                     wprintf(L"\\%ls\\%s\n", ObjectName, pTemp);
                 }
@@ -153,8 +153,8 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
                 wprintf(L"\nInstances of the %ls object:\n\n", ObjectName);
 
                 // Walk the instance list.
-                // The list can contain one or more null-terminated strings.
-                // The list is terminated using two null-terminator characters.
+                // The list can contain one or more nullptr-terminated strings.
+                // The list is terminated using two nullptr-terminator characters.
                 for (pTemp = pwsInstanceListBuffer; *pTemp != 0; pTemp += wcslen(pTemp) + 1) {
                     wprintf(L"\\%ls\\%s\n", ObjectName, pTemp);//如果设置了ProcessNameFormat 或 ThreadNameFormat这里的显示会：_ID。
                 }
@@ -169,10 +169,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/enumerating-process-obj
         wprintf(L"\nPdhEnumObjectItems failed with 0x%x.\n", status);
     }
 
-    if (pwsCounterListBuffer != NULL)
+    if (pwsCounterListBuffer != nullptr)
         free(pwsCounterListBuffer);
 
-    if (pwsInstanceListBuffer != NULL)
+    if (pwsInstanceListBuffer != nullptr)
         free(pwsInstanceListBuffer);
 }
 
@@ -186,9 +186,9 @@ https://learn.microsoft.com/en-us/windows/win32/api/pdh/nf-pdh-pdhenumobjectsa
 */
 {
     //PDH_STATUS status = ERROR_SUCCESS;
-    //LPCWSTR DataSource = NULL;
-    //LPCWSTR MachineName = NULL;
-    //PZZWSTR ObjectList = NULL;    
+    //LPCWSTR DataSource = nullptr;
+    //LPCWSTR MachineName = nullptr;
+    //PZZWSTR ObjectList = nullptr;    
     //DWORD BufferSize = 0;
     //DWORD   DetailLevel = PERF_DETAIL_NOVICE;//PERF_DETAIL_WIZARD
     //BOOL    Refresh = FALSE;//TRUE
@@ -213,8 +213,8 @@ https://learn.microsoft.com/en-us/windows/win32/api/pdh/nf-pdh-pdhenummachinesa
 */
 {
     PDH_STATUS status = ERROR_SUCCESS;
-    LPCWSTR DataSource = NULL;
-    PZZWSTR MachineList = NULL;
+    LPCWSTR DataSource = nullptr;
+    PZZWSTR MachineList = nullptr;
     DWORD BufferSize = 0;
 
     status = PdhEnumMachines(DataSource, MachineList, &BufferSize);
@@ -251,7 +251,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-co
 */
 {
     PDH_STATUS Status{};
-    HQUERY Query = NULL;
+    HQUERY Query = nullptr;
     HCOUNTER Counter{};
     PDH_FMT_COUNTERVALUE DisplayValue{};
     DWORD CounterType{};
@@ -261,7 +261,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-co
     CONST ULONG SAMPLE_INTERVAL_MS = 1000;
     CONST PWSTR BROWSE_DIALOG_CAPTION = (CONST PWSTR)L"Select a counter to monitor.";
 
-    Status = PdhOpenQuery(NULL, NULL, &Query);// Create a query.
+    Status = PdhOpenQuery(nullptr, 0, &Query);// Create a query.
     if (Status != ERROR_SUCCESS) {
         wprintf(L"\nPdhOpenQuery failed with status 0x%x.", Status);
         goto Cleanup;
@@ -280,10 +280,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-co
     BrowseDlgData.bDisableMachineSelection = FALSE;
     BrowseDlgData.bIncludeCostlyObjects = FALSE;
     BrowseDlgData.bShowObjectBrowser = FALSE;
-    BrowseDlgData.hWndOwner = NULL;
+    BrowseDlgData.hWndOwner = nullptr;
     BrowseDlgData.szReturnPathBuffer = CounterPathBuffer;
     BrowseDlgData.cchReturnPathLength = PDH_MAX_COUNTER_PATH;
-    BrowseDlgData.pCallBack = NULL;
+    BrowseDlgData.pCallBack = nullptr;
     BrowseDlgData.dwCallBackArg = 0;
     BrowseDlgData.CallBackStatus = ERROR_SUCCESS;
     BrowseDlgData.dwDefaultDetailLevel = PERF_DETAIL_WIZARD;
@@ -388,8 +388,8 @@ For an example that reads the generated log file, see Reading Performance Data f
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-data-to-a-log-file
 */
 {
-    HQUERY hQuery = NULL;
-    HLOG hLog = NULL;
+    HQUERY hQuery = nullptr;
+    HLOG hLog = nullptr;
     PDH_STATUS pdhStatus{};
     DWORD dwLogType = PDH_LOG_TYPE_CSV;
     HCOUNTER hCounter{};
@@ -403,7 +403,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
     }
 
     // Open a query object.
-    pdhStatus = PdhOpenQuery(NULL, 0, &hQuery);
+    pdhStatus = PdhOpenQuery(nullptr, 0, &hQuery);
     if (pdhStatus != ERROR_SUCCESS) {
         wprintf(L"PdhOpenQuery failed with 0x%x\n", pdhStatus);
         goto cleanup;
@@ -422,7 +422,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
                            &dwLogType,
                            hQuery,
                            0,
-                           NULL,
+                           nullptr,
                            &hLog);
     if (pdhStatus != ERROR_SUCCESS) {
         wprintf(L"PdhOpenLog failed with 0x%x\n", pdhStatus);
@@ -433,7 +433,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
     for (dwCount = 0; dwCount < 10; dwCount++) {
         wprintf(L"Writing record %u\n", dwCount);
 
-        pdhStatus = PdhUpdateLog(hLog, NULL);
+        pdhStatus = PdhUpdateLog(hLog, nullptr);
         if (ERROR_SUCCESS != pdhStatus) {
             wprintf(L"PdhUpdateLog failed with 0x%x\n", pdhStatus);
             goto cleanup;
@@ -474,8 +474,8 @@ the PdhGetFormattedCounterValue function to format the data for display.
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-data-from-a-log-file
 */
 {
-    HQUERY hQuery = NULL;
-    HCOUNTER hCounter = NULL;
+    HQUERY hQuery = nullptr;
+    HCOUNTER hCounter = nullptr;
     PDH_STATUS status = ERROR_SUCCESS;
     DWORD dwFormat = PDH_FMT_DOUBLE;
     PDH_FMT_COUNTERVALUE ItemBuffer{};
@@ -510,7 +510,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-dat
         status = PdhCollectQueryData(hQuery);// Read the next record
         if (ERROR_SUCCESS == status) {
             // Format the performance data record.
-            status = PdhGetFormattedCounterValue(hCounter, dwFormat, (LPDWORD)NULL, &ItemBuffer);
+            status = PdhGetFormattedCounterValue(hCounter, dwFormat, (LPDWORD)nullptr, &ItemBuffer);
             if (ERROR_SUCCESS != status) {
                 wprintf(L"PdhGetFormattedCounterValue failed with 0x%x.\n", status);
                 goto cleanup;
@@ -550,9 +550,9 @@ add the computer name to the path (for example, "\\\\<computername>\\Processor(0
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/transferring-data-from-a-perfmon-format-log-file-to-a-csv-format-log-file
 */
 {
-    HQUERY hQuery = NULL;
-    HLOG hOutputLog = NULL;
-    HCOUNTER hCounter = NULL;
+    HQUERY hQuery = nullptr;
+    HLOG hOutputLog = nullptr;
+    HCOUNTER hCounter = nullptr;
     PDH_STATUS pdhStatus = ERROR_SUCCESS;
     DWORD dwOutputLogType = PDH_LOG_TYPE_CSV;
     CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(0)\\% Processor Time";
@@ -585,7 +585,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/transferring-data-from-
                            &dwOutputLogType,
                            hQuery,
                            0,
-                           NULL,
+                           nullptr,
                            &hOutputLog);
     if (ERROR_SUCCESS != pdhStatus) {
         wprintf(L"PdhOpenLog failed with 0x%x\n", pdhStatus);
@@ -594,7 +594,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/transferring-data-from-
 
     // Transfer the log records from the input file to the output file.
     while (ERROR_SUCCESS == pdhStatus) {
-        pdhStatus = PdhUpdateLog(hOutputLog, NULL);
+        pdhStatus = PdhUpdateLog(hOutputLog, nullptr);
     }
 
     if (PDH_NO_MORE_DATA != pdhStatus) {
@@ -621,8 +621,8 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
 */
 {
     PDH_STATUS Status{};
-    HANDLE Event = NULL;
-    PDH_HQUERY Query = NULL;
+    HANDLE Event = nullptr;
+    PDH_HQUERY Query = nullptr;
     PDH_HCOUNTER Counter{};
     ULONG WaitResult{};
     ULONG CounterType{};
@@ -632,7 +632,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
     CONST ULONG SAMPLE_COUNT = 10;
     CONST ULONG SAMPLE_INTERVAL = 2;
 
-    Status = PdhOpenQuery(NULL, 0, &Query);
+    Status = PdhOpenQuery(nullptr, 0, &Query);
     if (Status != ERROR_SUCCESS) {
         wprintf(L"\nPdhOpenQuery failed with status 0x%x.", Status);
         goto Cleanup;
@@ -655,8 +655,8 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
 
     // This will create a separate thread that will collect raw counter data 
     // every 2 seconds and set the supplied Event.
-    Event = CreateEvent(NULL, FALSE, FALSE, L"MyEvent");
-    if (Event == NULL) {
+    Event = CreateEvent(nullptr, FALSE, FALSE, L"MyEvent");
+    if (Event == nullptr) {
         wprintf(L"\nCreateEvent failed with status 0x%x.", GetLastError());
         goto Cleanup;
     }
@@ -711,14 +711,14 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
 */
 {
     PDH_STATUS Status{};
-    HANDLE Event = NULL;
-    PDH_HQUERY Query = NULL;
+    HANDLE Event = nullptr;
+    PDH_HQUERY Query = nullptr;
     PDH_HCOUNTER Counter{};
     ULONG WaitResult{};
     ULONG CounterType{};
     PDH_FMT_COUNTERVALUE DisplayValue{};
 
-    Status = PdhOpenQuery(NULL, 0, &Query);
+    Status = PdhOpenQuery(nullptr, 0, &Query);
     if (Status != ERROR_SUCCESS) {
         wprintf(L"\nPdhOpenQuery failed with status 0x%x.", Status);
         goto Cleanup;
@@ -740,8 +740,8 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhcollectqueryda
 
     // This will create a separate thread that will collect raw counter data 
     // every 2 seconds and set the supplied Event.
-    Event = CreateEvent(NULL, FALSE, FALSE, L"PerformanceEvent");
-    if (Event == NULL) {
+    Event = CreateEvent(nullptr, FALSE, FALSE, L"PerformanceEvent");
+    if (Event == nullptr) {
         wprintf(L"\nCreateEvent failed with status 0x%x.", GetLastError());
         goto Cleanup;
     }
@@ -811,16 +811,16 @@ void WINAPI GetFormattedCounterArray()
 https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedcounterarraya
 */
 {
-    PDH_HQUERY hQuery = NULL;
+    PDH_HQUERY hQuery = nullptr;
     PDH_STATUS status = ERROR_SUCCESS;
-    PDH_HCOUNTER hCounter = NULL;
+    PDH_HCOUNTER hCounter = nullptr;
     DWORD dwBufferSize = 0;         // Size of the pItems buffer
     DWORD dwItemCount = 0;          // Number of items in the pItems buffer
-    PDH_FMT_COUNTERVALUE_ITEM * pItems = NULL;  // Array of PDH_FMT_COUNTERVALUE_ITEM structures
+    PDH_FMT_COUNTERVALUE_ITEM * pItems = nullptr;  // Array of PDH_FMT_COUNTERVALUE_ITEM structures
     CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(*)\\% Processor Time";
     CONST ULONG SAMPLE_INTERVAL_MS = 1000;
 
-    if (status = PdhOpenQuery(NULL, 0, &hQuery)) {
+    if (status = PdhOpenQuery(nullptr, 0, &hQuery)) {
         wprintf(L"PdhOpenQuery failed with 0x%x.\n", status);
         goto cleanup;
     }
@@ -863,7 +863,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedco
                 }
 
                 free(pItems);
-                pItems = NULL;
+                pItems = nullptr;
                 dwBufferSize = dwItemCount = 0;
             } else {
                 wprintf(L"malloc for PdhGetFormattedCounterArray failed.\n");
@@ -899,15 +899,15 @@ L"\\Process(*)\\Working Set"
 https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedcounterarraya
 */
 {
-    PDH_HQUERY hQuery = NULL;
+    PDH_HQUERY hQuery = nullptr;
     PDH_STATUS status = ERROR_SUCCESS;
-    PDH_HCOUNTER hCounter = NULL;
+    PDH_HCOUNTER hCounter = nullptr;
     DWORD dwBufferSize = 0;         // Size of the pItems buffer
     DWORD dwItemCount = 0;          // Number of items in the pItems buffer
-    PDH_FMT_COUNTERVALUE_ITEM * pItems = NULL;  // Array of PDH_FMT_COUNTERVALUE_ITEM structures
+    PDH_FMT_COUNTERVALUE_ITEM * pItems = nullptr;  // Array of PDH_FMT_COUNTERVALUE_ITEM structures
     //CONST PWSTR COUNTER_PATH = (CONST PWSTR)L"\\Processor(*)\\% Processor Time";
 
-    if (status = PdhOpenQuery(NULL, 0, &hQuery)) {
+    if (status = PdhOpenQuery(nullptr, 0, &hQuery)) {
         wprintf(L"PdhOpenQuery failed with 0x%x.\n", status);
         goto cleanup;
     }
@@ -975,7 +975,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/pdh/nf-pdh-pdhgetformattedco
                 }
 
                 free(pItems);
-                pItems = NULL;
+                pItems = nullptr;
                 dwBufferSize = dwItemCount = 0;
             } else {
                 wprintf(L"malloc for PdhGetFormattedCounterArray failed.\n");

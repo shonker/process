@@ -399,7 +399,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/api/wtsapi32/nf-wtsapi32-wtsregi
     BOOL b = WTSRegisterSessionNotification(hWnd, NOTIFY_FOR_ALL_SESSIONS);
 
     MSG sMsg;
-    while (GetMessage(&sMsg, NULL, 0, 0)) {
+    while (GetMessage(&sMsg, nullptr, 0, 0)) {
         DispatchMessage(&sMsg);
     }
 

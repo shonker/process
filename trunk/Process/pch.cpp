@@ -34,16 +34,16 @@ DisplayWinError(
 
     if (dwBufferLength = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL,
+        nullptr,
         dwError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPSTR)&MessageBuffer,
         0,
-        NULL)) {
+        nullptr)) {
         DWORD dwBytesWritten; // unused
 
         // Output message string on stderr
-        WriteFile(GetStdHandle(STD_ERROR_HANDLE), MessageBuffer, dwBufferLength, &dwBytesWritten, NULL);
+        WriteFile(GetStdHandle(STD_ERROR_HANDLE), MessageBuffer, dwBufferLength, &dwBytesWritten, nullptr);
 
         // free the buffer allocated by the system
         LocalFree(MessageBuffer);
@@ -66,12 +66,12 @@ void DisplayError(const wchar_t * pszAPI)
     LPWSTR lpvMessageBuffer;
 
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                  NULL,
+                  nullptr,
                   GetLastError(),
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (LPWSTR)&lpvMessageBuffer,
                   0,
-                  NULL);
+                  nullptr);
 
     //去掉回车换行
     int x = lstrlenW((LPWSTR)lpvMessageBuffer);
@@ -96,11 +96,11 @@ void printError(CONST TCHAR * msg)
 
     eNum = GetLastError();
     FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                  NULL, eNum,
+                  nullptr, eNum,
                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-                  sysMsg, 256, NULL);
+                  sysMsg, 256, nullptr);
 
-    // Trim the end of the line and terminate it with a null
+    // Trim the end of the line and terminate it with a nullptr
     p = sysMsg;
     while ((*p > 31) || (*p == 9))
         ++p;
@@ -122,11 +122,11 @@ void ErrorHandler(LPCTSTR lpszFunction)
 
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
+        nullptr,
         dw,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPTSTR)&lpMsgBuf,
-        0, NULL);
+        0, nullptr);
 
     // Display the error message.
 
@@ -136,7 +136,7 @@ void ErrorHandler(LPCTSTR lpszFunction)
                     LocalSize(lpDisplayBuf) / sizeof(TCHAR),
                     TEXT("%s failed with error %u: %s"),
                     lpszFunction, dw, lpMsgBuf);
-    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+    MessageBox(nullptr, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
 
     // Free error-handling buffer allocations.
 
@@ -162,16 +162,16 @@ void DisplayWinError(LPSTR szAPI, DWORD WinError)
 
     if (dwBufferLength = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL,
+        nullptr,
         WinError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPSTR)&MessageBuffer,
         0,
-        NULL)) {
+        nullptr)) {
         DWORD dwBytesWritten; // unused
 
         // Output message string on stderr.
-        WriteFile(GetStdHandle(STD_ERROR_HANDLE), MessageBuffer, dwBufferLength, &dwBytesWritten, NULL);
+        WriteFile(GetStdHandle(STD_ERROR_HANDLE), MessageBuffer, dwBufferLength, &dwBytesWritten, nullptr);
 
         LocalFree(MessageBuffer);// Free the buffer allocated by the system.
     }
@@ -188,7 +188,7 @@ void DebugPrintA(PCSTR format, ...)
     size_t len = MAXUINT16;
 
     char * out = (char *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, len);
-    _ASSERTE(NULL != out);
+    _ASSERTE(nullptr != out);
 
     va_list marker;
 
@@ -213,7 +213,7 @@ void DebugPrintW(PCWSTR format, ...)
 {
     size_t len = MAXINT16 * sizeof(WCHAR);
     wchar_t * out = (wchar_t *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, len);
-    _ASSERTE(NULL != out);
+    _ASSERTE(nullptr != out);
 
     va_list marker;
 
@@ -261,7 +261,7 @@ void GetImageFilePath(_Out_ LPWSTR ImageFilePath, _In_ DWORD nSize)
 此目录区别于GetCurrentDirectory.
 */
 {
-    GetModuleFileName(NULL, ImageFilePath, nSize);
+    GetModuleFileName(nullptr, ImageFilePath, nSize);
 
     ImageFilePath[lstrlen(ImageFilePath) - lstrlen(PathFindFileName(ImageFilePath))] = 0;
 
@@ -278,7 +278,7 @@ void Nt2Dos(IN  OUT TCHAR * szFileName)
 本代码摘自：微软的CppFileHandle工程。
 */
 {
-    if (szFileName == NULL) {
+    if (szFileName == nullptr) {
         return;
     }
 
@@ -288,7 +288,7 @@ void Nt2Dos(IN  OUT TCHAR * szFileName)
 
     TCHAR szTemp[MAX_PATH] = {0};// Translate path with device name to drive letters.
 
-    // Get a series of null-terminated strings, one for each valid drive in the system, plus with an additional null character.
+    // Get a series of nullptr-terminated strings, one for each valid drive in the system, plus with an additional nullptr character.
     // Each string is a drive name. e.g. C:\\0D:\\0\0
     if (GetLogicalDriveStrings(MAX_PATH - 1, szTemp)) {
         TCHAR szName[MAX_PATH]{};
@@ -317,7 +317,7 @@ void Nt2Dos(IN  OUT TCHAR * szFileName)
                 }
             }
 
-            while (*p++);// Go to the next NULL character, i.e. the next drive name.
+            while (*p++);// Go to the next nullptr character, i.e. the next drive name.
 
         } while (!bFound && *p); // End of string
     }
@@ -346,10 +346,10 @@ EnablePrivilege(SE_DEBUG_NAME, FALSE);
         TOKEN_PRIVILEGES tp;
 
         tp.PrivilegeCount = 1;
-        LookupPrivilegeValue(NULL, szPrivilege, &tp.Privileges[0].Luid);
+        LookupPrivilegeValue(nullptr, szPrivilege, &tp.Privileges[0].Luid);
 
         tp.Privileges[0].Attributes = fEnable ? SE_PRIVILEGE_ENABLED : 0;
-        AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), NULL, NULL);
+        AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(tp), nullptr, nullptr);
         fOk = (GetLastError() == ERROR_SUCCESS);
 
         CloseHandle(hToken);// Don't forget to close the token handle
