@@ -80,7 +80,7 @@ void DisplayError(const wchar_t * pszAPI)
 
     //... now display this string
     wprintf(L"ERROR: API        = %s.\n", pszAPI);
-    wprintf(L"       error code = %d.\n", GetLastError());
+    wprintf(L"       error code = %u.\n", GetLastError());
     wprintf(L"       message    = %s.\n", (LPWSTR)lpvMessageBuffer);//lpvMessageBuffer后有回车换行，而且还有垃圾数据。
 
     LocalFree(lpvMessageBuffer);// Free the buffer allocated by the system
@@ -108,7 +108,7 @@ void printError(CONST TCHAR * msg)
                             ((*p == '.') || (*p < 33)));
 
     // Display the message
-    _tprintf(TEXT("\n  WARNING: %s failed with error %d (%s)"), msg, eNum, sysMsg);
+    _tprintf(TEXT("\n  WARNING: %s failed with error %u (%s)"), msg, eNum, sysMsg);
 }
 
 
@@ -134,7 +134,7 @@ void ErrorHandler(LPCTSTR lpszFunction)
                                       (lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
     StringCchPrintf((LPTSTR)lpDisplayBuf,
                     LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-                    TEXT("%s failed with error %d: %s"),
+                    TEXT("%s failed with error %u: %s"),
                     lpszFunction, dw, lpMsgBuf);
     MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
 

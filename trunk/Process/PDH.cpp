@@ -335,7 +335,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-co
             wprintf(L"\nPdhCollectQueryData failed with status 0x%x.", Status);
         }
 
-        wprintf(L"\n\"%2.2d/%2.2d/%4.4d %2.2d:%2.2d:%2.2d.%3.3d\"",
+        wprintf(L"\n\"%2.2u/%2.2u/%4.4u %2.2u:%2.2u:%2.2u.%3.3u\"",
                 SampleTime.wMonth,
                 SampleTime.wDay,
                 SampleTime.wYear,
@@ -431,7 +431,7 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/writing-performance-dat
 
     // Write 10 records to the log file.
     for (dwCount = 0; dwCount < 10; dwCount++) {
-        wprintf(L"Writing record %d\n", dwCount);
+        wprintf(L"Writing record %u\n", dwCount);
 
         pdhStatus = PdhUpdateLog(hLog, NULL);
         if (ERROR_SUCCESS != pdhStatus) {

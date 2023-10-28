@@ -67,15 +67,15 @@ int WINAPI CreatingViewWithinFile(void)
     // To calculate where to start the file mapping, round down the
     // offset of the data into the file to the nearest multiple of the system allocation granularity.
     dwFileMapStart = (FILE_MAP_START / dwSysGran) * dwSysGran;
-    _tprintf(TEXT("The file map view starts at %ld bytes into the file.\n"), dwFileMapStart);
+    _tprintf(TEXT("The file map view starts at %lu bytes into the file.\n"), dwFileMapStart);
 
     // Calculate the size of the file mapping view.
     dwMapViewSize = (FILE_MAP_START % dwSysGran) + BUFFSIZE;
-    _tprintf(TEXT("The file map view is %ld bytes large.\n"), dwMapViewSize);
+    _tprintf(TEXT("The file map view is %lu bytes large.\n"), dwMapViewSize);
 
     // How large will the file mapping object be?
     dwFileMapSize = FILE_MAP_START + BUFFSIZE;
-    _tprintf(TEXT("The file mapping object is %ld bytes large.\n"), dwFileMapSize);
+    _tprintf(TEXT("The file mapping object is %lu bytes large.\n"), dwFileMapSize);
 
     // The data of interest isn't at the beginning of the view, so determine how far into the view to set the pointer.
     iViewDelta = FILE_MAP_START - dwFileMapStart;
@@ -94,7 +94,7 @@ int WINAPI CreatingViewWithinFile(void)
 
     // Verify that the correct file size was written.
     dwFileSize = GetFileSize(hFile, NULL);
-    _tprintf(TEXT("hFile size: %10d\n"), dwFileSize);
+    _tprintf(TEXT("hFile size: %10u\n"), dwFileSize);
 
     // Create a file mapping object for the file
     // Note that it is a good idea to ensure the file size is not zero
@@ -105,7 +105,7 @@ int WINAPI CreatingViewWithinFile(void)
                                  dwFileMapSize,  // size of mapping object, low
                                  NULL);          // name of mapping object
     if (hMapFile == NULL) {
-        _tprintf(TEXT("hMapFile is NULL: last error: %d\n"), GetLastError());
+        _tprintf(TEXT("hMapFile is NULL: last error: %u\n"), GetLastError());
         return (2);
     }
 
@@ -116,7 +116,7 @@ int WINAPI CreatingViewWithinFile(void)
                                  dwFileMapStart,      // low-order 32 bits of file offset
                                  dwMapViewSize);      // number of bytes to map
     if (lpMapAddress == NULL) {
-        _tprintf(TEXT("lpMapAddress is NULL: last error: %d\n"), GetLastError());
+        _tprintf(TEXT("lpMapAddress is NULL: last error: %u\n"), GetLastError());
         return 3;
     }
 
@@ -135,12 +135,12 @@ int WINAPI CreatingViewWithinFile(void)
     bFlag = UnmapViewOfFile(lpMapAddress);
     bFlag = CloseHandle(hMapFile); // close the file mapping object
     if (!bFlag) {
-        _tprintf(TEXT("\nError %ld occurred closing the mapping object!"), GetLastError());
+        _tprintf(TEXT("\nError %lu occurred closing the mapping object!"), GetLastError());
     }
 
     bFlag = CloseHandle(hFile);   // close the file itself
     if (!bFlag) {
-        _tprintf(TEXT("\nError %ld occurred closing the file!"), GetLastError());
+        _tprintf(TEXT("\nError %lu occurred closing the file!"), GetLastError());
     }
 
     return 0;
@@ -175,7 +175,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-named-shared-memo
         BUF_SIZE,                // maximum object size (low-order DWORD)
         szName);                 // name of mapping object
     if (hMapFile == NULL) {
-        _tprintf(TEXT("Could not create file mapping object (%d).\n"), GetLastError());
+        _tprintf(TEXT("Could not create file mapping object (%u).\n"), GetLastError());
         return 1;
     }
     pBuf = (LPTSTR)MapViewOfFile(hMapFile,   // handle to map object
@@ -184,7 +184,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/creating-named-shared-memo
                                  0,
                                  BUF_SIZE);
     if (pBuf == NULL) {
-        _tprintf(TEXT("Could not map view of file (%d).\n"), GetLastError());
+        _tprintf(TEXT("Could not map view of file (%u).\n"), GetLastError());
         CloseHandle(hMapFile);
         return 1;
     }
@@ -224,7 +224,7 @@ void DisplayError(const wchar_t * pszAPI, DWORD dwError)
 
     //... now display this string
     _tprintf(TEXT("ERROR: API        = %s\n"), pszAPI);
-    _tprintf(TEXT("       error code = %d\n"), dwError);
+    _tprintf(TEXT("       error code = %u\n"), dwError);
     _tprintf(TEXT("       message    = %p\n"), lpvMessageBuffer);
 
     // Free the buffer allocated by the system
@@ -455,7 +455,7 @@ https://docs.microsoft.com/en-us/windows/win32/memory/obtaining-a-file-name-from
 
     hFile = CreateFile(argv[1], GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-        _tprintf(TEXT("CreateFile failed with %d\n"), GetLastError());
+        _tprintf(TEXT("CreateFile failed with %u\n"), GetLastError());
         return 0;
     }
 

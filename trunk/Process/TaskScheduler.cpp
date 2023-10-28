@@ -3159,7 +3159,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    wprintf(L"The last exit code of Test Task is: %d\n", pdwExitCode);
+    wprintf(L"The last exit code of Test Task is: %u\n", pdwExitCode);
 
     CoUninitialize();
     return 0;
@@ -3220,8 +3220,8 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     wprintf(L"The idle wait of Test Task is: \n");
-    wprintf(L" %d minutes\n", pwIdleMinutes);
-    wprintf(L" %d minutes\n", pwDeadlineMinutes);
+    wprintf(L" %u minutes\n", pwIdleMinutes);
+    wprintf(L" %u minutes\n", pwDeadlineMinutes);
 
     CoUninitialize();
     return 0;
@@ -3409,7 +3409,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     wprintf(L"The next %u runtimes for this task are: \n", wCountOfRuns);
 
     for (WORD i = 0; i < wCountOfRuns; i++) {
-        wprintf(L"\t%u - %u/%u/%u \t %u:%u\n",
+        wprintf(L"\t%d - %u/%u/%u \t %u:%u\n",
                 i + 1,
                 pstListOfTimes->wMonth,
                 pstListOfTimes->wDay,
@@ -3822,7 +3822,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
         return 1;
     }
 
-    wprintf(L"Test Task can run for %d milliseconds\n", pdwRunTime);
+    wprintf(L"Test Task can run for %u milliseconds\n", pdwRunTime);
     CoUninitialize();
     return 0;
 }
@@ -4828,7 +4828,7 @@ https://docs.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-retriev
     }
 
     // Display the trigger stings, calling ITask::GetTriggerString for each trigger associated with the task.
-    wprintf(L"There are %i triggers with Test Task.\n", plTriggerCount);
+    wprintf(L"There are %u triggers with Test Task.\n", plTriggerCount);
     wprintf(L"They are:\n");
 
     WORD CurrentTrigger = 0;

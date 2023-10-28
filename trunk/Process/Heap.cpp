@@ -17,7 +17,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
     // Retrieve the number of active heaps for the current process so we can calculate the buffer size needed for the heap handles.
     DWORD NumberOfHeaps = GetProcessHeaps(0, NULL);
     if (NumberOfHeaps == 0) {
-        _tprintf(TEXT("Failed to retrieve the number of heaps with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to retrieve the number of heaps with LastError %u.\n"), GetLastError());
         return 1;
     }
 
@@ -33,7 +33,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
     // Get a handle to the default process heap.
     HANDLE hDefaultProcessHeap = GetProcessHeap();
     if (hDefaultProcessHeap == NULL) {
-        _tprintf(TEXT("Failed to retrieve the default process heap with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to retrieve the default process heap with LastError %u.\n"), GetLastError());
         return 1;
     }
 
@@ -51,7 +51,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
     // Note that heap functions should be called only on the default heap of the process or on private heaps that your component creates by calling HeapCreate.
     NumberOfHeaps = GetProcessHeaps(HeapsLength, aHeaps);
     if (NumberOfHeaps == 0) {
-        _tprintf(TEXT("Failed to retrieve heaps with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to retrieve heaps with LastError %u.\n"), GetLastError());
         return 1;
     }
     else if (NumberOfHeaps > HeapsLength) {
@@ -62,9 +62,9 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175820(v=vs.85).aspx
         return 1;
     }
 
-    _tprintf(TEXT("Process has %d heaps.\n"), HeapsLength);
+    _tprintf(TEXT("Process has %u heaps.\n"), HeapsLength);
     for (DWORD HeapsIndex = 0; HeapsIndex < HeapsLength; ++HeapsIndex) {
-        _tprintf(TEXT("Heap %d at address: %#p.\n"), HeapsIndex, aHeaps[HeapsIndex]);
+        _tprintf(TEXT("Heap %u at address: %#p.\n"), HeapsIndex, aHeaps[HeapsIndex]);
     }
 
     // Release memory allocated from default process heap.
@@ -87,7 +87,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/dd299432(v=vs.85).aspx
 {
     HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, GetCurrentProcessId());
     if (hHeapSnap == INVALID_HANDLE_VALUE) {
-        printf("CreateToolhelp32Snapshot failed (%d)\n", GetLastError());
+        printf("CreateToolhelp32Snapshot failed (%u)\n", GetLastError());
         return 1;
     }
 
@@ -110,7 +110,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/dd299432(v=vs.85).aspx
         } while (Heap32ListNext(hHeapSnap, &hl));
     }
     else {
-        printf("Cannot list first heap (%d)\n", GetLastError());
+        printf("Cannot list first heap (%u)\n", GetLastError());
     }
 
     CloseHandle(hHeapSnap);
@@ -129,13 +129,13 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
 {
     HANDLE hHeap = HeapCreate(0, 0, 0);// Create a new heap with default parameters.
     if (hHeap == NULL) {
-        _tprintf(TEXT("Failed to create a new heap with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to create a new heap with LastError %u.\n"), GetLastError());
         return 1;
     }
 
     // Lock the heap to prevent other threads from accessing the heap during enumeration.
     if (HeapLock(hHeap) == FALSE) {
-        _tprintf(TEXT("Failed to lock heap with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to lock heap with LastError %u.\n"), GetLastError());
         return 1;
     }
 
@@ -156,8 +156,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
             }
         }
         else if ((Entry.wFlags & PROCESS_HEAP_REGION) != 0) {
-            _tprintf(TEXT("Region\n  %d bytes committed\n") \
-                TEXT("  %d bytes uncommitted\n  First block address: %#p\n") \
+            _tprintf(TEXT("Region\n  %u bytes committed\n") \
+                TEXT("  %u bytes uncommitted\n  First block address: %#p\n") \
                 TEXT("  Last block address: %#p\n"),
                 Entry.Region.dwCommittedSize,
                 Entry.Region.dwUnCommittedSize,
@@ -171,8 +171,8 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
             _tprintf(TEXT("Block\n"));
         }
 
-        _tprintf(TEXT("  Data portion begins at: %#p\n  Size: %d bytes\n") \
-            TEXT("  Overhead: %d bytes\n  Region index: %d\n\n"),
+        _tprintf(TEXT("  Data portion begins at: %#p\n  Size: %u bytes\n") \
+            TEXT("  Overhead: %u bytes\n  Region index: %u\n\n"),
             Entry.lpData,
             Entry.cbData,
             Entry.cbOverhead,
@@ -181,18 +181,18 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ee175819(v=vs.85).aspx
 
     DWORD LastError = GetLastError();
     if (LastError != ERROR_NO_MORE_ITEMS) {
-        _tprintf(TEXT("HeapWalk failed with LastError %d.\n"), LastError);
+        _tprintf(TEXT("HeapWalk failed with LastError %u.\n"), LastError);
     }
 
     // Unlock the heap to allow other threads to access the heap after enumeration has completed.
     if (HeapUnlock(hHeap) == FALSE) {
-        _tprintf(TEXT("Failed to unlock heap with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to unlock heap with LastError %u.\n"), GetLastError());
     }
 
     // When a process terminates, allocated memory is reclaimed by the operating system so it is not really necessary to call HeapDestroy in this example.
     // However, it may be advisable to call HeapDestroy in a longer running application.
     if (HeapDestroy(hHeap) == FALSE) {
-        _tprintf(TEXT("Failed to destroy heap with LastError %d.\n"), GetLastError());
+        _tprintf(TEXT("Failed to destroy heap with LastError %u.\n"), GetLastError());
     }
 
     return 0;
@@ -221,7 +221,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-heap-list
     HANDLE hHeapSnap = CreateToolhelp32Snapshot(TH32CS_SNAPHEAPLIST, GetCurrentProcessId());
     hl.dwSize = sizeof(HEAPLIST32);
     if (hHeapSnap == INVALID_HANDLE_VALUE) {
-        printf("CreateToolhelp32Snapshot failed (%d)\n", GetLastError());
+        printf("CreateToolhelp32Snapshot failed (%u)\n", GetLastError());
         return 1;
     }
 
@@ -241,7 +241,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-heap-list
             hl.dwSize = sizeof(HEAPLIST32);
         } while (Heap32ListNext(hHeapSnap, &hl));
     }
-    else printf("Cannot list first heap (%d)\n", GetLastError());
+    else printf("Cannot list first heap (%u)\n", GetLastError());
 
     CloseHandle(hHeapSnap);
 
