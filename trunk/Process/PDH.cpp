@@ -314,11 +314,10 @@ https://learn.microsoft.com/en-us/windows/win32/perfctrs/browsing-performance-co
     }
 
     // Most counters require two sample values to display a formatted value.
-    // PDH stores the current sample value and the previously collected
-    // sample value. This call retrieves the first value that will be used
+    // PDH stores the current sample value and the previously collected sample value.
+    // This call retrieves the first value that will be used
     // by PdhGetFormattedCounterValue in the first iteration of the loop
-    // Note that this value is lost if the counter does not require two
-    // values to compute a displayable value.
+    // Note that this value is lost if the counter does not require two values to compute a displayable value.
     Status = PdhCollectQueryData(Query);
     if (Status != ERROR_SUCCESS) {
         wprintf(L"\nPdhCollectQueryData failed with 0x%x.\n", Status);
@@ -469,7 +468,8 @@ Article
 01/08/2021
 3 contributors
 The following example reads data written to a log file in the Writing Performance Data to a Log File example.
-It uses the PdhCollectQueryData function to retrieve the data from the log file and the PdhGetFormattedCounterValue function to format the data for display.
+It uses the PdhCollectQueryData function to retrieve the data from the log file and 
+the PdhGetFormattedCounterValue function to format the data for display.
 
 https://learn.microsoft.com/en-us/windows/win32/perfctrs/reading-performance-data-from-a-log-file
 */

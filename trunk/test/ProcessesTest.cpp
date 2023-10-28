@@ -42,7 +42,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/services/protecting-anti-malware
 {
     DWORD ProtectionLevel = PROTECTION_LEVEL_SAME;//启动成功了，但不是保护的进程，看来还得签名啊！
     //DWORD ProtectionLevel = PROTECTION_LEVEL_WINTCB;//启动失败，返回值是0x00000241。
-    SIZE_T AttributeListSize;
+    SIZE_T AttributeListSize = 0;
     DWORD Result;
     PROCESS_INFORMATION ProcessInformation = {0};
     STARTUPINFOEXW StartupInfoEx = {0};
@@ -51,6 +51,7 @@ https://learn.microsoft.com/zh-cn/windows/win32/services/protecting-anti-malware
 
     InitializeProcThreadAttributeList(NULL, 1, 0, &AttributeListSize);
     StartupInfoEx.lpAttributeList = (LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(GetProcessHeap(), 0, AttributeListSize);
+    _ASSERTE(StartupInfoEx.lpAttributeList);
     if (InitializeProcThreadAttributeList(StartupInfoEx.lpAttributeList, 1, 0, &AttributeListSize) == FALSE) {
         Result = GetLastError();
         goto exitFunc;
@@ -82,8 +83,13 @@ https://learn.microsoft.com/zh-cn/windows/win32/services/protecting-anti-malware
     }
 
 exitFunc:
-
-    return;
+    if (ProcessInformation.hProcess){
+        CloseHandle(ProcessInformation.hProcess);
+    }
+    
+    if (ProcessInformation.hThread){
+        CloseHandle(ProcessInformation.hThread);
+    }    
 }
 
 
