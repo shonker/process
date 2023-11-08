@@ -193,6 +193,8 @@ __declspec(dllimport) BOOL WINAPI IsCurrentUserLocalAdministrator(VOID);
 
 __declspec(dllimport) int WINAPI ManageUserPrivileges(int argc, char * argv[]);
 
+__declspec(dllimport) int WINAPI ChangePassword(int argc, wchar_t * argv[]);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 

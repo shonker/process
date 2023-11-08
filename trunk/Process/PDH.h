@@ -21,7 +21,5 @@ https://support.microfocus.com/kb/doc.php?id=7010545
 
 #pragma once
 
-class PDH
-{
-
-};
+#include <pdh.h> //不能与LMErrlog.h同时被包含。
+#pragma comment (lib,"pdh.lib")

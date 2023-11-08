@@ -183,8 +183,6 @@
 #include <Wininet.h>
 #pragma comment (lib,"Wininet.lib")
 
-#include <pdh.h>
-#pragma comment (lib,"pdh.lib")
 
 #include <string>
 #include <list>

@@ -64,7 +64,6 @@
 #include <comutil.h>
 #include <wbemidl.h>
 #include <dbt.h>
-#include <lm.h>
 #include <winnetwk.h>
 #include <ws2spi.h>
 #include <comdef.h>
@@ -150,8 +149,3 @@
 #include <set>
 
 using namespace std;
-
-class pch
-{
-
-};
