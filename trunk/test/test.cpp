@@ -47,13 +47,11 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
         return 0;
     }
 
-    //ReadingPerformanceDataFromLogFile(Args, Arglist);
+    EnumUser(Args, Arglist);
     //GetAdaptersAddressesInfo(argc, argv);
     
     //test_c();
     //PerformanceTest();
-    //TestThread();
-    SetPassword();
 
     LocalFree(Arglist);
 }
