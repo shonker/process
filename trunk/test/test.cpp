@@ -47,8 +47,8 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
         return 0;
     }
 
-    EnumUser(Args, Arglist);
-    //GetAdaptersAddressesInfo(argc, argv);
+    //EnumUser(Args, Arglist);
+    EnumGroup(argc, argv);
     
     //test_c();
     //PerformanceTest();

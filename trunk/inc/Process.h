@@ -199,6 +199,8 @@ __declspec(dllimport) void WINAPI SetPassword();
 
 __declspec(dllimport) int WINAPI EnumUser(int argc, wchar_t * argv[]);
 
+__declspec(dllimport) void WINAPI EnumGroup(int argc, char * argv[]);
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
