@@ -48,10 +48,10 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     }
 
     //EnumUser(Args, Arglist);
-    EnumGroup(argc, argv);
+    //EnumGroup(argc, argv);
     
     //test_c();
-    //PerformanceTest();
+    EnumLocalGroup();
 
     LocalFree(Arglist);
 }
