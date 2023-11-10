@@ -68,6 +68,12 @@
 #include <ws2spi.h>
 #include <comdef.h>
 
+#include <lm.h>
+#include <lmerr.h>
+#include <lmcons.h>
+#include <lmaccess.h>
+#include <lmapibuf.h>
+
 #include <initguid.h> //ע��ǰ��˳�򡣾�̬����UUID�õģ�����error LNK2001��
 #include <usbioctl.h>
 #include <usbiodef.h>
