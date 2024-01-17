@@ -67,8 +67,6 @@ __declspec(dllimport) int WINAPI ShellExecInExplorerProcess(PCWSTR pszFile);
 
 __declspec(dllimport) int WINAPI EnumeratingAllModulesForProcess();
 
-__declspec(dllimport) int WINAPI EnumeratingAllDeviceDrivers();
-
 __declspec(dllimport) BOOL WINAPI IsWow64();
 
 __declspec(dllimport) BOOL WINAPI IsWow64Process2Ex(_In_ DWORD Pid);

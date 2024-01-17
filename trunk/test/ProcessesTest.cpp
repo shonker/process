@@ -97,7 +97,5 @@ void TestProcess()
 {
     //EnumeratingAllProcesses(EnumeratingProcessesCallBackTest, nullptr);
 
-    EnumerateProcess(EnumerateProcessCallBackTest, nullptr);
-
-
+    //EnumerateProcess(EnumerateProcessCallBackTest, nullptr);
 }
