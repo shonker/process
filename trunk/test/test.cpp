@@ -51,7 +51,7 @@ int _cdecl main(_In_ int argc, _In_reads_(argc) CHAR * argv[])
     //EnumGroup(argc, argv);
     
     //test_c();
-    TestProcess();
+    EnumKernelModules();
 
     LocalFree(Arglist);
 }

@@ -1,5 +1,4 @@
 #pragma once
-class Shutdown
-{
-};
+
+#include "pch.h"
 

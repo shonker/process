@@ -1,10 +1,7 @@
 #pragma once
 
 
-class TaskScheduler
-{
-
-};
+#include "pch.h"
 
 
 #define TASKS_TO_RETRIEVE          5

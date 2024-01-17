@@ -1,5 +1,4 @@
 #pragma once
-class Heap
-{
-};
+
+#include "pch.h"
 
