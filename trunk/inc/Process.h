@@ -108,6 +108,8 @@ __declspec(dllimport) BOOL WINAPI ListProcessModules(DWORD dwPID);
 
 __declspec(dllimport) void CALLBACK RunDllApi(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow);
 
+__declspec(dllimport) int WINAPI EnumeratingAllDeviceDrivers();
+
 __declspec(dllimport) void WINAPI EnumKernelModules();
 
 __declspec(dllimport) int WINAPI TraversingHeapList2(void);
