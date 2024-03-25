@@ -218,3 +218,9 @@ void BruteForceCrack()
         }
     }
 }
+
+
+void DisabledGuestAccount()
+{
+    DisabledAccount(NULL, L"Guest");
+}

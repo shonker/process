@@ -202,6 +202,7 @@ __declspec(dllimport) void WINAPI SetPassword();
 __declspec(dllimport) int WINAPI EnumUser(int argc, wchar_t * argv[]);
 __declspec(dllimport) void WINAPI EnumGroup(int argc, char * argv[]);
 __declspec(dllimport) int WINAPI EnumLocalGroup();
+__declspec(dllimport) int WINAPI DisabledAccount(_In_opt_  LPCWSTR servername OPTIONAL, _In_ LPCWSTR username);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

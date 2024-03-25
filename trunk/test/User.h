@@ -9,3 +9,4 @@ void TestEnumerateAccountRights();
 void TestGetCurrentSid();
 void TestConvertStringSidToSid();
 void BruteForceCrack();
+void DisabledGuestAccount();
