@@ -102,10 +102,13 @@ void printError(CONST TCHAR * msg)
 
     // Trim the end of the line and terminate it with a nullptr
     p = sysMsg;
+
     while ((*p > 31) || (*p == 9))
         ++p;
-    do { *p-- = 0; } while ((p >= sysMsg) &&
-                            ((*p == '.') || (*p < 33)));
+
+    do {
+        *p-- = 0;
+    } while ((p >= sysMsg) && ((*p == '.') || (*p < 33)));
 
     // Display the message
     _tprintf(TEXT("\n  WARNING: %s failed with error %u (%s)"), msg, eNum, sysMsg);

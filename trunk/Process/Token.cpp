@@ -173,8 +173,8 @@ https://docs.microsoft.com/en-us/previous-versions/dotnet/articles/bb625960(v=ms
     TIL.Label.Sid = pIntegritySid;
 
     // Set the process integrity level
-    fRet = SetTokenInformation(hNewToken, 
-                               TokenIntegrityLevel, 
+    fRet = SetTokenInformation(hNewToken,
+                               TokenIntegrityLevel,
                                &TIL,
                                sizeof(TOKEN_MANDATORY_LABEL) + GetLengthSid(pIntegritySid));
     if (!fRet) {
@@ -286,9 +286,9 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
                 // Copy the ACEs to the new ACL.
                 if (aclSizeInfo.AceCount) {
                     for (i = 0; i < aclSizeInfo.AceCount; i++) {
-                        // Get an ACE.
-                        if (!GetAce(pacl, i, &pTempAce))
+                        if (!GetAce(pacl, i, &pTempAce)) {// Get an ACE.
                             __leave;
+                        }
 
                         // Add the ACE to the new ACL.
                         if (!AddAce(pNewAcl, ACL_REVISION, MAXDWORD, pTempAce, ((PACE_HEADER)pTempAce)->AceSize))
@@ -329,11 +329,8 @@ BOOL AddAceToWindowStation(HWINSTA hwinsta, PSID psid)
             if (!SetUserObjectSecurity(hwinsta, &si, psdNew))
                 __leave;
 
-            // Indicate success.
-            bSuccess = TRUE;
-    } __finally {
-        // Free the allocated buffers.
-
+            bSuccess = TRUE;// Indicate success.
+    } __finally {// Free the allocated buffers.
         if (pace != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)pace);
 
@@ -424,9 +421,9 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
             // Copy the ACEs to the new ACL.
             if (aclSizeInfo.AceCount) {
                 for (i = 0; i < aclSizeInfo.AceCount; i++) {
-                    // Get an ACE.
-                    if (!GetAce(pacl, i, &pTempAce))
+                    if (!GetAce(pacl, i, &pTempAce)) {// Get an ACE.
                         __leave;
+                    }
 
                     // Add the ACE to the new ACL.
                     if (!AddAce(pNewAcl, ACL_REVISION, MAXDWORD, pTempAce, ((PACE_HEADER)pTempAce)->AceSize))
@@ -447,11 +444,8 @@ BOOL AddAceToDesktop(HDESK hdesk, PSID psid)
         if (!SetUserObjectSecurity(hdesk, &si, psdNew))
             __leave;
 
-        // Indicate success.
-        bSuccess = TRUE;
-    } __finally {
-        // Free buffers.
-
+        bSuccess = TRUE;// Indicate success.
+    } __finally {// Free buffers.
         if (pNewAcl != nullptr)
             HeapFree(GetProcessHeap(), 0, (LPVOID)pNewAcl);
 
@@ -517,8 +511,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
     if (hwinsta == nullptr)
         goto Cleanup;
 
-    // To get the correct default desktop, set the caller's 
-    // window station to the interactive window station.
+    // To get the correct default desktop, set the caller's window station to the interactive window station.
     if (!SetProcessWindowStation(hwinsta))
         goto Cleanup;
 
@@ -574,8 +567,7 @@ https://docs.microsoft.com/en-us/previous-versions//aa379608(v=vs.85)?redirected
         &pi                // receives information about new process
     );
 
-    // End impersonation of client.
-    RevertToSelf();
+    RevertToSelf();// End impersonation of client.
 
     if (bResult && pi.hProcess != INVALID_HANDLE_VALUE) {
         WaitForSingleObject(pi.hProcess, INFINITE);
@@ -656,8 +648,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/secauthz/searching-for-a-sid-in-a
         }
     }
 
-    // Allocate the buffer.
-    pGroupInfo = (PTOKEN_GROUPS)GlobalAlloc(GPTR, dwSize);
+    pGroupInfo = (PTOKEN_GROUPS)GlobalAlloc(GPTR, dwSize);// Allocate the buffer.
 
     // Call GetTokenInformation again to get the group information.
     if (!GetTokenInformation(hToken, TokenGroups, pGroupInfo, dwSize, &dwSize)) {
@@ -864,7 +855,7 @@ int CreateLowProcessTest(int argc, _TCHAR * argv[])
     TOKEN_LINKED_TOKEN tlt = {0};
 
     // Notepad is used as an example
-    fRet = OpenProcessToken(GetCurrentProcess(), 
+    fRet = OpenProcessToken(GetCurrentProcess(),
                             TOKEN_DUPLICATE | TOKEN_ADJUST_DEFAULT | TOKEN_QUERY | TOKEN_ASSIGN_PRIMARY,
                             &hToken);
     if (!fRet) {

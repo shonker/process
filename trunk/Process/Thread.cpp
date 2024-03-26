@@ -47,8 +47,7 @@ https://docs.microsoft.com/en-us/windows/win32/toolhelp/traversing-the-thread-li
     }
 
     // Now walk the thread list of the system,
-    // and display information about each thread
-    // associated with the specified process
+    // and display information about each thread associated with the specified process
     do {
         if (te32.th32OwnerProcessID == dwOwnerPID) {
             _tprintf(TEXT("\n     THREAD ID      = 0x%08X"), te32.th32ThreadID);
@@ -108,7 +107,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/procthread/creating-threads
 {
     PMYDATA pDataArray[MAX_THREADS]{};
     DWORD   dwThreadIdArray[MAX_THREADS]{};
-    HANDLE  hThreadArray[MAX_THREADS] = { 0 };
+    HANDLE  hThreadArray[MAX_THREADS] = {0};
 
     // Create MAX_THREADS worker threads.
     for (int i = 0; i < MAX_THREADS; i++) {
@@ -178,8 +177,7 @@ DWORD WINAPI MyThreadFunction(LPVOID lpParam)
     pDataArray = (PMYDATA)lpParam;
 
     // Print the parameter values using thread-safe functions.
-    StringCchPrintf(msgBuf, BUF_SIZE, TEXT("Parameters = %d, %d\n"),
-        pDataArray->val1, pDataArray->val2);
+    StringCchPrintf(msgBuf, BUF_SIZE, TEXT("Parameters = %d, %d\n"), pDataArray->val1, pDataArray->val2);
     (void)StringCchLength(msgBuf, BUF_SIZE, &cchStringSize);
     WriteConsole(hStdout, msgBuf, (DWORD)cchStringSize, &dwChars, nullptr);
 
@@ -200,8 +198,7 @@ void ReportError(LPCWSTR pszFunction, DWORD dwError = GetLastError())
 //
 //   PARAMETERS:
 //   * pszFunction - the name of the function that failed.
-//   * dwError - the Win32 error code. Its default value is the calling 
-//   thread's last-error code value.
+//   * dwError - the Win32 error code. Its default value is the calling thread's last-error code value.
 //
 //   NOTE: The failing function must be immediately followed by the call of 
 //   ReportError if you do not explicitly specify the dwError parameter of 
@@ -212,7 +209,7 @@ void ReportError(LPCWSTR pszFunction, DWORD dwError = GetLastError())
 }
 
 
-int ImpersonateUser(int argc, wchar_t* argv[])
+int ImpersonateUser(int argc, wchar_t * argv[])
 /***************************** Module Header *******************************\
 * Module Name:  CppImpersonateUser.cpp
 * Project:      CppImpersonateUser
@@ -224,13 +221,11 @@ int ImpersonateUser(int argc, wchar_t* argv[])
 * security model. In general Windows also uses impersonation in its client/
 * server programming model.Impersonation lets a server to temporarily adopt
 * the security profile of a client making a resource request. The server can
-* then access resources on behalf of the client, and the OS carries out the
-* access validations.
+* then access resources on behalf of the client, and the OS carries out the access validations.
 * A server impersonates a client only within the thread that makes the
 * impersonation request. Thread-control data structures contain an optional
 * entry for an impersonation token. However, a thread's primary token, which
-* represents the thread's real security credentials, is always accessible in
-* the process's control structure.
+* represents the thread's real security credentials, is always accessible in the process's control structure.
 *
 * After the server thread finishes its task, it reverts to its primary
 * security profile. These forms of impersonation are convenient for carrying
@@ -260,7 +255,7 @@ int ImpersonateUser(int argc, wchar_t* argv[])
     wchar_t szUserName[INFO_BUFFER_SIZE] = {};
     wchar_t szDomain[INFO_BUFFER_SIZE] = {};
     wchar_t szPassword[INFO_BUFFER_SIZE] = {};
-    wchar_t* pc = nullptr;
+    wchar_t * pc = nullptr;
     HANDLE hToken = nullptr;
     BOOL fSucceeded = FALSE;
 
@@ -360,7 +355,7 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
         return B;
     }
 
-    HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
+    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
     if (hProcess == nullptr) {
 
         return FALSE;
@@ -416,7 +411,7 @@ BOOL WINAPI LoadLibraryInProcess(_In_ LPCWSTR lpLibFileName, _In_ DWORD dwProces
 EXTERN_C
 __declspec(dllexport)
 BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID ShellCode,
-                                   _In_ SIZE_T ShellCodeSize, 
+                                   _In_ SIZE_T ShellCodeSize,
                                    _In_ DWORD dwProcessId)
 {
     BOOL B = AdjustCurrentProcessPrivilege(SE_DEBUG_NAME, TRUE);
@@ -424,7 +419,7 @@ BOOL WINAPI LoadShellCodeInProcess(_In_reads_bytes_(ShellCodeSize) LPCVOID Shell
         return B;
     }
 
-    HANDLE hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessId );
+    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
     if (hProcess == nullptr) {
 
         return FALSE;
