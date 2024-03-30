@@ -33,15 +33,5 @@ typedef struct _RTL_PROCESS_MODULES {
 
 
 EXTERN_C
-__declspec(dllexport) 
+__declspec(dllexport)
 BOOL WINAPI ListProcessModules(DWORD dwPID);
-
-
-EXTERN_C
-__declspec(dllexport)
-int WINAPI EnumeratingAllDeviceDrivers();
-
-
-EXTERN_C
-__declspec(dllexport)
-void WINAPI EnumKernelModules();

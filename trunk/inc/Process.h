@@ -400,6 +400,29 @@ void WINAPI CollectPerformanceDatas(_In_  LPCWSTR FullCounterPath, _In_ DWORD Fo
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+//Module
+
+
+EXTERN_C
+__declspec(dllimport)
+BOOL WINAPI ListProcessModules(DWORD dwPID);
+
+
+EXTERN_C
+__declspec(dllimport)
+int WINAPI EnumeratingAllDeviceDrivers();
+
+
+EXTERN_C
+__declspec(dllimport)
+void WINAPI EnumKernelModules();
+
+EXTERN_C
+__declspec(dllimport)
+void WINAPI EnumSystemUnloadImage();
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
 //Memory
 
 
